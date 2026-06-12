@@ -7,24 +7,34 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Servlet du spring-framework-by-Angeli
+ * @author Angeli
+ * @date 2024/6/11 17:28
+ */
 public class FrontControllerServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse rep) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         ProcessRequest(req, rep);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse rep) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         ProcessRequest(req, rep);
     }
 
-    private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) {
-        try {
+
+    /**
+     * Print le URL sur la page web
+     * @param req la requete http
+     * @param rep la reponse http
+      * @throws IOException
+      * @date 2024/6/11 17:29
+      * @author Angeli
+     */
+    private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
             PrintWriter wr = rep.getWriter();
             String url = req.getRequestURL().toString();
             wr.print(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
