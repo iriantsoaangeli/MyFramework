@@ -1,4 +1,5 @@
 Tomcat/*
-test/*
-.vscode
-test/pom.xml
+test/**
+test
+.vscode/*
+/mon-framework/target/*
