@@ -1,3 +1,4 @@
+# Ceci est un document personnel de reference 
 ## Commandes mavens (JDK 17)
 ### Initialiser 
 `
@@ -8,19 +9,19 @@ mvn archetype:generate -DgroupId=angeli.test.servlet -DartifactId=test -Darchety
 `
 mvn clean package
 `
-
-
-├── mon-framework \
-│   ├── pom.xml \
-│   ├── src \
-│   └── target  \
-├── README.md   \
-├── test    \
-│   ├── pom.xml \
-│   └── src         \
-└── Tomcat      
-
-
+## Le dossier test
+```text
+mon-app-web/
+├── pom.xml
+└── src/
+    └── main/
+        ├── java/         
+        └── webapp/       
+            ├── index.html
+            └── WEB-INF/ 
+                ├── lib/ 
+                └── web.xml
+```
 ## Sprint 0 : FrontControllerServlet :
     doGet(),doPost() -> ProcessRequest() : print url .
 
