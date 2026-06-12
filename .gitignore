@@ -3,3 +3,9 @@ test/**
 test
 .vscode/*
 /mon-framework/target/*
+spring-framework-by-angeli/target/classes/angeli/sprint/App.class
+spring-framework-by-angeli/target/classes/angeli/sprint/FrontControllerServlet.class
+spring-framework-by-angeli/target/maven-archiver/pom.properties
+spring-framework-by-angeli/target/spring-framework-by-angeli-1.0-SNAPSHOT.jar
+spring-framework-by-angeli/target/surefire-reports/angeli.sprint.AppTest.txt
+spring-framework-by-angeli/target/test-classes/angeli/sprint/AppTest.class
