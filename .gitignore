@@ -1,1 +1,4 @@
-Tomcat/
+Tomcat
+test
+.vscode
+test/pom.xml
