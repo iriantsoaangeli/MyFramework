@@ -8,11 +8,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class FrontControllerServlet extends HttpServlet {
-    public void doGet(HttpServletRequest req, HttpServletResponse rep) {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse rep) {
         ProcessRequest(req, rep);
     }
 
-    public void doPost(HttpServletRequest req, HttpServletResponse rep) {
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse rep) {
         ProcessRequest(req, rep);
     }
 
