@@ -26,3 +26,10 @@ mon-app-web/
 ## Sprint 0 : FrontControllerServlet :
     doGet(),doPost() -> ProcessRequest() : print url .
 
+## Sprint 1 :
+    angeli.sprint.annotation.controller
+    Chargement de classe  au choix , puis verifier si il contiennet l'annotation
+        - package specifique 
+        - Tous 
+    Au demarrage de l'appli web (ContextListener sinon init anle servlet raha tsy vita)
+    Tsara ataovy izy roa
