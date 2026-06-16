@@ -12,18 +12,48 @@ import io.github.classgraph.*;
  * @date 2026/6/16 11:44
  */
 public class ClassPathScanner {
-    
+
+    /**
+     * L'instance depuis la librairie ClassGraph pour scanner les paquets
+     */
     ClassGraph classGraph;
 
     /**
-     *Recupere les classes avec l'annotation donnee dans les paquets donnes
-     * @param annotationClass l'annotation a chercher 
-     * @param paths les paquets a scanner
-     * @return liste des classes avec l'annotation donnees
+     * Recupere les classes avec l'annotation donnee dans les paquets donnes
+     * @see  List<String> scanPath(Class<? extends java.lang.annotation.Annotation>[] annotationClass, String... paths)
+     * pour plusieurs annotations
+     * @param annotationClass l'annotation a chercher
+     * @param paths           les paquets a scanner
+     * @return clazzliste des classes avec l'annotation donnees
      */
-    public List<String> scanPath(Class<? extends java.lang.annotation.Annotation> annotationClass,String...paths) {
+    public List<String> scanPath(Class<? extends java.lang.annotation.Annotation> annotationClass, String... paths) {
         List<String> clazz = new ArrayList<String>();
+        try (ScanResult scanResult = classGraph.enableAllInfo().acceptPackages(paths).scan()) {
+            ClassInfoList classInfoList = scanResult.getClassesWithAnnotation(annotationClass);
+            for (ClassInfo classInfo : classInfoList) {
+                clazz.add(classInfo.getName());
+            }
+        }
+        return clazz;
+    }
 
+    /**
+     * Recupere les classes avec les annotation donnees dans les paquets donnes
+     * Meme chose que 
+     * @see List<String> scanPath(Class<? extends java.lang.annotation.Annotation> annotationClass, String... paths)
+     * pour une seule annotation 
+     * @param annotationClass l'annotation a chercher
+     * @param paths           les paquets a scanner
+     * @return clazz liste des classes avec l'annotation donnees
+     */
+    public List<String> scanPath(Class<? extends java.lang.annotation.Annotation>[] annotationClass, String... paths) {
+        List<String> clazz = new ArrayList<String>();
+        try (ScanResult scanResult = classGraph.enableAllInfo().acceptPackages(paths).scan()) {
+            ClassInfoList classInfoList = scanResult.getClassesWithAllAnnotations(annotationClass);
+            for (ClassInfo classInfo : classInfoList) {
+                clazz.add(classInfo.getName());
+            }
+        }
         return clazz;
     }
 }
