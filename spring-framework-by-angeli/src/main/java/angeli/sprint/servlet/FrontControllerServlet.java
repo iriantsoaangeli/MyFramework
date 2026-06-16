@@ -12,11 +12,15 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Servlet du spring-framework-by-Angeli
+ * 
  * @author Angeli
  * @date 2026/6/11 17:28
  */
 public class FrontControllerServlet extends HttpServlet {
 
+    /**
+     * La liste des classes avec l'annotation @Controller
+     */
     List<String> controllerList;
 
     @Override
@@ -31,6 +35,7 @@ public class FrontControllerServlet extends HttpServlet {
 
     /**
      * Print le URL sur la page web
+     * 
      * @param req la requete http
      * @param rep la reponse http
      * @throws IOException
@@ -45,12 +50,13 @@ public class FrontControllerServlet extends HttpServlet {
 
     /**
      * Lire les paquets et lister les controller
+     * 
      * @author Angeli
      * @date 2026/6/11 17:29
      */
     @Override
     public void init() throws ServletException {
         super.init();
-        controllerList = new ArrayList<String>() ;
+        controllerList = new ArrayList<String>();
     }
 }
