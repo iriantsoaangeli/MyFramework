@@ -2,6 +2,7 @@ package angeli.sprint.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -30,7 +31,6 @@ public class FrontControllerServlet extends HttpServlet {
 
     /**
      * Print le URL sur la page web
-     * 
      * @param req la requete http
      * @param rep la reponse http
      * @throws IOException
@@ -51,5 +51,6 @@ public class FrontControllerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
+        controllerList = new ArrayList<String>() ;
     }
 }
