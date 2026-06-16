@@ -1,8 +1,10 @@
 package angeli.sprint;
 
+
 /**
- * Hello world!
- *
+ * Rien pour l'instant
+ * @author Angeli
+ * @date 2024/6/11 17:28
  */
 public class App 
 {

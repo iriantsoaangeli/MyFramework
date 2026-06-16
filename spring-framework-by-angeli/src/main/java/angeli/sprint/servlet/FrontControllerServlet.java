@@ -1,4 +1,4 @@
-package angeli.sprint;
+package angeli.sprint.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +22,6 @@ public class FrontControllerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         ProcessRequest(req, rep);
     }
-
 
     /**
      * Print le URL sur la page web
