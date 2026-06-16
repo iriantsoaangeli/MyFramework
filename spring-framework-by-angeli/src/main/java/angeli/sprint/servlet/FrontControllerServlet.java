@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Servlet du spring-framework-by-Angeli
- * 
  * @author Angeli
  * @date 2026/6/11 17:28
  */
@@ -46,7 +45,6 @@ public class FrontControllerServlet extends HttpServlet {
 
     /**
      * Lire les paquets et lister les controller
-     * 
      * @author Angeli
      * @date 2026/6/11 17:29
      */
