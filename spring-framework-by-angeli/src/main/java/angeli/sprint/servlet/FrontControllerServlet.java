@@ -51,7 +51,8 @@ public class FrontControllerServlet extends HttpServlet {
     }
 
     /**
-     * Lire les paquets et lister les controller
+     * Initialisation du servlet, recupere la liste des controllers depuis le
+     * context du servlet
      * 
      * @author Angeli
      * @date 2026/6/11 17:29
