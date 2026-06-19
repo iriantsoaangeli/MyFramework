@@ -46,6 +46,8 @@ public class FrontControllerServlet extends HttpServlet {
         PrintWriter wr = rep.getWriter();
         String url = req.getRequestURL().toString();
         wr.print(url);
+        wr.print("<h3>Les Controllers trouves sont :</h3>");
+        wr.print(controllerList);
     }
 
     /**
@@ -57,6 +59,6 @@ public class FrontControllerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        controllerList = new ArrayList<String>();
+        controllerList = (List<String>) getServletContext().getAttribute("controllerList");
     }
 }
