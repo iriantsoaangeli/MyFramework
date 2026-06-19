@@ -46,7 +46,7 @@ public class FrontControllerServlet extends HttpServlet {
         PrintWriter wr = rep.getWriter();
         String url = req.getRequestURL().toString();
         wr.print(url);
-        wr.print("<h3>Les Controllers trouves sont :</h3>");
+        wr.print("<Les Controllers trouves sont :");
         wr.print(controllerList);
     }
 

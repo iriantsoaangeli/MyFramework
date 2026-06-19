@@ -19,9 +19,19 @@ public class ClassPathScanner {
     ClassGraph classGraph;
 
     /**
+     * Constructeur de la classe
+     * Cree une classgraph dedans
+     */
+    public ClassPathScanner() {
+        this.classGraph = new ClassGraph();
+    }
+
+    /**
      * Recupere les classes avec l'annotation donnee dans les paquets donnes
-     * @see  List<String> scanPath(Class<? extends java.lang.annotation.Annotation>[] annotationClass, String... paths)
-     * pour plusieurs annotations
+     * 
+     * @see List<String> scanPath(Class<? extends java.lang.annotation.Annotation>[]
+     *      annotationClass, String... paths)
+     *      pour plusieurs annotations
      * @param annotationClass l'annotation a chercher
      * @param paths           les paquets a scanner
      * @return clazzliste des classes avec l'annotation donnees
@@ -39,9 +49,11 @@ public class ClassPathScanner {
 
     /**
      * Recupere les classes avec les annotation donnees dans les paquets donnes
-     * Meme chose que 
-     * @see List<String> scanPath(Class<? extends java.lang.annotation.Annotation> annotationClass, String... paths)
-     * pour une seule annotation 
+     * Meme chose que
+     * 
+     * @see List<String> scanPath(Class<? extends java.lang.annotation.Annotation>
+     *      annotationClass, String... paths)
+     *      pour une seule annotation
      * @param annotationClass l'annotation a chercher
      * @param paths           les paquets a scanner
      * @return clazz liste des classes avec l'annotation donnees

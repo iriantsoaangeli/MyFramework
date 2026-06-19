@@ -35,7 +35,7 @@ public class ContextListener implements ServletContextListener {
         context.setAttribute("cpScanner", cpScanner);
         context.log("Le scanner de classe a ete ajoute au context du servlet");
 
-        List<String> controllerList = cpScanner.scanPath(angeli.sprint.annotation.Controller.class, "angeli.sprint");
+        List<String> controllerList = cpScanner.scanPath(angeli.sprint.annotation.Controller.class);
         context.setAttribute("controllerList", controllerList);
         context.log("La liste des controllers a ete ajoute au context du servlet");
 
