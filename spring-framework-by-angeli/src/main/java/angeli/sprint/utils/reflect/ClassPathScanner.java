@@ -1,12 +1,15 @@
 package angeli.sprint.utils.reflect;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.classgraph.*;
 
 /**
- * La classe qui interagit avec les paquets
+ * La classe qui interagit avec les packages
  * 
  * @author Angeli
  * @date 2026/6/16 11:44
