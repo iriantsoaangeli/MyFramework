@@ -33,3 +33,15 @@ mon-app-web/
         - Tous 
     Au demarrage de l'appli web (ContextListener sinon init anle servlet raha tsy vita)
     Tsara ataovy izy roa
+
+
+## Sprint 2 :
+    Mapper les methodes avec annotation l'annotation specifiee a un URL
+
+
+## Sprint 3 :
+    Support Meme URL avec differentes methodes(post/get)
+
+
+## Sprint 3+1/2 : 
+    Run la methode dans l'url ?
