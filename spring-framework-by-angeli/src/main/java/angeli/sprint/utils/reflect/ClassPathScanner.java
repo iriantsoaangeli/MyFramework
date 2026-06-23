@@ -72,22 +72,4 @@ public class ClassPathScanner {
         return clazz;
     }
 
-    /**
-     * Cherche les methodes de la fonction avec l'annotation donnee 
-     * @param clazz la classe 
-     * @param annotationClass l'annotation a chercher 
-     * @date 2026/6/23 
-     * @return annotedMethods la liste des method avec les annotations 
-     * ,vide si rien n'est trouve
-     */
-    public List<Method> getMethodsWithAnnotation(Class<?> clazz,
-            Class<? extends java.lang.annotation.Annotation> annotationClass) {
-        Method[] list = clazz.getDeclaredMethods();
-        List<Method> annotedMethods = new ArrayList<Method>();
-        for (Method method : list) {
-            if (method.isAnnotationPresent(annotationClass))
-                annotedMethods.add(method);
-        }
-        return annotedMethods;
-    }
 }
