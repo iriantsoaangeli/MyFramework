@@ -2,8 +2,10 @@ package angeli.sprint.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -14,7 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
  * Servlet du spring-framework-by-Angeli
  * 
  * @author Angeli
- * @date 2026/6/11 17:28
  */
 public class FrontControllerServlet extends HttpServlet {
 
@@ -22,6 +23,8 @@ public class FrontControllerServlet extends HttpServlet {
      * La liste des classes avec l'annotation @Controller
      */
     List<String> controllerList;
+    List<Method> methodList;
+    Map<String, Method> urlMethodMap;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -40,26 +43,28 @@ public class FrontControllerServlet extends HttpServlet {
      * @param rep la reponse http
      * @throws IOException
      * @date 2026/6/11 17:29
-     * @author Angeli
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         PrintWriter wr = rep.getWriter();
         String url = req.getRequestURL().toString();
-        wr.print(url);
-        wr.print("<Les Controllers trouves sont :");
-        wr.print(controllerList);
+        wr.println(url);
+        wr.println("<Les Controllers trouves sont :");
+        wr.println(controllerList);
+        wr.println("<Les Methodes annotees avec @URL sont :");
+        wr.println(methodList);
+        wr.println("<Le Map URL -> Method  :");
+        wr.println(urlMethodMap);
     }
 
     /**
      * Initialisation du servlet, recupere la liste des controllers depuis le
      * context du servlet
-     * 
-     * @author Angeli
-     * @date 2026/6/11 17:29
      */
     @Override
     public void init() throws ServletException {
         super.init();
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
+        methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
+        urlMethodMap = (Map<String, Method>) getServletContext().getAttribute("urlMethodMap");
     }
 }
