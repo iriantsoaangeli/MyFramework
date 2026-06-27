@@ -12,6 +12,11 @@ import java.util.Map;
  */
 public class Mapper {
 
+    /**
+     * Map les methodes avec l'annotation @URL avec leur URL
+     * @param methods liste de methodes donnees
+     * @return map avec l'URL comme cle et la methode comme valeur
+     */
     public Map<String, Method> mapUrlToMethod(List<Method> methods) {
         Map<String, Method> urlMap = new HashMap<>();
         for (Method method : methods){

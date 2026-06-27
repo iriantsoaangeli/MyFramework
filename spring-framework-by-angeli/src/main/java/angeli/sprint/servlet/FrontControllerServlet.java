@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -23,6 +24,7 @@ public class FrontControllerServlet extends HttpServlet {
      */
     List<String> controllerList;
     List<Method> methodList;
+    Map<String, Method> urlMethodMap;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -50,6 +52,8 @@ public class FrontControllerServlet extends HttpServlet {
         wr.print(controllerList);
         wr.print("<Les Methodes annotees avec @URL sont :");
         wr.print(methodList);
+        wr.print("<Le Map URL -> Method  :");
+        wr.print(urlMethodMap);
     }
 
     /**
@@ -61,5 +65,6 @@ public class FrontControllerServlet extends HttpServlet {
         super.init();
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
         methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
+        urlMethodMap = (Map<String, Method>) getServletContext().getAttribute("urlMethodMap");
     }
 }
