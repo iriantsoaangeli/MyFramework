@@ -14,6 +14,13 @@ public class Mapper {
 
     public Map<String, Method> mapUrlToMethod(List<Method> methods) {
         Map<String, Method> urlMap = new HashMap<>();
+        for (Method method : methods){
+            if(method.isAnnotationPresent(angeli.sprint.annotation.URL.class)){
+                angeli.sprint.annotation.URL annotation = method.getAnnotation(angeli.sprint.annotation.URL.class);
+                String url = annotation.value();
+                urlMap.put(url, method);
+            }
+        }
         return urlMap;
     }
 }
