@@ -8,7 +8,6 @@ import java.util.List;
  * Class pour mapper des methodes/objets
  * 
  * @author Angeli
- * @date 2026/6/23
  */
 public class Mapper {
     ClassPathScanner cps;

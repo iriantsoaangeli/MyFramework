@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
  * Servlet du spring-framework-by-Angeli
  * 
  * @author Angeli
- * @date 2026/6/11 17:28
  */
 public class FrontControllerServlet extends HttpServlet {
 
@@ -40,7 +39,6 @@ public class FrontControllerServlet extends HttpServlet {
      * @param rep la reponse http
      * @throws IOException
      * @date 2026/6/11 17:29
-     * @author Angeli
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         PrintWriter wr = rep.getWriter();
@@ -53,9 +51,6 @@ public class FrontControllerServlet extends HttpServlet {
     /**
      * Initialisation du servlet, recupere la liste des controllers depuis le
      * context du servlet
-     * 
-     * @author Angeli
-     * @date 2026/6/11 17:29
      */
     @Override
     public void init() throws ServletException {
