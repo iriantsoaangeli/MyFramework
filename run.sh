@@ -1,7 +1,23 @@
-cd "/home/angeli/Asa/Sprint(Mr Naina)/spring-framework-by-angeli"
+#!/bin/bash
+
+SOURCE_DIR="/home/angeli/Asa/Sprint(Mr Naina)/spring-framework-by-angeli"
+TARGET_JAR="$SOURCE_DIR/target/spring-framework-by-angeli-1.0-SNAPSHOT-jar-with-dependencies.jar"
+
+TEST_DIR="/home/angeli/Asa/Sprint(Mr Naina)/test"
+TEST_WAR="$TEST_DIR/target/test-test.war"
+
+TOMCAT_PATH="/home/angeli/Asa/Sprint(Mr Naina)/Tomcat/"
+
+cd "$SOURCE_DIR"
+
 mvn clean package
-cp ./target/spring-framework-by-angeli-1.0-SNAPSHOT-jar-with-dependencies.jar "/home/angeli/Asa/Sprint(Mr Naina)/test/src/main/webapp/WEB-INF/lib"
-cd "/home/angeli/Asa/Sprint(Mr Naina)/test"
+
+
+cp "$TARGET_JAR" "$TEST_DIR/src/main/webapp/WEB-INF/lib"
+
+cd "$TEST_DIR"
 mvn clean package
-cp ./target/test-test.war "/home/angeli/Asa/Sprint(Mr Naina)/Tomcat/webapps"
-"/home/angeli/Asa/Sprint(Mr Naina)/Tomcat/bin/startup.sh"
+
+
+cp "$TEST_WAR" "$TOMCAT_PATH/webapps"
+"$TOMCAT_PATH/bin/startup.sh"
