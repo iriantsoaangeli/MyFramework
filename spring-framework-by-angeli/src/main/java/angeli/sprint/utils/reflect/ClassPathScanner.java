@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.github.classgraph.*;
+import io.github.classgraph.MethodInfoList.MethodInfoFilter;
 
 /**
  * La classe qui interagit avec les packages
  * 
  * @author Angeli
- * @date 2026/6/16 11:44
  */
 public class ClassPathScanner {
 
@@ -32,14 +32,18 @@ public class ClassPathScanner {
     /**
      * Recupere les classes avec l'annotation donnee dans les paquets donnes
      * 
-     * @see List<String> scanPath(Class<? extends java.lang.annotation.Annotation>[]
+     * @see List<String> scanPath(Class<? extends Annotation>[]
      *      annotationClass, String... paths)
      *      pour plusieurs annotations
      * @param annotationClass l'annotation a chercher
-     * @param paths           les paquets a scanner
-     * @return clazzliste des classes avec l'annotation donnee,vide si rien est trouvee
+     * @param paths           les paquets a scanner, exemple :
+     *                        "angeli.sprint.controller",scan tout les paquets si
+     *                        vide
+     * @return clazzliste des classes avec l'annotation donnee,vide si rien est
+     *         trouvee
      */
-    public List<String> scanPath(Class<? extends java.lang.annotation.Annotation> annotationClass, String... paths) {
+    public List<String> scanPathForClassAnnotation(Class<? extends Annotation> annotationClass,
+            String... paths) {
         List<String> clazz = new ArrayList<String>();
         try (ScanResult scanResult = classGraph.enableAllInfo().acceptPackages(paths).scan()) {
             ClassInfoList classInfoList = scanResult.getClassesWithAnnotation(annotationClass);
@@ -54,14 +58,17 @@ public class ClassPathScanner {
      * Recupere les classes avec les annotations donnees dans les paquets donnes
      * Meme chose que
      * 
-     * @see List<String> scanPath(Class<? extends java.lang.annotation.Annotation>
+     * @see List<String> scanPath(Class<? extends Annotation>
      *      annotationClass, String... paths)
      *      pour une seule annotation
      * @param annotationClass l'annotation a chercher
-     * @param paths          les paquets a scanner , exemple : "angeli.sprint.controller"
+     * @param paths           les paquets a scanner , exemple :
+     *                        "angeli.sprint.controller", scan tout les paquets si
+     *                        vide
      * @return clazz liste des classes avec l'annotation donnees,vide sinon
      */
-    public List<String> scanPath(Class<? extends java.lang.annotation.Annotation>[] annotationClass, String... paths) {
+    public List<String> scanPathForClassAnnotation(Class<? extends Annotation>[] annotationClass,
+            String... paths) {
         List<String> clazz = new ArrayList<String>();
         try (ScanResult scanResult = classGraph.enableAllInfo().acceptPackages(paths).scan()) {
             ClassInfoList classInfoList = scanResult.getClassesWithAllAnnotations(annotationClass);
@@ -72,4 +79,25 @@ public class ClassPathScanner {
         return clazz;
     }
 
+    /**
+     * Recupere les methodes avec l'annotation donnee dans les classes donnes
+     * @param classNames Une liste de classes en String 
+     * @param annotationClass classe de l'annotation a chercher
+     * @return Une liste de methodes avec l'annotation donnee sinon vide
+     * @throws ClassNotFoundException il faut verifier la syntaxe 
+     */
+    public List<Method> scanClassForMethodAnnotation(List<String> classNames,
+            Class<? extends Annotation> annotationClass) throws ClassNotFoundException {
+        List<Method> methods = new ArrayList<Method>();
+        for (String className : classNames) {
+            Class<?> clazz = Class.forName(className);
+            Method[] classMethods = clazz.getDeclaredMethods();
+            for (Method method : classMethods) {
+                if (method.isAnnotationPresent(annotationClass)) {
+                    methods.add(method);
+                }
+            }
+        }
+        return methods;
+    }
 }
