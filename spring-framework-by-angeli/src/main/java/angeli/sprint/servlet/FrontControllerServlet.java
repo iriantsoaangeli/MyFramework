@@ -2,6 +2,7 @@ package angeli.sprint.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class FrontControllerServlet extends HttpServlet {
      * La liste des classes avec l'annotation @Controller
      */
     List<String> controllerList;
+    List<Method> methodList;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -46,6 +48,8 @@ public class FrontControllerServlet extends HttpServlet {
         wr.print(url);
         wr.print("<Les Controllers trouves sont :");
         wr.print(controllerList);
+        wr.print("<Les Methodes annotées avec @URL sont :");
+        wr.print(methodList);
     }
 
     /**
@@ -56,5 +60,6 @@ public class FrontControllerServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
+        methodList = (List<Method>) getServletContext().getAttribute("methodList");
     }
 }
