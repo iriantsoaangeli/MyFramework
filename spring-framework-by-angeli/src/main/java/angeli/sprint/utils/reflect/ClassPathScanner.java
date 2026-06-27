@@ -51,7 +51,7 @@ public class ClassPathScanner {
     }
 
     /**
-     * Recupere les classes avec les annotation donnees dans les paquets donnes
+     * Recupere les classes avec les annotations donnees dans les paquets donnes
      * Meme chose que
      * 
      * @see List<String> scanPath(Class<? extends java.lang.annotation.Annotation>
