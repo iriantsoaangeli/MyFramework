@@ -47,13 +47,13 @@ public class FrontControllerServlet extends HttpServlet {
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         PrintWriter wr = rep.getWriter();
         String url = req.getRequestURL().toString();
-        wr.print(url);
-        wr.print("<Les Controllers trouves sont :");
-        wr.print(controllerList);
-        wr.print("<Les Methodes annotees avec @URL sont :");
-        wr.print(methodList);
-        wr.print("<Le Map URL -> Method  :");
-        wr.print(urlMethodMap);
+        wr.println(url);
+        wr.println("<Les Controllers trouves sont :");
+        wr.println(controllerList);
+        wr.println("<Les Methodes annotees avec @URL sont :");
+        wr.println(methodList);
+        wr.println("<Le Map URL -> Method  :");
+        wr.println(urlMethodMap);
     }
 
     /**
