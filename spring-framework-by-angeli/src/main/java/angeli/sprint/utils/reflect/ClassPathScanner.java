@@ -92,12 +92,20 @@ public class ClassPathScanner {
         for (String className : classNames) {
             Class<?> clazz = Class.forName(className);
             Method[] classMethods = clazz.getDeclaredMethods();
+            System.out.println("classMethods: " + classMethods);
+            System.out.println("className: " + className);
             for (Method method : classMethods) {
-                if (method.isAnnotationPresent(annotationClass)) {
+                method.setAccessible(true);
+               Annotation[] annotations = method.getAnnotations();
+                for (Annotation annotation : annotations) {
+                    System.out.println("Method: " + method.getName() + ", Annotation: " + annotation.annotationType().getName());
+                }
+               if (method.isAnnotationPresent(annotationClass)) {
                     methods.add(method);
                 }
             }
         }
+        System.out.println("Methods with annotation " + annotationClass.getName() + ": " + methods);
         return methods;
     }
 }

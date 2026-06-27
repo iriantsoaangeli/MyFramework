@@ -48,7 +48,7 @@ public class FrontControllerServlet extends HttpServlet {
         wr.print(url);
         wr.print("<Les Controllers trouves sont :");
         wr.print(controllerList);
-        wr.print("<Les Methodes annotées avec @URL sont :");
+        wr.print("<Les Methodes annotees avec @URL sont :");
         wr.print(methodList);
     }
 
@@ -60,6 +60,6 @@ public class FrontControllerServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
-        methodList = (List<Method>) getServletContext().getAttribute("methodList");
+        methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
     }
 }
