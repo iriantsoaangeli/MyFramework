@@ -37,6 +37,7 @@ public class ContextListener implements ServletContextListener {
 
     /**
      * Met le scanner de pages dans le context du servlet
+     * Comme ca on peut l'utiliser dans le servlet
      */
     void initPackageScanner(ServletContext context){
         ClassPathScanner cpScanner = new ClassPathScanner();
