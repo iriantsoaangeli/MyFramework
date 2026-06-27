@@ -58,7 +58,7 @@ public class ClassPathScanner {
      *      annotationClass, String... paths)
      *      pour une seule annotation
      * @param annotationClass l'annotation a chercher
-     * @param paths           les paquets a scanner
+     * @param paths          les paquets a scanner , exemple : "angeli.sprint.controller"
      * @return clazz liste des classes avec l'annotation donnees,vide sinon
      */
     public List<String> scanPath(Class<? extends java.lang.annotation.Annotation>[] annotationClass, String... paths) {

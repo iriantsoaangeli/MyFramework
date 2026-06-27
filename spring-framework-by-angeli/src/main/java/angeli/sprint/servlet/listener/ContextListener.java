@@ -38,6 +38,8 @@ public class ContextListener implements ServletContextListener {
     /**
      * Met le scanner de pages dans le context du servlet
      * Comme ca on peut l'utiliser dans le servlet
+     * @author Angeli
+     * @date 2026/06/27 21:59
      */
     void initPackageScanner(ServletContext context){
         ClassPathScanner cpScanner = new ClassPathScanner();
@@ -47,6 +49,8 @@ public class ContextListener implements ServletContextListener {
 
     /**
      * Met la liste des controllers dans le context du servlet
+     * @author Angeli
+     * @date 2026/06/27 21:59
      */
     void initController(ServletContext context){
         ClassPathScanner cpScanner = (ClassPathScanner) context.getAttribute("cpScanner");
