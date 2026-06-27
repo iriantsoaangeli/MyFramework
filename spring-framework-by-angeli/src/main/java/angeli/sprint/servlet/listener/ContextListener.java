@@ -28,17 +28,29 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
+        initPackageScanner(context);
+        initController(context);
+
+        context.log("Le context du servlet a ete initialisé");
+    }
+
+
+    /**
+     * Met le scanner de pages dans le context du servlet
+     */
+    void initPackageScanner(ServletContext context){
         ClassPathScanner cpScanner = new ClassPathScanner();
-
-        context.log("ContextListener : initialisation du context du servlet detecte");
-
         context.setAttribute("cpScanner", cpScanner);
-        context.log("Le scanner de classe a ete ajoute au context du servlet");
+        context.log("Le scanner de packages a ete ajoute au context du servlet");
+    }
 
+    /**
+     * Met la liste des controllers dans le context du servlet
+     */
+    void initController(ServletContext context){
+        ClassPathScanner cpScanner = (ClassPathScanner) context.getAttribute("cpScanner");
         List<String> controllerList = cpScanner.scanPath(angeli.sprint.annotation.Controller.class);
         context.setAttribute("controllerList", controllerList);
         context.log("La liste des controllers a ete ajoute au context du servlet");
-
     }
-
 }
