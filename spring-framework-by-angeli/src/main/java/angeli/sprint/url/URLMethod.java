@@ -22,4 +22,5 @@ public class URLMethod {
     public String getRequestMethod(){
         return requestMethod;
     }
+
 }
