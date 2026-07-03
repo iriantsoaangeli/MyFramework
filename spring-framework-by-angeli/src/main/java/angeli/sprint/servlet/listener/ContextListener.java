@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.reflect.ClassPathScanner;
 import angeli.sprint.utils.reflect.Mapper;
 
@@ -78,7 +79,7 @@ public class ContextListener implements ServletContextListener {
                     angeli.sprint.annotation.URL.class);
             context.setAttribute("urlMethods", urlMethods);
             context.log("La liste des méthodes annotées a été trouvee");
-            Map<String, Method> urlMethodMap = mapper.mapUrlToMethod(urlMethods);
+            Map<String, URLMethod> urlMethodMap = mapper.mapUrlToMethod(urlMethods);
             context.setAttribute("urlMethodMap", urlMethodMap);
             context.log("Les methodes ont ete mis dans le contexte avec leur urls");
         } catch (ClassNotFoundException e) {
