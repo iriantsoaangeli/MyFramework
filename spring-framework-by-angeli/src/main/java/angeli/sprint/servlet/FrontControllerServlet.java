@@ -47,21 +47,22 @@ public class FrontControllerServlet extends HttpServlet {
      * @date 2026/6/11 17:29
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
+        rep.setContentType("text/html;charset=UTF-8");
         PrintWriter wr = rep.getWriter();
         String[] url = URLParser.getUrlFromRequest(req);
         String uri = url[1];
         URLMethod methodPresent = urlMethodMap.get(uri);
         urlMethodMap.remove(uri);
-        wr.println(url);
-        wr.println("Les Controllers trouves sont :");
+        wr.println("<h2>"+url[0]+" "+url[1]+"</h2>");
+        wr.println("<h3>Les Controllers trouves sont :</h3>");
         wr.println(controllerList);
-        wr.println("Les Methodes annotees avec @URL sont :");
+        wr.println("<h3>Les Methodes annotees avec @URL sont :</h3>");
         wr.println(methodList);
-        wr.println("Le Map URL -> Method  :");
+        wr.println("<h3>Le Map URL -> Method  :</h3>");
         wr.println(urlMethodMap);
         urlMethodMap.put(url[1], methodPresent);
-        wr.println("Votre url : " + url[0]+""+url[1]);
-        wr.println("Methode appellee :"+methodPresent.getMethod().getName()+"()");
+        wr.println("<h3>Votre url : " + url[0] + " " + url[1] + "</h3>");
+        wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
     }
 
     /**
