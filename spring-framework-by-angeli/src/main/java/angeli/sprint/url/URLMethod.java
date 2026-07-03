@@ -10,5 +10,9 @@ public class URLMethod {
         this.method = method;
         this.requestMethod = requestMethod;
     }
-
+    @Override
+    public String toString(){
+        String urlMethod = "Method: " + method.getName() + ", Request Method: " + requestMethod;
+        return urlMethod;
+    }
 }

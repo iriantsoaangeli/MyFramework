@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.url.URLMethod;
+
 /**
  * Class pour mapper des methodes/objets
  * 
@@ -17,13 +19,13 @@ public class Mapper {
      * @param methods liste de methodes donnees
      * @return map avec l'URL comme cle et la methode comme valeur
      */
-    public Map<String, Method> mapUrlToMethod(List<Method> methods) {
-        Map<String, Method> urlMap = new HashMap<>();
+    public Map<String, URLMethod> mapUrlToMethod(List<Method> methods) {
+        Map<String, URLMethod> urlMap = new HashMap<>();
         for (Method method : methods){
             if(method.isAnnotationPresent(angeli.sprint.annotation.URL.class)){
                 angeli.sprint.annotation.URL annotation = method.getAnnotation(angeli.sprint.annotation.URL.class);
                 String url = annotation.value();
-                urlMap.put(url, method);
+                urlMap.put(url, new URLMethod(method, annotation.method()));
             }
         }
         return urlMap;

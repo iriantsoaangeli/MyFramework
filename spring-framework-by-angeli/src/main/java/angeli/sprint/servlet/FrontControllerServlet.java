@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.url.URLMethod;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ public class FrontControllerServlet extends HttpServlet {
      */
     List<String> controllerList;
     List<Method> methodList;
-    Map<String, Method> urlMethodMap;
+    Map<String, URLMethod> urlMethodMap;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -65,6 +66,6 @@ public class FrontControllerServlet extends HttpServlet {
         super.init();
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
         methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
-        urlMethodMap = (Map<String, Method>) getServletContext().getAttribute("urlMethodMap");
+        urlMethodMap = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMap");
     }
 }
