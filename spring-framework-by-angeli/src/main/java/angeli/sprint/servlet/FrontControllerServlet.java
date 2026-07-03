@@ -53,7 +53,7 @@ public class FrontControllerServlet extends HttpServlet {
         String uri = url[1];
         URLMethod methodPresent = urlMethodMap.get(uri);
         urlMethodMap.remove(uri);
-        wr.println("<h2>"+url[0]+" "+url[1]+"</h2>");
+        wr.println("<h2>" + url[0] + " " + url[1] + "</h2>");
         wr.println("<h3>Les Controllers trouves sont :</h3>");
         wr.println(controllerList);
         wr.println("<h3>Les Methodes annotees avec @URL sont :</h3>");
@@ -62,7 +62,24 @@ public class FrontControllerServlet extends HttpServlet {
         wr.println(urlMethodMap);
         urlMethodMap.put(url[1], methodPresent);
         wr.println("<h3>Votre url : " + url[0] + " " + url[1] + "</h3>");
-        wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
+        if (methodPresent == null) {
+            wr.println("<h3>Aucune methode n'est associee a cette URL</h3>");
+            return;
+        } else {
+            wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
+
+            methodPresent.getMethod().setAccessible(true);
+            try
+
+            {
+                methodPresent.getMethod()
+                        .invoke(methodPresent.getMethod().getDeclaringClass().getDeclaredConstructor().newInstance());
+                wr.println("<h3>La methode a ete appelee avec succes</h3>");
+            } catch (Exception e) {
+                e.printStackTrace(wr);
+            }
+        }
+
     }
 
     /**
