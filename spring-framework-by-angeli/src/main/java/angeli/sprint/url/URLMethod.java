@@ -15,4 +15,11 @@ public class URLMethod {
         String urlMethod = "Method: " + method.getName() + ", Request Method: " + requestMethod;
         return urlMethod;
     }
+
+    public Method getMethod(){
+        return method;
+    }
+    public String getRequestMethod(){
+        return requestMethod;
+    }
 }

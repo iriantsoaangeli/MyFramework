@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import angeli.sprint.url.URLMethod;
+import angeli.sprint.utils.URLParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,14 +48,20 @@ public class FrontControllerServlet extends HttpServlet {
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         PrintWriter wr = rep.getWriter();
-        String url = req.getRequestURL().toString();
+        String[] url = URLParser.getUrlFromRequest(req);
+        String uri = url[1];
+        URLMethod methodPresent = urlMethodMap.get(uri);
+        urlMethodMap.remove(uri);
         wr.println(url);
-        wr.println("<Les Controllers trouves sont :");
+        wr.println("Les Controllers trouves sont :");
         wr.println(controllerList);
-        wr.println("<Les Methodes annotees avec @URL sont :");
+        wr.println("Les Methodes annotees avec @URL sont :");
         wr.println(methodList);
-        wr.println("<Le Map URL -> Method  :");
+        wr.println("Le Map URL -> Method  :");
         wr.println(urlMethodMap);
+        urlMethodMap.put(url[1], methodPresent);
+        wr.println("Votre url : " + url[0]+""+url[1]);
+        wr.println("Methode appellee :"+methodPresent.getMethod().getName()+"()");
     }
 
     /**
