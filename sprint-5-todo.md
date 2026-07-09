@@ -26,6 +26,8 @@
     
     - [ ] Modifier angeli.sprint.listner.ContextListner
       - [ ] Creer la fonction initPrefixAndSuffix
+  
+  
 # problemes futurs a eviter 
 - [ ] sprint 5 - fix 
   - [ ] envoyer toutes les erreurs dans catalina.out au lieu de catalina.log

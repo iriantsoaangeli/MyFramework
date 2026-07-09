@@ -32,6 +32,7 @@ public class ContextListener implements ServletContextListener {
         initPackageScanner(context);
         initMapper(context);
         initControllerList(context);
+        initSuffixAndPrefix(context);
 
         context.log("Le context du servlet a ete initialisé");
     }
@@ -93,6 +94,17 @@ public class ContextListener implements ServletContextListener {
             context.log("Erreur lors de la récupération des classes pour chercher les URLs: " + e.getMessage());
             throw new RuntimeException("Erreur lors de la récupération des classes pour chercher les URLs", e);
         }
+    }
+
+
+    /**
+     * Met le prefix et le suffix dans le context du servlet
+     * Generalement on a pas besoin de les mettre dans le context du servlet mais c'est pour montrer comment on peut le faire
+     * @param context
+     */
+    void initSuffixAndPrefix(ServletContext context) {
+        context.setAttribute("prefix", context.getInitParameter("prefix"));
+        context.setAttribute("suffix", context.getInitParameter("suffix"));
     }
 
 }
