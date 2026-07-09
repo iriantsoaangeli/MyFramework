@@ -21,11 +21,11 @@
       - [ ] Si la vue n'existe pas appeler PageNotFound
 
     - [ ] Creer une classe angeli.sprint.util.Config
-      - [ ]  Creer une fonction getSuffixPrefix()
+      - [ ]  Creer une fonction getSuffixAndPrefix()
         - [ ]  Lire le xml 
     
-  
-
+    - [ ] Modifier angeli.sprint.listner.ContextListner
+      - [ ] Creer la fonction initPrefixAndSuffix
 # problemes futurs a eviter 
 - [ ] sprint 5 - fix 
   - [ ] envoyer toutes les erreurs dans catalina.out au lieu de catalina.log
