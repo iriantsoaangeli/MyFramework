@@ -9,16 +9,16 @@
   - [ ] creer la classe angeli.sprint.model.ModelAndView
     - [ ] attribut contexte 
     - [ ] Fonction setAttribute(String,Object)
-    - [ ] Fonction getView()
+    - [ ] Fonction getView() String avec suffix et prefix 
     - [ ] Attribut view String
 
   - [ ] Modifier  angeli.sprint.servlet.FrontControllerServlet
-    - [ ] Creer la fonction viewPageNotFound()
+    - [ ] Creer la fonction viewPageNotFound(errorType)
       - [ ] Affiche les urls disponible si on a tapper un truc qui existe pas
       - [ ] Affiche erreur de page si on dis que le fichier jsp est pas la
     - [ ] Creer la fonction loadView()
       - [ ] Affiche la vue si elle existe
-      - [ ] Si la vue n'existe pas appeler PageNotFound
+      - [ ] Si la vue n'existe pas appeler PageNotFound()
 
     - [ ] Creer une classe angeli.sprint.util.Config
       - [ ]  Creer une fonction getSuffixAndPrefix()
