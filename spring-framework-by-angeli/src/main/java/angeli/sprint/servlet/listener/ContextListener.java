@@ -79,9 +79,16 @@ public class ContextListener implements ServletContextListener {
                     angeli.sprint.annotation.URL.class);
             context.setAttribute("urlMethods", urlMethods);
             context.log("La liste des méthodes annotées a été trouvee");
+
+            Map<String, URLMethod> urlMethodMapPOST = mapper.mapUrlToMethodPOST(urlMethods);
+            context.setAttribute("urlMethodMapPOST", urlMethodMapPOST);
+            context.log("Les methodes POST ont ete mis dans le contexte avec leur urls");
+
             Map<String, URLMethod> urlMethodMapGET = mapper.mapUrlToMethodGET(urlMethods);
+
             context.setAttribute("urlMethodMapGET", urlMethodMapGET);
             context.log("Les methodes GET ont ete mis dans le contexte avec leur urls");
+
         } catch (ClassNotFoundException e) {
             context.log("Erreur lors de la récupération des classes pour chercher les URLs: " + e.getMessage());
             throw new RuntimeException("Erreur lors de la récupération des classes pour chercher les URLs", e);
