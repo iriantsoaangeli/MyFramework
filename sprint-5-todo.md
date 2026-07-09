@@ -6,11 +6,11 @@
     - [x] Creer 2 fonction mapGET et mapPOST qui apppellent mapURLToMethod("GET" ou "POST")
   
 
-  - [ ] creer la classe angeli.sprint.model.ModelAndView
-    - [ ] attribut contexte 
-    - [ ] Fonction setAttribute(String,Object)
-    - [ ] Fonction getView() String avec suffix et prefix 
-    - [ ] Attribut view String
+  - [x] creer la classe angeli.sprint.model.ModelAndView
+    - [x] attribut contexte 
+    - [x] Fonction setAttribute(String,Object)
+    - [x] Fonction getView() String avec suffix et prefix 
+    - [x] Attribut view String
 
   - [ ] Modifier  angeli.sprint.servlet.FrontControllerServlet
     - [ ] Creer la fonction viewPageNotFound(errorType)
