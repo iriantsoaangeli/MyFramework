@@ -48,9 +48,16 @@ public class FrontControllerServlet extends HttpServlet {
      * @date 2026/6/11 17:29
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, controllerList, methodList);
+        if(doesUrlExist(req.getRequestURL().toString(), urlMethodMapGET)) {
+            // Handle existing URL
+        } else {
+            PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, controllerList, methodList);
+        }
     }
 
+    public boolean doesUrlExist(String url, Map<String, URLMethod> urlMethodMap) {
+        return urlMethodMap.containsKey(url);
+    }
 
     public void view(HttpServletRequest req, HttpServletResponse rep, String viewName) throws ServletException, IOException {
         String prefix = (String) getServletContext().getAttribute("prefix");
