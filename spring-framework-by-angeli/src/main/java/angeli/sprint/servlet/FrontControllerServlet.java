@@ -26,7 +26,7 @@ public class FrontControllerServlet extends HttpServlet {
      */
     List<String> controllerList;
     List<Method> methodList;
-    Map<String, URLMethod> urlMethodMap;
+    Map<String, URLMethod> urlMethodMapGET;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -52,21 +52,21 @@ public class FrontControllerServlet extends HttpServlet {
         String method = req.getMethod();
         String[] url = URLParser.getUrlFromRequest(req);
         String uri = url[1];
-        URLMethod methodPresent = urlMethodMap.get(uri);
-        urlMethodMap.remove(uri);
+        URLMethod methodPresent = urlMethodMapGET.get(uri);
+        urlMethodMapGET.remove(uri);
         wr.println("<h2>" + url[0] + " " + url[1] + "</h2>");
         wr.println("<h3>Les Controllers trouves sont :</h3>");
         wr.println(controllerList);
         wr.println("<h3>Les Methodes annotees avec @URL sont :</h3>");
         wr.println(methodList);
         wr.println("<h3>Le Map URL -> Method  :</h3>");
-        wr.println(urlMethodMap);
+        wr.println(urlMethodMapGET);
         wr.println("<h3>Votre url : " + url[0] + " " + url[1] + "</h3>");
         if (methodPresent == null) {
             wr.println("<h3>Aucune methode n'est associee a cette URL</h3>");
             return;
         } else {
-            urlMethodMap.put(url[1], methodPresent);
+            urlMethodMapGET.put(url[1], methodPresent);
             if (!methodPresent.getRequestMethod().equals(method)) {
                 // wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
 
@@ -97,6 +97,6 @@ public class FrontControllerServlet extends HttpServlet {
         super.init();
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
         methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
-        urlMethodMap = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMap");
+        urlMethodMapGET = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapGET");
     }
 }
