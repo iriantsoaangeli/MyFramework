@@ -1,7 +1,10 @@
 # fonctionnalites a implementer dans le sprint 5 
 - [ ] sprint 5 
   
-  - [ ] Modifier le angeli.sprint.utils.reflect.Mapper pour separer les GET POST en 2 listes separee 
+  - [ ] Modifier le angeli.sprint.utils.reflect.Mapper pour separer les GET POST en 2 listes separee
+    - [ ] Modifier la fonction mapURLToMethod() ajouter un arg String method 
+    - [ ] Creer 2 fonction mapGET et mapPOST qui apppellent mapURLToMethod("GET" ou "POST")
+  
 
   - [ ] creer la classe angeli.sprint.model.ModelAndView
     - [ ] attribut contexte 
@@ -16,6 +19,10 @@
     - [ ] Creer la fonction loadView()
       - [ ] Affiche la vue si elle existe
       - [ ] Si la vue n'existe pas appeler PageNotFound
+
+    - [ ] Creer une classe angeli.sprint.util.Config
+      - [ ]  Creer une fonction getSuffixPrefix()
+        - [ ]  Lire le xml 
     
   
 
