@@ -72,9 +72,11 @@ public class ContextListener implements ServletContextListener {
      * URL
      */
     void mapUrlToMethod(ServletContext context) {
+
         ClassPathScanner cpScanner = (ClassPathScanner) context.getAttribute("cpScanner");
         List<String> controllerList = (List<String>) context.getAttribute("controllerList");
         Mapper mapper = (Mapper) context.getAttribute("mapper");
+
         try {
             List<Method> urlMethods = cpScanner.scanClassForMethodAnnotation(controllerList,
                     angeli.sprint.annotation.URL.class);
@@ -88,6 +90,8 @@ public class ContextListener implements ServletContextListener {
             Map<String, URLMethod> urlMethodMapGET = mapper.mapUrlToMethodGET(urlMethods);
 
             context.setAttribute("urlMethodMapGET", urlMethodMapGET);
+            context.setAttribute("urlMethodMapPOST", urlMethodMapPOST);
+
             context.log("Les methodes GET ont ete mis dans le contexte avec leur urls");
 
         } catch (ClassNotFoundException e) {
@@ -96,10 +100,11 @@ public class ContextListener implements ServletContextListener {
         }
     }
 
-
     /**
      * Met le prefix et le suffix dans le context du servlet
-     * Generalement on a pas besoin de les mettre dans le context du servlet mais c'est pour montrer comment on peut le faire
+     * Generalement on a pas besoin de les mettre dans le context du servlet mais
+     * c'est pour montrer comment on peut le faire
+     * 
      * @param context
      */
     void initSuffixAndPrefix(ServletContext context) {
