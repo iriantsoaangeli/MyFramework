@@ -1,6 +1,12 @@
 package angeli.sprint.utils;
 
+import java.io.IOException;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class URLParser {
 
@@ -18,6 +24,15 @@ public class URLParser {
         return parts;
     }   
 
-    
+    public static void readUrl(HttpServletRequest req , HttpServletResponse rep) throws IOException,ServletException{
+        String method = req.getMethod();
+        String url = getUrlFromRequest(req)[1];
+        ServletContext  context = req.getServletContext();
+        String affix = (String) context.getAttribute("affix");
+        String prefix = (String) context.getAttribute("prefix");
+        String fullUrl = prefix + url + affix;
+
+        req.getRequestDispatcher(fullUrl).forward(req,rep);;
+    }
 
 }

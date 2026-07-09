@@ -34,9 +34,11 @@ public class ContextListener implements ServletContextListener {
         initMapper(context);
         initControllerList(context);
         initSuffixAndPrefix(context);
+
         ModelAndView.setAction((key, value) -> {
             context.setAttribute(key, value);
         });
+
         context.log("Le context du servlet a ete initialisé");
     }
 
