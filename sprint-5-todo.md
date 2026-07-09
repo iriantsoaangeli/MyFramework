@@ -19,10 +19,6 @@
     - [ ] Creer la fonction loadView()
       - [ ] Affiche la vue si elle existe
       - [ ] Si la vue n'existe pas appeler PageNotFound()
-
-    - [ ] Creer une classe angeli.sprint.util.Config
-      - [ ]  Creer une fonction getSuffixAndPrefix()
-        - [ ]  Lire le xml 
     
     - [x] Modifier angeli.sprint.listner.ContextListner
       - [x] Creer la fonction initPrefixAndSuffix

@@ -68,7 +68,7 @@ public class FrontControllerServlet extends HttpServlet {
         } else {
             urlMethodMapGET.put(url[1], methodPresent);
             if (!methodPresent.getRequestMethod().equals(method)) {
-                // wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
+                 wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
 
                 // wr.println("<h3>Cette fonction ne marche qu'en " + methodPresent.getRequestMethod() + "</h3>");
 
