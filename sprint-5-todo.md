@@ -19,6 +19,7 @@
     - [ ] Creer la fonction loadView()
       - [ ] Affiche la vue si elle existe
       - [ ] Si la vue n'existe pas appeler PageNotFound()
+    - [ ] Creer fonction viewAttributes(List<String>) 
     
     - [x] Modifier angeli.sprint.listner.ContextListner
       - [x] Creer la fonction initPrefixAndSuffix
