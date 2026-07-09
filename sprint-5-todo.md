@@ -1,9 +1,9 @@
 # fonctionnalites a implementer dans le sprint 5 
 - [ ] sprint 5 
   
-  - [ ] Modifier le angeli.sprint.utils.reflect.Mapper pour separer les GET POST en 2 listes separee
-    - [ ] Modifier la fonction mapURLToMethod() ajouter un arg String method 
-    - [ ] Creer 2 fonction mapGET et mapPOST qui apppellent mapURLToMethod("GET" ou "POST")
+  - [ x ] Modifier le angeli.sprint.utils.reflect.Mapper pour separer les GET POST en 2 listes separee
+    - [ x ] Modifier la fonction mapURLToMethod() ajouter un arg String method 
+    - [ x ] Creer 2 fonction mapGET et mapPOST qui apppellent mapURLToMethod("GET" ou "POST")
   
 
   - [ ] creer la classe angeli.sprint.model.ModelAndView
