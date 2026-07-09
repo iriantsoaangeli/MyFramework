@@ -49,6 +49,7 @@ public class FrontControllerServlet extends HttpServlet {
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         rep.setContentType("text/html;charset=UTF-8");
         PrintWriter wr = rep.getWriter();
+        String method = req.getMethod();
         String[] url = URLParser.getUrlFromRequest(req);
         String uri = url[1];
         URLMethod methodPresent = urlMethodMap.get(uri);
@@ -60,23 +61,28 @@ public class FrontControllerServlet extends HttpServlet {
         wr.println(methodList);
         wr.println("<h3>Le Map URL -> Method  :</h3>");
         wr.println(urlMethodMap);
-        urlMethodMap.put(url[1], methodPresent);
         wr.println("<h3>Votre url : " + url[0] + " " + url[1] + "</h3>");
         if (methodPresent == null) {
             wr.println("<h3>Aucune methode n'est associee a cette URL</h3>");
             return;
         } else {
-            wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
+            urlMethodMap.put(url[1], methodPresent);
+            if (!methodPresent.getRequestMethod().equals(method)) {
+                // wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
 
-            methodPresent.getMethod().setAccessible(true);
-            try
+                // wr.println("<h3>Cette fonction ne marche qu'en " + methodPresent.getRequestMethod() + "</h3>");
 
-            {
-                methodPresent.getMethod()
-                        .invoke(methodPresent.getMethod().getDeclaringClass().getDeclaredConstructor().newInstance());
-                wr.println("<h3>La methode a ete appelee avec succes</h3>");
-            } catch (Exception e) {
-                e.printStackTrace(wr);
+            } else {
+
+                methodPresent.getMethod().setAccessible(true);
+                try {
+                    methodPresent.getMethod()
+                            .invoke(methodPresent.getMethod().getDeclaringClass().getDeclaredConstructor()
+                                    .newInstance());
+                    wr.println("<h3>La methode a ete appelee avec succes</h3>");
+                } catch (Exception e) {
+                    e.printStackTrace(wr);
+                }
             }
         }
 
