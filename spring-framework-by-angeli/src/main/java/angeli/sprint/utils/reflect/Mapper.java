@@ -18,9 +18,10 @@ public class Mapper {
      * Map les methodes avec l'annotation @URL avec leur URL
      * 
      * @param methods liste de methodes donnees
+     * @param Method type de methode (GET,POST)
      * @return map avec l'URL comme cle et la methode comme valeur
      */
-    public Map<String, URLMethod> mapUrlToMethod(List<Method> methods) {
+    public Map<String, URLMethod> mapUrlToMethod(List<Method> methods,String Method) {
         Map<String, URLMethod> urlMap = new HashMap<>();
         for (Method method : methods) {
             if (method.isAnnotationPresent(angeli.sprint.annotation.URL.class)) {
@@ -34,5 +35,26 @@ public class Mapper {
             }
         }
         return urlMap;
+    }
+
+
+    /**
+     * Appelle la methode mapUrlToMethod pour les requetes GET
+     * 
+     * @param methods liste de methodes donnees
+     * @return map avec l'URL comme cle et la methode comme valeur
+     */
+    public Map<String,URLMethod> mapUrlToMethodGET(List<Method> methods) {
+        return mapUrlToMethod(methods,"GET");
+    }
+
+
+    /**
+     *Appelle la methode mapUrlToMethod pour les requetes POST
+     * @param methods liste de methodes donnees
+     * @return map avec l'URL comme cle et la methode comme valeur
+     */
+    public Map<String,URLMethod> mapUrlToMethodPOST(List<Method> methods) {
+        return mapUrlToMethod(methods,"POST");
     }
 }
