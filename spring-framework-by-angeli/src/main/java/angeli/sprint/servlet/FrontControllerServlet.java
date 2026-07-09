@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.model.ModelAndView;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,10 +50,32 @@ public class FrontControllerServlet extends HttpServlet {
      * @date 2026/6/11 17:29
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        if(doesUrlExist(req.getRequestURL().toString(), urlMethodMapGET)) {
+        if (doesUrlExist(req.getRequestURL().toString(), urlMethodMapGET)) {
+            if (doesUrlHaveView(req.getRequestURL().toString(), urlMethodMapGET)) {
+                try {
+                    Method calledMethod = urlMethodMapGET.get(req.getRequestURL().toString()).getMethod();
+                    ModelAndView modelAndView = (ModelAndView) calledMethod
+                            .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
+                    ServletContext context = req.getServletContext();
+                    view(modelAndView.getView(), context.getAttribute("suffix").toString(),
+                            context.getAttribute("prefix").toString(), req, rep);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             // Handle existing URL
         } else {
             PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, controllerList, methodList);
+        }
+    }
+
+    public void view(String viewName, String suffix, String prefix, HttpServletRequest req, HttpServletResponse rep)
+            throws IOException {
+        String viewPath = prefix + viewName + suffix;
+        try {
+            req.getRequestDispatcher(viewPath).forward(req, rep);
+        } catch (ServletException e) {
+            e.printStackTrace();
         }
     }
 
@@ -59,11 +83,14 @@ public class FrontControllerServlet extends HttpServlet {
         return urlMethodMap.containsKey(url);
     }
 
-    public void view(HttpServletRequest req, HttpServletResponse rep, String viewName) throws ServletException, IOException {
-        String prefix = (String) getServletContext().getAttribute("prefix");
-        String affix = (String) getServletContext().getAttribute("affix");
-        String fullViewPath = prefix + viewName + affix;
-        req.getRequestDispatcher(fullViewPath).forward(req, rep);
+    public boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
+        if (urlMethodMap.containsKey(url)) {
+            Method calledMethod = urlMethodMap.get(url).getMethod();
+            if (calledMethod.getReturnType() == angeli.sprint.model.ModelAndView.class) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

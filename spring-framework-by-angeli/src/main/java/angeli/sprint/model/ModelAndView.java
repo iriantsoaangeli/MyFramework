@@ -13,8 +13,7 @@ import jakarta.servlet.ServletContext;
  * @author Angeli
  */
 public class ModelAndView {
-
-    static String view;
+    String view;
     static BiConsumer<String, Object> action;
 
     public ModelAndView(String view, ServletContext context) {
@@ -25,8 +24,8 @@ public class ModelAndView {
         ModelAndView.action = action;
     }
 
-    public static void setView(String view) {
-        ModelAndView.view = view;
+    public void setView(String view) {
+        this.view = view;
     }
 
     public void setAttribute(String key, Object value) {
