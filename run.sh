@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Les paths 
 BASE_DIR=$(dirname "$0")
 SOURCE_DIR="/home/angeli/Asa/Sprint(Mr Naina)/spring-framework-by-angeli"
 TARGET_JAR="$SOURCE_DIR/target/spring-framework-by-angeli-1.0-SNAPSHOT-jar-with-dependencies.jar"
