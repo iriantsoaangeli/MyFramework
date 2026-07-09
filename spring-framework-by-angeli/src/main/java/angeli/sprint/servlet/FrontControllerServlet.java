@@ -85,6 +85,12 @@ public class FrontControllerServlet extends HttpServlet {
         }
 
     }
+    public void view(HttpServletRequest req, HttpServletResponse rep, String viewName) throws ServletException, IOException {
+        String prefix = (String) getServletContext().getAttribute("prefix");
+        String affix = (String) getServletContext().getAttribute("affix");
+        String fullViewPath = prefix + viewName + affix;
+        req.getRequestDispatcher(fullViewPath).forward(req, rep);
+    }
 
     /**
      * Initialisation du servlet, recupere la liste des controllers depuis le

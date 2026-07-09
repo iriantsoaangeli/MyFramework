@@ -24,15 +24,5 @@ public class URLParser {
         return parts;
     }   
 
-    public static void readUrl(HttpServletRequest req , HttpServletResponse rep) throws IOException,ServletException{
-        String method = req.getMethod();
-        String url = getUrlFromRequest(req)[1];
-        ServletContext  context = req.getServletContext();
-        String affix = (String) context.getAttribute("affix");
-        String prefix = (String) context.getAttribute("prefix");
-        String fullUrl = prefix + url + affix;
-
-        req.getRequestDispatcher(fullUrl).forward(req,rep);;
-    }
-
+ 
 }
