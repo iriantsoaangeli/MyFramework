@@ -45,3 +45,16 @@ mon-app-web/
 
 ## Sprint 3+1/2 : 
     Run la methode dans l'url ?
+
+## Sprint 4 :
+
+    utiliser le ContextListner au demarrage (Deja fais en sprint 1 )
+
+
+## Sprint 5 :
+
+    On gerera le view donnes par les methodes dans les controllers  via une classe ModelAndView
+
+
+
+    
