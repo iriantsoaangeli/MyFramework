@@ -3,6 +3,7 @@ package angeli.sprint.utils;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class URLParser {
+
     public static String[] getUrlFromRequest(HttpServletRequest req){
         String url = req.getRequestURL().toString();
         String[] parts = new String[2];
@@ -16,4 +17,7 @@ public class URLParser {
         parts[1] = uri;
         return parts;
     }   
+
+    
+
 }

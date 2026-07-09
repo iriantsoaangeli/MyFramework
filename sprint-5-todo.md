@@ -18,8 +18,10 @@
       - [ ] Affiche erreur de page si on dis que le fichier jsp est pas la
     - [ ] Creer la fonction loadView()
       - [ ] Affiche la vue si elle existe
-      - [ ] Si la vue n'existe pas appeler PageNotFound()
-    - [ ] Creer fonction viewAttributes(List<String>) 
+      - [ ] Si la vue n'existe pas appeler viewPageNotFound()
+  
+  - [ ] Modifier la class angeli.sprint.util.URLParser
+    - [ ] Creer la fonction readURL() retourne null ou path de view
     
     - [x] Modifier angeli.sprint.listner.ContextListner
       - [x] Creer la fonction initPrefixAndSuffix

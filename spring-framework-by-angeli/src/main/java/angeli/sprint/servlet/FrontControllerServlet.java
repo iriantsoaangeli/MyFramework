@@ -27,6 +27,7 @@ public class FrontControllerServlet extends HttpServlet {
     List<String> controllerList;
     List<Method> methodList;
     Map<String, URLMethod> urlMethodMapGET;
+    Map<String, URLMethod> urlMethodMapPost;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -68,9 +69,10 @@ public class FrontControllerServlet extends HttpServlet {
         } else {
             urlMethodMapGET.put(url[1], methodPresent);
             if (!methodPresent.getRequestMethod().equals(method)) {
-                 wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
+                wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
 
-                // wr.println("<h3>Cette fonction ne marche qu'en " + methodPresent.getRequestMethod() + "</h3>");
+                // wr.println("<h3>Cette fonction ne marche qu'en " +
+                // methodPresent.getRequestMethod() + "</h3>");
 
             } else {
 
@@ -98,5 +100,6 @@ public class FrontControllerServlet extends HttpServlet {
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
         methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
         urlMethodMapGET = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapGET");
+        urlMethodMapPost = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapPOST");
     }
 }
