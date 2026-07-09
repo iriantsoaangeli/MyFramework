@@ -27,10 +27,10 @@ public class Mapper {
             if (method.isAnnotationPresent(angeli.sprint.annotation.URL.class)) {
                 angeli.sprint.annotation.URL annotation = method.getAnnotation(angeli.sprint.annotation.URL.class);
                 String url = annotation.value();
-                if (urlMap.containsKey(url) && urlMap.get(url).getRequestMethod().equals(annotation.method())) {
+                if (urlMap.containsKey(url) && urlMap.get(url).getRequestMethod().equals(Method)) {
                     throw new RuntimeException("Doublons sur URL ET METHODE pour la methode " + method.getName() + " et la methode " + urlMap.get(url).getMethod().getName());
                 } else {
-                    urlMap.put(url, new URLMethod(method, annotation.method()));
+                    urlMap.put(url, new URLMethod(method, Method));
                 }
             }
         }
