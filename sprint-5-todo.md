@@ -1,9 +1,9 @@
 # fonctionnalites a implementer dans le sprint 5 
 - [ ] sprint 5 
   
-  - [ x ] Modifier le angeli.sprint.utils.reflect.Mapper pour separer les GET POST en 2 listes separee
-    - [ x ] Modifier la fonction mapURLToMethod() ajouter un arg String method 
-    - [ x ] Creer 2 fonction mapGET et mapPOST qui apppellent mapURLToMethod("GET" ou "POST")
+  - [x] Modifier le angeli.sprint.utils.reflect.Mapper pour separer les GET POST en 2 listes separee
+    - [x] Modifier la fonction mapURLToMethod() ajouter un arg String method 
+    - [x] Creer 2 fonction mapGET et mapPOST qui apppellent mapURLToMethod("GET" ou "POST")
   
 
   - [ ] creer la classe angeli.sprint.model.ModelAndView
@@ -24,10 +24,10 @@
       - [ ]  Creer une fonction getSuffixAndPrefix()
         - [ ]  Lire le xml 
     
-    - [ ] Modifier angeli.sprint.listner.ContextListner
-      - [ ] Creer la fonction initPrefixAndSuffix
+    - [x] Modifier angeli.sprint.listner.ContextListner
+      - [x] Creer la fonction initPrefixAndSuffix
   
-  
+
 # problemes futurs a eviter 
 - [ ] sprint 5 - fix 
   - [ ] envoyer toutes les erreurs dans catalina.out au lieu de catalina.log
