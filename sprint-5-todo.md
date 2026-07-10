@@ -12,7 +12,7 @@
     - [x] Fonction getView() String avec suffix et prefix 
     - [x] Attribut view String
 
-  - [ ] creation de la classe angeli.sprint.servlet.PageWriter
+  - [x] creation de la classe angeli.sprint.servlet.PageWriter
     - [x] Creer la fonction viewPageNotFound(errorType)
       - [ ] Affiche les urls disponible si on a tapper un truc qui existe pas
       - [ ] Affiche erreur de page si on dis que le fichier jsp est pas la
