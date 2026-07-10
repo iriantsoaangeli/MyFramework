@@ -62,11 +62,12 @@ public class FrontControllerServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else {
+                PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
             }
-            // Handle existing URL
-        }
-        else {
-            PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST,controllerList, methodList);
+
+        } else {
+            PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
         }
     }
 
