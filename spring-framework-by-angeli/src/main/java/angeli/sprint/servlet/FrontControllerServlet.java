@@ -29,7 +29,7 @@ public class FrontControllerServlet extends HttpServlet {
     List<String> controllerList;
     List<Method> methodList;
     Map<String, URLMethod> urlMethodMapGET;
-    Map<String, URLMethod> urlMethodMapPost;
+    Map<String, URLMethod> urlMethodMapPOST;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -50,7 +50,7 @@ public class FrontControllerServlet extends HttpServlet {
      * @date 2026/6/11 17:29
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        if (doesUrlExist(req.getRequestURL().toString(), urlMethodMapGET)) {
+        if (doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
             if (doesUrlHaveView(req.getRequestURL().toString(), urlMethodMapGET)) {
                 try {
                     Method calledMethod = urlMethodMapGET.get(req.getRequestURL().toString()).getMethod();
@@ -64,8 +64,9 @@ public class FrontControllerServlet extends HttpServlet {
                 }
             }
             // Handle existing URL
-        } else {
-            PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, controllerList, methodList);
+        }
+        else {
+            PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST,controllerList, methodList);
         }
     }
 
@@ -103,6 +104,6 @@ public class FrontControllerServlet extends HttpServlet {
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
         methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
         urlMethodMapGET = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapGET");
-        urlMethodMapPost = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapPOST");
+        urlMethodMapPOST = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapPOST");
     }
 }
