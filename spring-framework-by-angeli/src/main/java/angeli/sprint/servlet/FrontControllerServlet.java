@@ -51,13 +51,15 @@ public class FrontControllerServlet extends HttpServlet {
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
-            String targetPath = URLParser.getUrlFromRequest(req)[1]; // ex: "/WEB-INF/test.jsp" (chemin cible du
-                                                                     // forward)
+            String targetPath = URLParser.getUrlFromRequest(req)[1];
+
             System.out.println("Forward detecte, on sert: " + targetPath);
 
             req.setAttribute("org.apache.catalina.jsp_file", targetPath);
+
             try {
                 req.getServletContext().getNamedDispatcher("jsp").forward(req, rep);
+                rep.setContentType("application/json");
             } catch (ServletException e) {
                 e.printStackTrace();
             }
