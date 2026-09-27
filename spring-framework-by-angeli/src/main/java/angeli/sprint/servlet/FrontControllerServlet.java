@@ -70,7 +70,8 @@ public class FrontControllerServlet extends HttpServlet {
             Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
 
             // Si l'url est un objet different de modelAndView
-            if (isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+            if (isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)
+                    && !doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 try {
                     PageWriter.print(req, rep, calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null),
@@ -96,12 +97,12 @@ public class FrontControllerServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else {
+            } else if (!isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
             }
 
         } else {
-            PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
+            PageWriter.urlNotFound(rep);
         }
     }
 
