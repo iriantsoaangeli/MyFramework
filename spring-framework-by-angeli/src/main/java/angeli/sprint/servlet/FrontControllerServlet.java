@@ -49,6 +49,10 @@ public class FrontControllerServlet extends HttpServlet {
      * @throws IOException
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
+        if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
+            return;
+        }
+
         if (doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
             if (doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 try {
@@ -82,6 +86,7 @@ public class FrontControllerServlet extends HttpServlet {
         System.out.println("View Path: " + viewPath);
 
         try {
+
             req.getRequestDispatcher(viewPath).forward(req, rep);
         } catch (ServletException e) {
             e.printStackTrace();
