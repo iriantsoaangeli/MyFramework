@@ -59,7 +59,6 @@ public class FrontControllerServlet extends HttpServlet {
 
             try {
                 req.getServletContext().getNamedDispatcher("jsp").forward(req, rep);
-                rep.setContentType("application/json");
             } catch (ServletException e) {
                 e.printStackTrace();
             }
@@ -67,9 +66,24 @@ public class FrontControllerServlet extends HttpServlet {
         }
 
         if (doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+
+            Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
+
+            // Si l'url est un objet different de modelAndView
+            if (isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+                try {
+                    PageWriter.print(req, rep, calledMethod
+                            .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null),
+                            getContentTypeForUrl(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
             if (doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 try {
-                    Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
+
                     ModelAndView modelAndView = (ModelAndView) calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
 
@@ -105,11 +119,11 @@ public class FrontControllerServlet extends HttpServlet {
         }
     }
 
-    public boolean doesUrlExist(String url, Map<String, URLMethod> urlMethodMap) {
+    boolean doesUrlExist(String url, Map<String, URLMethod> urlMethodMap) {
         return urlMethodMap.containsKey(url);
     }
 
-    public boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
+    boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
 
         // Print url dont on veut savoir si elle a une vue dans catalina.out
         System.out.println("Checking if URL has view: " + url);
@@ -128,6 +142,23 @@ public class FrontControllerServlet extends HttpServlet {
         // Print dans catalina.out que la méthode n'a pas de vue
         System.out.println("URL does not have view: " + url);
 
+        return false;
+    }
+
+    String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
+        if (urlMethodMap.containsKey(url)) {
+            Method calledMethod = urlMethodMap.get(url).getMethod();
+            angeli.sprint.annotation.URL annotation = calledMethod.getAnnotation(angeli.sprint.annotation.URL.class);
+            return annotation.contentType();
+        }
+        return "text/html"; // Default content type
+    }
+
+    boolean isUrlObject(String url, Map<String, URLMethod> urlMethodMap) {
+        if (urlMethodMap.containsKey(url)) {
+            Method calledMethod = urlMethodMap.get(url).getMethod();
+            return !calledMethod.getReturnType().equals(angeli.sprint.model.ModelAndView.class);
+        }
         return false;
     }
 
