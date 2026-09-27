@@ -68,7 +68,7 @@ public class PageWriter {
     public static void printJson(PrintWriter wr, Object o) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(o);
-        wr.println(json);
+        wr.print(json);
     }
 
     public static void print(HttpServletRequest req, HttpServletResponse rep, Object message, String contentType)
@@ -79,6 +79,7 @@ public class PageWriter {
             switch (contentType) {
                 case "application/json":
                     printJson(wr, message);
+                    rep.setContentType("application/json");
                     break;
 
                 default:
