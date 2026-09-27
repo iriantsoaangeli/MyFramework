@@ -15,6 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import angeli.sprint.utils.URLHandler;
 
 /**
  * Servlet du spring-framework-by-Angeli
@@ -65,24 +66,24 @@ public class FrontControllerServlet extends HttpServlet {
             return;
         }
 
-        if (doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+        if (URLHandler.doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
 
             Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
 
             // Si l'url est un objet different de modelAndView
-            if (isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)
-                    && !doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+            if (URLHandler.isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)
+                    && !URLHandler.doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 try {
                     PageWriter.print(req, rep, calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null),
-                            getContentTypeForUrl(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET));
+                            URLHandler.getContentTypeForUrl(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             }
 
-            if (doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+            if (URLHandler.doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 try {
 
                     ModelAndView modelAndView = (ModelAndView) calledMethod
@@ -97,7 +98,7 @@ public class FrontControllerServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (!isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+            } else if (!URLHandler.isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
             }
 
@@ -118,49 +119,6 @@ public class FrontControllerServlet extends HttpServlet {
         } catch (ServletException e) {
             e.printStackTrace();
         }
-    }
-
-    boolean doesUrlExist(String url, Map<String, URLMethod> urlMethodMap) {
-        return urlMethodMap.containsKey(url);
-    }
-
-    boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
-
-        // Print url dont on veut savoir si elle a une vue dans catalina.out
-        System.out.println("Checking if URL has view: " + url);
-
-        if (urlMethodMap.containsKey(url)) {
-            Method calledMethod = urlMethodMap.get(url).getMethod();
-            if (calledMethod.getReturnType() == angeli.sprint.model.ModelAndView.class) {
-
-                // Print dans catalina.out que la méthode a une vue
-                System.out.println("URL has view: " + url);
-
-                return true;
-            }
-        }
-
-        // Print dans catalina.out que la méthode n'a pas de vue
-        System.out.println("URL does not have view: " + url);
-
-        return false;
-    }
-
-    String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
-        if (urlMethodMap.containsKey(url)) {
-            Method calledMethod = urlMethodMap.get(url).getMethod();
-            angeli.sprint.annotation.URL annotation = calledMethod.getAnnotation(angeli.sprint.annotation.URL.class);
-            return annotation.contentType();
-        }
-        return "text/html"; // Default content type
-    }
-
-    boolean isUrlObject(String url, Map<String, URLMethod> urlMethodMap) {
-        if (urlMethodMap.containsKey(url)) {
-            Method calledMethod = urlMethodMap.get(url).getMethod();
-            return !calledMethod.getReturnType().equals(angeli.sprint.model.ModelAndView.class);
-        }
-        return false;
     }
 
     /**
