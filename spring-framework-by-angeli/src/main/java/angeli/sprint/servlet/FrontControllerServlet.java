@@ -55,13 +55,9 @@ public class FrontControllerServlet extends HttpServlet {
                     Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
                     ModelAndView modelAndView = (ModelAndView) calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
-                           
-                            // Pour debug
-                        //  Print le ModelAndView en String dans catalina.out  
-                            System.out.println("ModelAndView: " + modelAndView) ;
 
-
-
+                    // Print le ModelAndView en String dans catalina.out
+                    System.out.println("ModelAndView: " + modelAndView);
 
                     ServletContext context = req.getServletContext();
                     view(modelAndView.getView(), context.getAttribute("suffix").toString(),
@@ -82,9 +78,8 @@ public class FrontControllerServlet extends HttpServlet {
             throws IOException {
         String viewPath = suffix + viewName + prefix;
 
-                //Pour debug
-                // Print le chemin de la vue dans catalina.out
-                System.out.println("View Path: " + viewPath) ;
+        // Print le chemin de la vue dans catalina.out
+        System.out.println("View Path: " + viewPath);
 
         try {
             req.getRequestDispatcher(viewPath).forward(req, rep);
@@ -98,12 +93,24 @@ public class FrontControllerServlet extends HttpServlet {
     }
 
     public boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
+
+        // Print url dont on veut savoir si elle a une vue dans catalina.out
+        System.out.println("Checking if URL has view: " + url);
+
         if (urlMethodMap.containsKey(url)) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
             if (calledMethod.getReturnType() == angeli.sprint.model.ModelAndView.class) {
+
+                // Print dans catalina.out que la méthode a une vue
+                System.out.println("URL has view: " + url);
+
                 return true;
             }
-        }   
+        }
+
+        // Print dans catalina.out que la méthode n'a pas de vue
+        System.out.println("URL does not have view: " + url);
+
         return false;
     }
 
