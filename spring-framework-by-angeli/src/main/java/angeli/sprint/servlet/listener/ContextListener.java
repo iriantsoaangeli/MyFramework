@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.model.ModelAndView;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.reflect.ClassPathScanner;
 import angeli.sprint.utils.reflect.Mapper;
@@ -32,6 +33,11 @@ public class ContextListener implements ServletContextListener {
         initPackageScanner(context);
         initMapper(context);
         initControllerList(context);
+        initSuffixAndPrefix(context);
+
+        ModelAndView.setAction((key, value) -> {
+            context.setAttribute(key, value);
+        });
 
         context.log("Le context du servlet a ete initialisé");
     }
@@ -71,21 +77,44 @@ public class ContextListener implements ServletContextListener {
      * URL
      */
     void mapUrlToMethod(ServletContext context) {
+
         ClassPathScanner cpScanner = (ClassPathScanner) context.getAttribute("cpScanner");
         List<String> controllerList = (List<String>) context.getAttribute("controllerList");
         Mapper mapper = (Mapper) context.getAttribute("mapper");
+
         try {
             List<Method> urlMethods = cpScanner.scanClassForMethodAnnotation(controllerList,
                     angeli.sprint.annotation.URL.class);
             context.setAttribute("urlMethods", urlMethods);
             context.log("La liste des méthodes annotées a été trouvee");
-            Map<String, URLMethod> urlMethodMap = mapper.mapUrlToMethod(urlMethods);
-            context.setAttribute("urlMethodMap", urlMethodMap);
-            context.log("Les methodes ont ete mis dans le contexte avec leur urls");
+
+            Map<String, URLMethod> urlMethodMapPOST = mapper.mapUrlToMethodPOST(urlMethods);
+            context.setAttribute("urlMethodMapPOST", urlMethodMapPOST);
+            context.log("Les methodes POST ont ete mis dans le contexte avec leur urls");
+
+            Map<String, URLMethod> urlMethodMapGET = mapper.mapUrlToMethodGET(urlMethods);
+
+            context.setAttribute("urlMethodMapGET", urlMethodMapGET);
+            context.setAttribute("urlMethodMapPOST", urlMethodMapPOST);
+
+            context.log("Les methodes GET ont ete mis dans le contexte avec leur urls");
+
         } catch (ClassNotFoundException e) {
             context.log("Erreur lors de la récupération des classes pour chercher les URLs: " + e.getMessage());
             throw new RuntimeException("Erreur lors de la récupération des classes pour chercher les URLs", e);
         }
+    }
+
+    /**
+     * Met le prefix et le suffix dans le context du servlet
+     * Generalement on a pas besoin de les mettre dans le context du servlet mais
+     * c'est pour montrer comment on peut le faire
+     * 
+     * @param context
+     */
+    void initSuffixAndPrefix(ServletContext context) {
+        context.setAttribute("prefix", context.getInitParameter("prefix"));
+        context.setAttribute("suffix", context.getInitParameter("suffix"));
     }
 
 }

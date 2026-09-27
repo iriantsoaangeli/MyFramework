@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.model.ModelAndView;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +28,8 @@ public class FrontControllerServlet extends HttpServlet {
      */
     List<String> controllerList;
     List<Method> methodList;
-    Map<String, URLMethod> urlMethodMap;
+    Map<String, URLMethod> urlMethodMapGET;
+    Map<String, URLMethod> urlMethodMapPOST;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -47,39 +50,49 @@ public class FrontControllerServlet extends HttpServlet {
      * @date 2026/6/11 17:29
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        rep.setContentType("text/html;charset=UTF-8");
-        PrintWriter wr = rep.getWriter();
-        String[] url = URLParser.getUrlFromRequest(req);
-        String uri = url[1];
-        URLMethod methodPresent = urlMethodMap.get(uri);
-        urlMethodMap.remove(uri);
-        wr.println("<h2>" + url[0] + " " + url[1] + "</h2>");
-        wr.println("<h3>Les Controllers trouves sont :</h3>");
-        wr.println(controllerList);
-        wr.println("<h3>Les Methodes annotees avec @URL sont :</h3>");
-        wr.println(methodList);
-        wr.println("<h3>Le Map URL -> Method  :</h3>");
-        wr.println(urlMethodMap);
-        urlMethodMap.put(url[1], methodPresent);
-        wr.println("<h3>Votre url : " + url[0] + " " + url[1] + "</h3>");
-        if (methodPresent == null) {
-            wr.println("<h3>Aucune methode n'est associee a cette URL</h3>");
-            return;
+        if (doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+            if (doesUrlHaveView(req.getRequestURL().toString(), urlMethodMapGET)) {
+                try {
+                    Method calledMethod = urlMethodMapGET.get(req.getRequestURL().toString()).getMethod();
+                    ModelAndView modelAndView = (ModelAndView) calledMethod
+                            .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
+                    ServletContext context = req.getServletContext();
+                    view(modelAndView.getView(), context.getAttribute("suffix").toString(),
+                            context.getAttribute("prefix").toString(), req, rep);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
+            }
+
         } else {
-            wr.println("<h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
+            PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
+        }
+    }
 
-            methodPresent.getMethod().setAccessible(true);
-            try
+    public void view(String viewName, String suffix, String prefix, HttpServletRequest req, HttpServletResponse rep)
+            throws IOException {
+        String viewPath = prefix + viewName + suffix;
+        try {
+            req.getRequestDispatcher(viewPath).forward(req, rep);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+    }
 
-            {
-                methodPresent.getMethod()
-                        .invoke(methodPresent.getMethod().getDeclaringClass().getDeclaredConstructor().newInstance());
-                wr.println("<h3>La methode a ete appelee avec succes</h3>");
-            } catch (Exception e) {
-                e.printStackTrace(wr);
+    public boolean doesUrlExist(String url, Map<String, URLMethod> urlMethodMap) {
+        return urlMethodMap.containsKey(url);
+    }
+
+    public boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
+        if (urlMethodMap.containsKey(url)) {
+            Method calledMethod = urlMethodMap.get(url).getMethod();
+            if (calledMethod.getReturnType() == angeli.sprint.model.ModelAndView.class) {
+                return true;
             }
         }
-
+        return false;
     }
 
     /**
@@ -91,6 +104,7 @@ public class FrontControllerServlet extends HttpServlet {
         super.init();
         controllerList = (List<String>) getServletContext().getAttribute("controllerList");
         methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
-        urlMethodMap = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMap");
+        urlMethodMapGET = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapGET");
+        urlMethodMapPOST = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapPOST");
     }
 }
