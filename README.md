@@ -45,5 +45,6 @@ mvn clean package
 ## Sprint 6 : 
 
     On peut choisir le type de content de la page (json ou HTML)
+    L'annotation Controller a maintenant un attribut ContentType
 
     
