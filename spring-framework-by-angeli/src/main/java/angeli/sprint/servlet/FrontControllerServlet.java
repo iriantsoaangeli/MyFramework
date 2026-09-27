@@ -55,6 +55,14 @@ public class FrontControllerServlet extends HttpServlet {
                     Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
                     ModelAndView modelAndView = (ModelAndView) calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
+                           
+                            // Pour debug
+                        //  Print le ModelAndView en String dans catalina.out  
+                            System.out.println("ModelAndView: " + modelAndView) ;
+
+
+
+
                     ServletContext context = req.getServletContext();
                     view(modelAndView.getView(), context.getAttribute("suffix").toString(),
                             context.getAttribute("prefix").toString(), req, rep);
@@ -72,7 +80,12 @@ public class FrontControllerServlet extends HttpServlet {
 
     public void view(String viewName, String suffix, String prefix, HttpServletRequest req, HttpServletResponse rep)
             throws IOException {
-        String viewPath = prefix + viewName + suffix;
+        String viewPath = suffix + viewName + prefix;
+
+                //Pour debug
+                // Print le chemin de la vue dans catalina.out
+                System.out.println("View Path: " + viewPath) ;
+
         try {
             req.getRequestDispatcher(viewPath).forward(req, rep);
         } catch (ServletException e) {
