@@ -85,7 +85,6 @@ public class PageWriter {
                 default:
                     break;
             }
-            printJson(wr, message);
         } else {
             wr.println(message);
         }
