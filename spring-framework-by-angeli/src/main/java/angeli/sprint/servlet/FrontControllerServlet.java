@@ -20,7 +20,7 @@ import angeli.sprint.utils.URLHandler;
 /**
  * Servlet du spring-framework-by-Angeli
  * 
- * @author Angeli
+ *   
  */
 public class FrontControllerServlet extends HttpServlet {
 
@@ -107,6 +107,14 @@ public class FrontControllerServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Affiche la vue sur la page web
+     * 
+     * @param viewName le nom du fichier jsp/html
+     * @param suffix   le chemin du dossier des vues
+     * @param prefix   .jsp ou .html
+     * @throws IOException
+     */
     public void view(String viewName, String suffix, String prefix, HttpServletRequest req, HttpServletResponse rep)
             throws IOException {
         String viewPath = suffix + viewName + prefix;

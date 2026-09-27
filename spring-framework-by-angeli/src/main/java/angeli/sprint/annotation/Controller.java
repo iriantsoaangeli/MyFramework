@@ -8,7 +8,7 @@ import java.lang.annotation.ElementType;
 /**
  * Annotation pour les controllers
  * 
- * @author Angeli
+ *   
 
  */
 @Target(ElementType.TYPE)
