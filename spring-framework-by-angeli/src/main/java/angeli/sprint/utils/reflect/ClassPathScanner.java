@@ -12,7 +12,7 @@ import io.github.classgraph.MethodInfoList.MethodInfoFilter;
 /**
  * La classe qui interagit avec les packages
  * 
- * @author Angeli
+ *   
  */
 public class ClassPathScanner {
 

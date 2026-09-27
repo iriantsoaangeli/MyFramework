@@ -15,11 +15,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import angeli.sprint.utils.URLHandler;
 
 /**
  * Servlet du spring-framework-by-Angeli
  * 
- * @author Angeli
+ *   
  */
 public class FrontControllerServlet extends HttpServlet {
 
@@ -47,52 +48,85 @@ public class FrontControllerServlet extends HttpServlet {
      * @param req la requete http
      * @param rep la reponse http
      * @throws IOException
-     * @date 2026/6/11 17:29
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        if (doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
-            if (doesUrlHaveView(req.getRequestURL().toString(), urlMethodMapGET)) {
+
+        if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
+            String targetPath = URLParser.getUrlFromRequest(req)[1];
+
+            System.out.println("Forward detecte, on sert: " + targetPath);
+
+            req.setAttribute("org.apache.catalina.jsp_file", targetPath);
+
+            try {
+                req.getServletContext().getNamedDispatcher("jsp").forward(req, rep);
+            } catch (ServletException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        if (URLHandler.doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+
+            Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
+
+            // Si l'url est un objet different de modelAndView
+            if (URLHandler.isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)
+                    && !URLHandler.doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 try {
-                    Method calledMethod = urlMethodMapGET.get(req.getRequestURL().toString()).getMethod();
+                    PageWriter.print(req, rep, calledMethod
+                            .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null),
+                            URLHandler.getContentTypeForUrl(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            if (URLHandler.doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+                try {
+
                     ModelAndView modelAndView = (ModelAndView) calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
+
+                    // Print le ModelAndView en String dans catalina.out
+                    System.out.println("ModelAndView: " + modelAndView);
+
                     ServletContext context = req.getServletContext();
                     view(modelAndView.getView(), context.getAttribute("suffix").toString(),
                             context.getAttribute("prefix").toString(), req, rep);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else {
+            } else if (!URLHandler.isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
             }
 
         } else {
-            PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
+            PageWriter.urlNotFound(rep);
         }
     }
 
+    /**
+     * Affiche la vue sur la page web
+     * 
+     * @param viewName le nom du fichier jsp/html
+     * @param suffix   le chemin du dossier des vues
+     * @param prefix   .jsp ou .html
+     * @throws IOException
+     */
     public void view(String viewName, String suffix, String prefix, HttpServletRequest req, HttpServletResponse rep)
             throws IOException {
-        String viewPath = prefix + viewName + suffix;
+        String viewPath = suffix + viewName + prefix;
+
+        // Print le chemin de la vue dans catalina.out
+        System.out.println("View Path: " + viewPath);
+
         try {
             req.getRequestDispatcher(viewPath).forward(req, rep);
         } catch (ServletException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean doesUrlExist(String url, Map<String, URLMethod> urlMethodMap) {
-        return urlMethodMap.containsKey(url);
-    }
-
-    public boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
-        if (urlMethodMap.containsKey(url)) {
-            Method calledMethod = urlMethodMap.get(url).getMethod();
-            if (calledMethod.getReturnType() == angeli.sprint.model.ModelAndView.class) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

@@ -42,6 +42,9 @@ mvn clean package
 
     On gerera le view donnes par les methodes dans les controllers  via une classe ModelAndView
 
+## Sprint 6 : 
 
+    On peut choisir le type de content de la page (json ou HTML)
+    L'annotation Controller a maintenant un attribut ContentType
 
     

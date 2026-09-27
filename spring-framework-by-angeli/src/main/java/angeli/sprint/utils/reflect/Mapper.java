@@ -10,7 +10,7 @@ import angeli.sprint.url.URLMethod;
 /**
  * Class pour mapper des methodes/objets
  * 
- * @author Angeli
+ *   
  */
 public class Mapper {
 

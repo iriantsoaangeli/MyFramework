@@ -17,7 +17,7 @@ import angeli.sprint.utils.reflect.Mapper;
 /**
  * Listner du context des servlets
  * 
- * @author Angeli
+ *   
  */
 @WebListener
 public class ContextListener implements ServletContextListener {

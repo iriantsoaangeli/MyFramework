@@ -10,7 +10,7 @@ import jakarta.servlet.ServletContext;
  * ModelAndView class
  * L'objet qui prend la vue et les donnees du model pour les passer a la vue
  * 
- * @author Angeli
+ *  
  */
 public class ModelAndView {
     String view;
@@ -20,6 +20,10 @@ public class ModelAndView {
         setView(view);
     }
 
+    /**
+     * Set la methode a appeler pour mettre les attributs dans le context du servlet
+     * 
+     */
     public static void setAction(BiConsumer<String, Object> action) {
         ModelAndView.action = action;
     }

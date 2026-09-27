@@ -5,24 +5,30 @@ import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PageWriter {
     public static void viewPageNotFound(HttpServletRequest req, HttpServletResponse rep,
             Map<String, URLMethod> urlMethodMapGET, Map<String, URLMethod> urlMethodMapPOST,
             List<String> controllerList, List<Method> methodList)
             throws IOException {
-        rep.setContentType("text/html;charset=UTF-8");
+
+        // Print dans catalina.out que le lien n'a pas de page associée
+        System.out.println("Page not found: " + URLParser.getUrlFromRequest(req)[1]);
+
         PrintWriter wr = rep.getWriter();
         String method = req.getMethod();
         String[] url = URLParser.getUrlFromRequest(req);
         String uri = url[1];
         URLMethod methodPresent = urlMethodMapGET.get(uri);
         wr.println("<h2>" + url[0] + " " + url[1] + "</h2>");
+        wr.println("uri: " + uri);
         wr.println("<h3>Les Controllers trouves sont :</h3>");
         wr.println(controllerList);
         wr.println("<h3>Les Methodes annotees avec @URL sont :</h3>");
@@ -54,4 +60,33 @@ public class PageWriter {
 
     }
 
+    public static void urlNotFound(HttpServletResponse rep) throws IOException {
+        PrintWriter wr = rep.getWriter();
+        wr.println("<h1>error 404</h1>");
+    }
+
+    public static void printJson(PrintWriter wr, Object o) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(o);
+        wr.print(json);
+    }
+
+    public static void print(HttpServletRequest req, HttpServletResponse rep, Object message, String contentType)
+            throws IOException {
+        PrintWriter wr = rep.getWriter();
+
+        if (contentType != null) {
+            switch (contentType) {
+                case "application/json":
+                    printJson(wr, message);
+                    rep.setContentType("application/json");
+                    break;
+
+                default:
+                    break;
+            }
+        } else {
+            wr.println(message);
+        }
+    }
 }
