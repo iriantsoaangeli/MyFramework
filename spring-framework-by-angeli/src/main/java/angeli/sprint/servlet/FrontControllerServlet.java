@@ -47,13 +47,12 @@ public class FrontControllerServlet extends HttpServlet {
      * @param req la requete http
      * @param rep la reponse http
      * @throws IOException
-     * @date 2026/6/11 17:29
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
         if (doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
-            if (doesUrlHaveView(req.getRequestURL().toString(), urlMethodMapGET)) {
+            if (doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
                 try {
-                    Method calledMethod = urlMethodMapGET.get(req.getRequestURL().toString()).getMethod();
+                    Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
                     ModelAndView modelAndView = (ModelAndView) calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
                     ServletContext context = req.getServletContext();
@@ -91,7 +90,7 @@ public class FrontControllerServlet extends HttpServlet {
             if (calledMethod.getReturnType() == angeli.sprint.model.ModelAndView.class) {
                 return true;
             }
-        }
+        }   
         return false;
     }
 
