@@ -59,6 +59,9 @@ public class PageWriter {
 
     }
 
-    
+    public static void urlNotFound(HttpServletRequest req, HttpServletResponse rep) throws IOException {
+        PrintWriter wr = rep.getWriter();
+        wr.println("<h1>error 404</h1>");
+    }
 
 }
