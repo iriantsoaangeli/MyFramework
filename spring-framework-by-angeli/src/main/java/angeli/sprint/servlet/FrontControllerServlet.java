@@ -49,7 +49,12 @@ public class FrontControllerServlet extends HttpServlet {
      * @throws IOException
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
+       
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
+
+            //Forward detecte 
+            System.out.println("Forward detected: " + req.getAttribute("jakarta.servlet.forward.request_uri"));
+
             return;
         }
 
