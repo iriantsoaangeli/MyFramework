@@ -5,11 +5,13 @@ import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PageWriter {
     public static void viewPageNotFound(HttpServletRequest req, HttpServletResponse rep,
@@ -17,9 +19,8 @@ public class PageWriter {
             List<String> controllerList, List<Method> methodList)
             throws IOException {
 
-        //Print dans catalina.out que le lien n'a pas de page associée 
-                System.out.println("Page not found: " + URLParser.getUrlFromRequest(req)[1]);
-
+        // Print dans catalina.out que le lien n'a pas de page associée
+        System.out.println("Page not found: " + URLParser.getUrlFromRequest(req)[1]);
 
         PrintWriter wr = rep.getWriter();
         String method = req.getMethod();
@@ -64,4 +65,28 @@ public class PageWriter {
         wr.println("<h1>error 404</h1>");
     }
 
+    public static void printJson(PrintWriter wr, Object o) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(o);
+        wr.println(json);
+    }
+
+    public static void print(HttpServletRequest req, HttpServletResponse rep, String message, String contentType)
+            throws IOException {
+        PrintWriter wr = rep.getWriter();
+
+        if (contentType != null) {
+            switch (contentType) {
+                case "application/json":
+                    printJson(wr, message);
+                    break;
+
+                default:
+                    break;
+            }
+            printJson(wr, message);
+        } else {
+            wr.println(message);
+        }
+    }
 }
