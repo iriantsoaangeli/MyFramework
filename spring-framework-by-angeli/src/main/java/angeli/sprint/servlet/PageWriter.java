@@ -16,13 +16,18 @@ public class PageWriter {
             Map<String, URLMethod> urlMethodMapGET, Map<String, URLMethod> urlMethodMapPOST,
             List<String> controllerList, List<Method> methodList)
             throws IOException {
-        rep.setContentType("text/html;charset=UTF-8");
+
+        //Print dans catalina.out que le lien n'a pas de page associée 
+                System.out.println("Page not found: " + URLParser.getUrlFromRequest(req)[1]);
+
+
         PrintWriter wr = rep.getWriter();
         String method = req.getMethod();
         String[] url = URLParser.getUrlFromRequest(req);
         String uri = url[1];
         URLMethod methodPresent = urlMethodMapGET.get(uri);
         wr.println("<h2>" + url[0] + " " + url[1] + "</h2>");
+        wr.println("uri: " + uri);
         wr.println("<h3>Les Controllers trouves sont :</h3>");
         wr.println(controllerList);
         wr.println("<h3>Les Methodes annotees avec @URL sont :</h3>");
