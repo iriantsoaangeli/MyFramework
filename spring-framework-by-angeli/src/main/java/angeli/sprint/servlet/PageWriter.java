@@ -71,7 +71,7 @@ public class PageWriter {
         wr.println(json);
     }
 
-    public static void print(HttpServletRequest req, HttpServletResponse rep, String message, String contentType)
+    public static void print(HttpServletRequest req, HttpServletResponse rep, Object message, String contentType)
             throws IOException {
         PrintWriter wr = rep.getWriter();
 
