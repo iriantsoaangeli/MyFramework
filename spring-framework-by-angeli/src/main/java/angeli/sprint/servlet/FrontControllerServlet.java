@@ -68,7 +68,8 @@ public class FrontControllerServlet extends HttpServlet {
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
-
+            
+            //Afficher le path du jsp dans catalina.out
             System.out.println("Forward detecte, on sert: " + targetPath);
 
             req.setAttribute("org.apache.catalina.jsp_file", targetPath);
