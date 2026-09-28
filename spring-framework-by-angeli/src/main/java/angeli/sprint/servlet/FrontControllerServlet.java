@@ -66,10 +66,14 @@ public class FrontControllerServlet extends HttpServlet {
                 break;
         }
 
+        boolean UrlExists = URLHandler.doesUrlExist(url, urlMethodMap);
+        boolean UrlHasView = URLHandler.doesUrlHaveView(url, urlMethodMap);
+        boolean UrlReturnsObject = URLHandler.isUrlObject(url, urlMethodMap);
+
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
-            
-            //Afficher le path du jsp dans catalina.out
+
+            // Afficher le path du jsp dans catalina.out
             System.out.println("Forward detecte, on sert: " + targetPath);
 
             req.setAttribute("org.apache.catalina.jsp_file", targetPath);
@@ -81,14 +85,12 @@ public class FrontControllerServlet extends HttpServlet {
             }
             return;
         }
-
-        if (URLHandler.doesUrlExist(url, urlMethodMap)) {
+        if (UrlExists) {
 
             Method calledMethod = urlMethodMap.get(url).getMethod();
 
             // Si l'url est un objet different de modelAndView
-            if (URLHandler.isUrlObject(url, urlMethodMap)
-                    && !URLHandler.doesUrlHaveView(url, urlMethodMap)) {
+            if (UrlReturnsObject && !UrlHasView) {
                 try {
                     PageWriter.print(req, rep, calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null),
@@ -96,10 +98,8 @@ public class FrontControllerServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
-
-            if (URLHandler.doesUrlHaveView(url, urlMethodMap)) {
+            if (UrlHasView) {
                 try {
 
                     ModelAndView modelAndView = (ModelAndView) calledMethod
@@ -114,7 +114,7 @@ public class FrontControllerServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (!URLHandler.isUrlObject(url, urlMethodMap)) {
+            } else if (!UrlReturnsObject) {
                 PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
             }
 
