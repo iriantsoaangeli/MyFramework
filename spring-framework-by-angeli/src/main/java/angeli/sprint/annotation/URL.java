@@ -8,5 +8,4 @@ import java.lang.annotation.Target;
 public @interface URL {
     String value() default "";
     String method() default "GET";
-    String contentType() default "text/html";
 }
