@@ -1,9 +1,7 @@
 package angeli.sprint.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +18,7 @@ import angeli.sprint.utils.URLHandler;
 /**
  * Servlet du spring-framework-by-Angeli
  * 
- *   
+ * 
  */
 public class FrontControllerServlet extends HttpServlet {
 
@@ -34,12 +32,12 @@ public class FrontControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        ProcessRequest(req, rep);
+        ProcessRequest(req, rep, "GET");
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        ProcessRequest(req, rep);
+        ProcessRequest(req, rep, "POST");
     }
 
     /**
@@ -49,11 +47,33 @@ public class FrontControllerServlet extends HttpServlet {
      * @param rep la reponse http
      * @throws IOException
      */
-    private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep) throws IOException {
+    private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep, String method) throws IOException {
+
+        String url = URLParser.getUrlFromRequest(req)[1];
+
+        // Affiche la methode utilisee
+        System.out.println("Method: " + method);
+
+        Map<String, URLMethod> urlMethodMap = null;
+
+        switch (method) {
+            case "GET":
+                urlMethodMap = urlMethodMapGET;
+                break;
+
+            case "POST":
+                urlMethodMap = urlMethodMapPOST;
+                break;
+        }
+
+        boolean UrlExists = URLHandler.doesUrlExist(url, urlMethodMap);
+        boolean UrlHasView = URLHandler.doesUrlHaveView(url, urlMethodMap);
+        boolean UrlReturnsObject = URLHandler.isUrlObject(url, urlMethodMap);
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
-            String targetPath = URLParser.getUrlFromRequest(req)[1];
+            String targetPath = url;
 
+            // Afficher le path du jsp dans catalina.out
             System.out.println("Forward detecte, on sert: " + targetPath);
 
             req.setAttribute("org.apache.catalina.jsp_file", targetPath);
@@ -65,25 +85,21 @@ public class FrontControllerServlet extends HttpServlet {
             }
             return;
         }
+        if (UrlExists) {
 
-        if (URLHandler.doesUrlExist(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
-
-            Method calledMethod = urlMethodMapGET.get(URLParser.getUrlFromRequest(req)[1]).getMethod();
+            Method calledMethod = urlMethodMap.get(url).getMethod();
 
             // Si l'url est un objet different de modelAndView
-            if (URLHandler.isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)
-                    && !URLHandler.doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+            if (UrlReturnsObject && !UrlHasView) {
                 try {
                     PageWriter.print(req, rep, calledMethod
                             .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null),
-                            URLHandler.getContentTypeForUrl(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET));
+                            URLHandler.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
-
-            if (URLHandler.doesUrlHaveView(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
+            if (UrlHasView) {
                 try {
 
                     ModelAndView modelAndView = (ModelAndView) calledMethod
@@ -98,8 +114,6 @@ public class FrontControllerServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (!URLHandler.isUrlObject(URLParser.getUrlFromRequest(req)[1], urlMethodMapGET)) {
-                PageWriter.viewPageNotFound(req, rep, urlMethodMapGET, urlMethodMapPOST, controllerList, methodList);
             }
 
         } else {

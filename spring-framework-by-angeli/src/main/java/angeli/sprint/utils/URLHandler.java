@@ -5,15 +5,15 @@ import java.util.Map;
 
 import angeli.sprint.url.URLMethod;
 
-
 /**
  * 
  * URLHandler
- * Regarde si une URL a une vue ou non, si elle existe ou non, et si elle retourne un objet ou non
+ * Regarde si une URL a une vue ou non, si elle existe ou non, et si elle
+ * retourne un objet ou non
  */
 
 public class URLHandler {
-    public static  boolean isUrlObject(String url, Map<String, URLMethod> urlMethodMap) {
+    public static boolean isUrlObject(String url, Map<String, URLMethod> urlMethodMap) {
         if (urlMethodMap.containsKey(url)) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
             return !calledMethod.getReturnType().equals(angeli.sprint.model.ModelAndView.class);
@@ -21,16 +21,20 @@ public class URLHandler {
         return false;
     }
 
-    public static  String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
+    public static String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
         if (urlMethodMap.containsKey(url)) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
-            angeli.sprint.annotation.URL annotation = calledMethod.getAnnotation(angeli.sprint.annotation.URL.class);
-            return annotation.contentType();
+            angeli.sprint.annotation.WebAPI annotation = calledMethod
+                    .getAnnotation(angeli.sprint.annotation.WebAPI.class);
+            if (annotation != null) {
+                return annotation.contentType();
+            }
+            return "application/json";
         }
-        return "text/html"; // Default content type
+        return "application/json";
     }
 
-    public static  boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
+    public static boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
 
         // Print url dont on veut savoir si elle a une vue dans catalina.out
         System.out.println("Checking if URL has view: " + url);
