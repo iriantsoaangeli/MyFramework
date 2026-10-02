@@ -66,6 +66,14 @@ public class FrontControllerServlet extends HttpServlet {
                 urlMethodMap = urlMethodMapPOST;
                 break;
         }
+
+        Object args = null;
+        
+        if(req.getParameterNames().hasMoreElements()){
+            args = req.getParameterMap();
+            args = new Object[]{args};
+        }
+
         boolean UrlExists = URLHandler.doesUrlExist(url, urlMethodMap);
         boolean UrlHasView = URLHandler.doesUrlHaveView(url, urlMethodMap);
         boolean UrlisAnAPI = URLHandler.isUrlAnAPI(url, urlMethodMap);
