@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PageWriter {
+    /** 
     public static void viewPageNotFound(HttpServletRequest req, HttpServletResponse rep,
             Map<String, URLMethod> urlMethodMapGET, Map<String, URLMethod> urlMethodMapPOST,
             List<String> controllerList, List<Method> methodList)
@@ -59,7 +60,7 @@ public class PageWriter {
         }
 
     }
-
+*/
     public static void urlNotFound(HttpServletResponse rep) throws IOException {
         PrintWriter wr = rep.getWriter();
         wr.println("<h1>error 404</h1>");
