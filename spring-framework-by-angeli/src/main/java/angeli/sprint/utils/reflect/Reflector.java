@@ -27,4 +27,12 @@ public class Reflector {
         }
         return true;
     }
+
+    /**
+     * Verifie si la methode a des arguments
+     */
+    public static boolean doesItHaveArgs(Method method) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        return parameterTypes.length > 0;
+    }
 }
