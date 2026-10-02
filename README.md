@@ -1,7 +1,6 @@
 
 # SpringFramewor by Angeli
 **DOCUMENTATION GENEREE PAR IA**
-**AZA MBA MATOKY BE LOATRA**
 
 ## 1) Objectif du projet
 Ce projet est un mini framework MVC basé sur des servlets Java.
