@@ -1,4 +1,4 @@
-package angeli.sprint.utils;
+package angeli.sprint.utils.reflect;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  * Classe utilitaire pour faire la reflection
  */
 public class Reflector {
-    public static Object getMethodReturn(Method method, Object[] args ) throws IllegalAccessException,InvocationTargetException,NoSuchMethodException,InstantiationException{
+    public static Object invokeMethod(Method method, Object[] args ) throws IllegalAccessException,InvocationTargetException,NoSuchMethodException,InstantiationException{
         return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args) ;
     }
 }

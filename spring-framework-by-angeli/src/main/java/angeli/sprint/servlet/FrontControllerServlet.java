@@ -8,6 +8,7 @@ import java.util.Map;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
+import angeli.sprint.utils.reflect.Reflector;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -88,10 +89,10 @@ public class FrontControllerServlet extends HttpServlet {
             Method calledMethod = urlMethodMap.get(url).getMethod();
 
             // Si l'url est un objet different de modelAndView
+            // Envoie en json
             if (UrlReturnsObject && !UrlHasView) {
                 try {
-                    PageWriter.print(req, rep, calledMethod
-                            .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null),
+                    PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, null),
                             URLHandler.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
