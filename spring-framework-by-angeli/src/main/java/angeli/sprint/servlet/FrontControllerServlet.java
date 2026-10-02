@@ -66,10 +66,9 @@ public class FrontControllerServlet extends HttpServlet {
                 urlMethodMap = urlMethodMapPOST;
                 break;
         }
-
         boolean UrlExists = URLHandler.doesUrlExist(url, urlMethodMap);
         boolean UrlHasView = URLHandler.doesUrlHaveView(url, urlMethodMap);
-        boolean UrlReturnsObject = URLHandler.isUrlObject(url, urlMethodMap);
+        boolean UrlisAnAPI = URLHandler.isUrlAnAPI(url, urlMethodMap);
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
@@ -85,12 +84,10 @@ public class FrontControllerServlet extends HttpServlet {
             return;
         }
         if (UrlExists) {
-
             Method calledMethod = urlMethodMap.get(url).getMethod();
-
             // Si l'url est un objet different de modelAndView
             // Envoie en json
-            if (UrlReturnsObject && !UrlHasView) {
+            if (UrlisAnAPI) {
                 try {
                     PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, null),
                             URLHandler.getContentTypeForUrl(url, urlMethodMap));

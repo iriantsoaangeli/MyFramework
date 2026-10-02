@@ -13,10 +13,13 @@ import angeli.sprint.url.URLMethod;
  */
 
 public class URLHandler {
-    public static boolean isUrlObject(String url, Map<String, URLMethod> urlMethodMap) {
+    public static boolean isUrlAnAPI(String url, Map<String, URLMethod> urlMethodMap) {
         if (urlMethodMap.containsKey(url)) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
-            return !calledMethod.getReturnType().equals(angeli.sprint.model.ModelAndView.class);
+            boolean val = calledMethod.isAnnotationPresent(angeli.sprint.annotation.WebAPI.class);
+            System.out.println(calledMethod);
+            System.out.println(calledMethod.getAnnotations().toString());
+            return val;
         }
         return false;
     }
