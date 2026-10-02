@@ -11,4 +11,20 @@ public class Reflector {
     public static Object invokeMethod(Method method, Object[] args ) throws IllegalAccessException,InvocationTargetException,NoSuchMethodException,InstantiationException{
         return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args) ;
     }
+    
+    /**
+     * Verifie si les arguments sont valides pour la methode
+     */
+    public static boolean areArgsValid(Method method, Object[] args) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        if (parameterTypes.length != args.length) {
+            return false;
+        }
+        for (int i = 0; i < parameterTypes.length; i++) {
+            if (!parameterTypes[i].isInstance(args[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
