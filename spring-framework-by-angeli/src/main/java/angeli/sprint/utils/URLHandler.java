@@ -3,6 +3,7 @@ package angeli.sprint.utils;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import angeli.sprint.model.ModelAndView;
 import angeli.sprint.url.URLMethod;
 
 /**
@@ -16,9 +17,11 @@ public class URLHandler {
     public static boolean isUrlAnAPI(String url, Map<String, URLMethod> urlMethodMap) {
         if (urlMethodMap.containsKey(url)) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
-            boolean val = calledMethod.isAnnotationPresent(angeli.sprint.annotation.WebAPI.class);
+            boolean val = calledMethod.isAnnotationPresent(angeli.sprint.annotation.WebAPI.class)
+                    && !(calledMethod.getReturnType().getClass().equals(ModelAndView.class));
+
+            // Print la methode appelee
             System.out.println(calledMethod);
-            System.out.println(calledMethod.getAnnotations().toString());
             return val;
         }
         return false;
