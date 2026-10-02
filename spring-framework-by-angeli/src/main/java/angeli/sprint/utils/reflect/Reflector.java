@@ -38,6 +38,10 @@ public class Reflector {
         return parameterTypes.length > 0;
     }
 
+
+    /**
+     * Verifie si la methode peut etre invoquee avec les arguments donnes
+     */
     static boolean canInvokeMethod(Method method, Object[] args) {
         if (doesItHaveArgs(method))
             return true;
