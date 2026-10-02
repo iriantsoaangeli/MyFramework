@@ -101,8 +101,7 @@ public class FrontControllerServlet extends HttpServlet {
             if (UrlHasView) {
                 try {
 
-                    ModelAndView modelAndView = (ModelAndView) calledMethod
-                            .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
+                    ModelAndView modelAndView = (ModelAndView) Reflector.invokeMethod(calledMethod, null);
 
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);
