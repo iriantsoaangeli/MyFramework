@@ -2,20 +2,22 @@ package angeli.sprint.utils.reflect;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 /**
  * 
  * Reflector
  * Classe utilitaire pour faire la reflection
  */
 public class Reflector {
-    public static Object invokeMethod(Method method, Object[] args ) throws IllegalAccessException,InvocationTargetException,NoSuchMethodException,InstantiationException{
-        return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args) ;
+    public static Object invokeMethod(Method method, Object[] args)
+            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
+        return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args);
     }
-    
+
     /**
      * Verifie si les arguments sont valides pour la methode
      */
-    public static boolean areArgsValid(Method method, Object[] args) {
+    static boolean areArgsValid(Method method, Object[] args) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length != args.length) {
             return false;
@@ -31,8 +33,9 @@ public class Reflector {
     /**
      * Verifie si la methode a des arguments
      */
-    public static boolean doesItHaveArgs(Method method) {
+    static boolean doesItHaveArgs(Method method) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         return parameterTypes.length > 0;
     }
+
 }
