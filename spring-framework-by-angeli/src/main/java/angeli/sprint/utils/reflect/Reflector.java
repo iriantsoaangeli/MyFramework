@@ -26,7 +26,9 @@ public class Reflector {
             return false;
         }
         for (int i = 0; i < parameterTypes.length; i++) {
-            return !parameterTypes[i].isInstance(args[i]) || parameterTypes[i].isAssignableFrom(args[i].getClass()) ;
+            if (!parameterTypes[i].isAssignableFrom(args[i].getClass())) {
+                return false;
+            }
         }
         return true;
     }
