@@ -11,8 +11,8 @@ import java.lang.reflect.Method;
 public class Reflector {
     public static Object invokeMethod(Method method, Object[] args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
-        if (canInvokeMethod(method, args)) 
-        return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args);
+        if (canInvokeMethod(method, args))
+            return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args);
         else
             throw new IllegalArgumentException("Cannot invoke method with the given arguments.");
     }
@@ -26,9 +26,7 @@ public class Reflector {
             return false;
         }
         for (int i = 0; i < parameterTypes.length; i++) {
-            if (!parameterTypes[i].isInstance(args[i])) {
-                return false;
-            }
+            return !parameterTypes[i].isInstance(args[i]) || parameterTypes[i].isAssignableFrom(args[i].getClass())
         }
         return true;
     }
@@ -41,7 +39,6 @@ public class Reflector {
         return parameterTypes.length > 0;
     }
 
-
     /**
      * Verifie si la methode peut etre invoquee avec les arguments donnes
      */
@@ -53,4 +50,5 @@ public class Reflector {
         }
         return false;
     }
+
 }
