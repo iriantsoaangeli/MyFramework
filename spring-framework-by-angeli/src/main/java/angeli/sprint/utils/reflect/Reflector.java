@@ -38,4 +38,12 @@ public class Reflector {
         return parameterTypes.length > 0;
     }
 
+    static boolean canInvokeMethod(Method method, Object[] args) {
+        if (doesItHaveArgs(method))
+            return true;
+        if (areArgsValid(method, args)) {
+
+        }
+        return false;
+    }
 }
