@@ -11,7 +11,10 @@ import java.lang.reflect.Method;
 public class Reflector {
     public static Object invokeMethod(Method method, Object[] args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
+        if (canInvokeMethod(method, args)) 
         return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args);
+        else
+            throw new IllegalArgumentException("Cannot invoke method with the given arguments.");
     }
 
     /**
