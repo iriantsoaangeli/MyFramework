@@ -48,7 +48,7 @@ public class Reflector {
         if (doesItHaveArgs(method))
             return true;
         if (areArgsValid(method, args)) {
-
+            return true;
         }
         return false;
     }
