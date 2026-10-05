@@ -67,11 +67,10 @@ public class FrontControllerServlet extends HttpServlet {
                 break;
         }
 
-        Object args = null;
+        Object args[] = null;
         
         if(req.getParameterNames().hasMoreElements()){
-            args = req.getParameterMap();
-            args = new Object[]{args};
+            args = req.getParameterMap().values().toArray(); 
         }
 
         boolean UrlExists = URLHandler.doesUrlExist(url, urlMethodMap);
@@ -97,7 +96,7 @@ public class FrontControllerServlet extends HttpServlet {
             // Envoie en json
             if (UrlisAnAPI) {
                 try {
-                    PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, null),
+                    PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, args),
                             URLHandler.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -106,7 +105,7 @@ public class FrontControllerServlet extends HttpServlet {
             if (UrlHasView) {
                 try {
 
-                    ModelAndView modelAndView = (ModelAndView) Reflector.invokeMethod(calledMethod, null);
+                    ModelAndView modelAndView = (ModelAndView) Reflector.invokeMethod(calledMethod, args);
 
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);
