@@ -47,6 +47,7 @@ public class URLHandler {
 
         if (urlMethodMap.containsKey(url)) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
+            System.out.println("Returning type of method: " + calledMethod.getReturnType().getName());
             if (calledMethod.getReturnType() == angeli.sprint.model.ModelAndView.class) {
 
                 // Print dans catalina.out que la méthode a une vue

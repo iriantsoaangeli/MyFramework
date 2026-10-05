@@ -45,7 +45,7 @@ public class Reflector {
      * Verifie si la methode peut etre invoquee avec les arguments donnes
      */
     static boolean canInvokeMethod(Method method, Object[] args) {
-        if (doesItHaveArgs(method))
+        if (!doesItHaveArgs(method)) 
             return true;
         if (areArgsValid(method, args)) {
             return true;
