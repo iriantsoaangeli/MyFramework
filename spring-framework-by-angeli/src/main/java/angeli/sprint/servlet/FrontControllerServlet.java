@@ -68,9 +68,9 @@ public class FrontControllerServlet extends HttpServlet {
         }
 
         Object args[] = null;
-        
-        if(req.getParameterNames().hasMoreElements()){
-            args = req.getParameterMap().values().toArray(); 
+
+        if (req.getParameterNames().hasMoreElements()) {
+            args = req.getParameterMap().values().toArray();
         }
 
         boolean UrlExists = URLHandler.doesUrlExist(url, urlMethodMap);
@@ -118,8 +118,12 @@ public class FrontControllerServlet extends HttpServlet {
                 }
             }
 
+        } else if (UrlExists) {
+            PageWriter.print(req, rep, args, "text/html");
+
         } else {
             PageWriter.urlNotFound(rep);
+
         }
     }
 
