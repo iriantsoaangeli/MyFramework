@@ -11,9 +11,13 @@ import java.lang.reflect.Method;
 public class Reflector {
     public static Object invokeMethod(Method method, Object[] args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
-        if (canInvokeMethod(method, args))
+        if (canInvokeMethod(method, args)) {
+
+            // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
+            // donnes
+            System.out.println("Can invoke method" + method.getName());
             return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args);
-        else
+        } else
             throw new IllegalArgumentException("Cannot invoke method with the given arguments.");
     }
 
@@ -45,12 +49,11 @@ public class Reflector {
      * Verifie si la methode peut etre invoquee avec les arguments donnes
      */
     static boolean canInvokeMethod(Method method, Object[] args) {
-        if (!doesItHaveArgs(method)) 
-            return true;
-        if (areArgsValid(method, args)) {
+        if (!doesItHaveArgs(method)) {
             return true;
         }
+        if (areArgsValid(method, args))
+            return true;
         return false;
     }
-
 }
