@@ -49,11 +49,15 @@ public class FrontControllerServlet extends HttpServlet {
      * @throws IOException
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep, String method) throws IOException {
+    System.out.println("===============================================================");
 
         String url = URLParser.getUrlFromRequest(req)[1];
 
         // Affiche la methode utilisee
         System.out.println("Method: " + method);
+
+        //Affiche l'url sur la page web
+        System.out.println("Application url : "+req.getContextPath()+ url);
 
         Map<String, URLMethod> urlMethodMap = null;
 
@@ -118,7 +122,7 @@ public class FrontControllerServlet extends HttpServlet {
                 }
             }
 
-        } else if (UrlExists) {
+        } else if (UrlExists && !UrlHasView && !UrlisAnAPI) {
             PageWriter.print(req, rep, args, "text/html");
 
         } else {
