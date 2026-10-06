@@ -64,6 +64,12 @@ public class URLHandler {
     }
 
     public static boolean doesUrlExist(String url, Map<String, URLMethod> urlMethodMap) {
-        return urlMethodMap.containsKey(url);
+        if (urlMethodMap.containsKey(url)) {
+
+            //Print si l'url existe dans catalina.out
+            System.out.println("URL exists: " + url);
+            return true;
+        }
+        return false;
     }
 }
