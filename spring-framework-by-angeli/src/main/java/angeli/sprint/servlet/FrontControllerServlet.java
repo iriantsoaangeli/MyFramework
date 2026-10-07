@@ -98,7 +98,7 @@ public class FrontControllerServlet extends HttpServlet {
         if (UrlExists && !UrlHasView && !UrlisAnAPI) {
             // Dans ce cas si l'url a chemin et doit print du texte
             System.out.println("Ni vue ni API Mais Url Existe");
-            PageWriter.print(req, rep, args, "text/html");
+            PageWriter.print(req, rep, args,null);
         } else if (UrlExists) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
             // Si l'url est un objet different de modelAndView
