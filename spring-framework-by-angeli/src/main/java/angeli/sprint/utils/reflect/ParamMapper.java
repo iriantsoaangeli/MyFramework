@@ -15,6 +15,7 @@ public class ParamMapper {
     public static Object[] constructObject(Class<?>[] clazz, Object[] args)
             throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
+
         if (canUseParams(clazz, args)) {
             Object[] result = new Object[clazz.length];
             int i = 0;
@@ -27,14 +28,15 @@ public class ParamMapper {
                 result[i] = constructor.newInstance(argsToTry);
                 i++;
             }
-        }
-        return null;
+            return result;
+        } else
+            return null;
     }
 
     static boolean canUseParams(Class<?>[] clazz, Object[] args) {
         int length = clazz.length;
         boolean canUse = true;
-        Constructor<?>[] constructors = getConstructors(clazz) ;
+        Constructor<?>[] constructors = getConstructors(clazz);
         int endarg = 0;
         int startarg = 0;
         for (int i = 0; i < length; i++) {
@@ -48,7 +50,8 @@ public class ParamMapper {
             if (!canUse)
                 break;
         }
-        // Dit dans catalina.out si les parametres peuvent etre utilises pour les constructeurs donnes
+        // Dit dans catalina.out si les parametres peuvent etre utilises pour les
+        // constructeurs donnes
         System.out.println("Can  use params: " + canUse);
         return canUse;
     }
