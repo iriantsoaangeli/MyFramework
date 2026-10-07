@@ -47,4 +47,20 @@ mvn clean package
     On peut choisir le type de content de la page (json ou HTML)
     L'annotation Controller a maintenant un attribut ContentType
 
-    
+## Sprint 7 :
+    Utiliser les elements de la requete comme argument d'un controller 
+
+
+## Sprint 7 bis :
+    Cette fois ci on envoie des objets personnalise dans la requetes 
+        Exemple :
+   
+```java
+//Avant
+addEmploye(String nom , String mail , int numero )
+
+//Apres 
+addEmploye(Employe emp)
+```
+
+        

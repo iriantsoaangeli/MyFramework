@@ -8,12 +8,13 @@ import java.util.Map;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
+import angeli.sprint.utils.reflect.Reflector;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import angeli.sprint.utils.URLHandler;
+import angeli.sprint.utils.URLChecker;
 
 /**
  * Servlet du spring-framework-by-Angeli
@@ -48,11 +49,15 @@ public class FrontControllerServlet extends HttpServlet {
      * @throws IOException
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep, String method) throws IOException {
+        System.out.println("===============================================================");
 
         String url = URLParser.getUrlFromRequest(req)[1];
 
         // Affiche la methode utilisee
         System.out.println("Method: " + method);
+
+        // Affiche l'url sur la page web
+        System.out.println("Application url : " + req.getContextPath() + url);
 
         Map<String, URLMethod> urlMethodMap = null;
 
@@ -66,18 +71,23 @@ public class FrontControllerServlet extends HttpServlet {
                 break;
         }
 
-        boolean UrlExists = URLHandler.doesUrlExist(url, urlMethodMap);
-        boolean UrlHasView = URLHandler.doesUrlHaveView(url, urlMethodMap);
-        boolean UrlReturnsObject = URLHandler.isUrlObject(url, urlMethodMap);
+        Object args[] = null;
+
+        if (req.getParameterNames().hasMoreElements()) {
+            args = req.getParameterMap().values().toArray();
+        }
+
+        boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);
+        boolean UrlExists = checkUrl[0];
+        boolean UrlHasView = checkUrl[1];
+        boolean UrlisAnAPI = checkUrl[2];
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
 
             // Afficher le path du jsp dans catalina.out
             System.out.println("Forward detecte, on sert: " + targetPath);
-
             req.setAttribute("org.apache.catalina.jsp_file", targetPath);
-
             try {
                 req.getServletContext().getNamedDispatcher("jsp").forward(req, rep);
             } catch (ServletException e) {
@@ -86,15 +96,13 @@ public class FrontControllerServlet extends HttpServlet {
             return;
         }
         if (UrlExists) {
-
             Method calledMethod = urlMethodMap.get(url).getMethod();
-
             // Si l'url est un objet different de modelAndView
-            if (UrlReturnsObject && !UrlHasView) {
+            // Envoie en json
+            if (UrlisAnAPI) {
                 try {
-                    PageWriter.print(req, rep, calledMethod
-                            .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null),
-                            URLHandler.getContentTypeForUrl(url, urlMethodMap));
+                    PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, args),
+                            URLChecker.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -102,8 +110,7 @@ public class FrontControllerServlet extends HttpServlet {
             if (UrlHasView) {
                 try {
 
-                    ModelAndView modelAndView = (ModelAndView) calledMethod
-                            .invoke(calledMethod.getDeclaringClass().getDeclaredConstructor().newInstance(), null);
+                    ModelAndView modelAndView = (ModelAndView) Reflector.invokeMethod(calledMethod, args);
 
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);
@@ -116,8 +123,15 @@ public class FrontControllerServlet extends HttpServlet {
                 }
             }
 
+        } else if (UrlExists && !UrlHasView && !UrlisAnAPI) {
+
+            // Dans ce cas si l'url a chemin et doit print du texte
+            System.out.println("Ni vue ni API Mais Url Existe");
+            PageWriter.print(req, rep, args, "text/html");
+
         } else {
             PageWriter.urlNotFound(rep);
+
         }
     }
 
