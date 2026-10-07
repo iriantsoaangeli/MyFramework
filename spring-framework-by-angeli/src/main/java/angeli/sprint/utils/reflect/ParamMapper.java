@@ -36,8 +36,7 @@ public class ParamMapper {
     }
 
     static boolean areTypesAssignable(Constructor<?> constructor,Object[] args) {
-        return Invoker.canInvokeMethod(constructor, args) ;
-        return true;
+        return Invoker.canInvokeConstructor(constructor, args) ;
     }
 
     static Constructor<?>[] getConstructors(Class<?>[] clazz) {
