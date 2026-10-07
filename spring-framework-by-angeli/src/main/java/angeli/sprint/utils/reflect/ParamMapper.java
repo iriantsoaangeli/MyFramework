@@ -67,4 +67,11 @@ public class ParamMapper {
         }
         return constructors;
     }
+
+    /**
+     * Prend une indexe du tableau d'arguments et verifie le tableau de param en
+     * serie
+     */
+    static void testArgsForConstructors(Class<?> clazz, Object[] args, Integer ndex) {
+    }
 }
