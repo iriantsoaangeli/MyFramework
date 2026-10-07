@@ -20,7 +20,7 @@ public class Invoker {
         if (canInvoke) {
             // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
             // donnes
-            System.out.println("Can invoke method" + method.getName());
+            System.out.println("Can invoke method :" + method.getName());
             ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args);
         }
         if (canUseParams) {
