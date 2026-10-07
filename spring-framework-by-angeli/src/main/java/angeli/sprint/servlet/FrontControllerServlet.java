@@ -123,6 +123,9 @@ public class FrontControllerServlet extends HttpServlet {
             }
 
         } else if (UrlExists && !UrlHasView && !UrlisAnAPI) {
+            
+            //Dans ce cas si l'url a chemin et doit print du texte 
+            System.out.println("Ni vue ni API Mais Url Existe");
             PageWriter.print(req, rep, args, "text/html");
 
         } else {
