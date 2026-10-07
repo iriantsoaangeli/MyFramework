@@ -69,9 +69,10 @@ public class ParamMapper {
     }
 
     /**
-     * Prend une indexe du tableau d'arguments et verifie le tableau de param en
-     * serie
+     * Prend une indexe du tableau d'arguments et verifie le tableau de param
+     * jusqu'a depasser le max ou trouver tout les constructeurs
      */
     static void testArgsForConstructors(Class<?> clazz, Object[] args, Integer ndex) {
+
     }
 }
