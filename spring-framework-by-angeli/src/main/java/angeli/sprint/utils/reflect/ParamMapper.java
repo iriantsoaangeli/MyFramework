@@ -1,6 +1,8 @@
 package angeli.sprint.utils.reflect;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
+
 import angeli.sprint.utils.reflect.Invoker;
 
 /**
@@ -15,11 +17,26 @@ public class ParamMapper {
     }
 
     static boolean canIUseParams(Class<?>[] clazz, Object[] args) {
-
-        return false;
+        int length = clazz.length;
+        boolean canUse = true;
+        Constructor<?>[] constructors = new Constructor<?>[length];
+        int nbarg = 0;
+        int endarg = 0;
+        int startarg = 0;
+        for (int i = 0; i < length; i++) {
+            if (constructors[i].getParameterCount() == 0)
+                canUse = canUse && true;
+            else {
+                endarg = constructors[i].getParameterCount() + startarg - 1;
+                Object[] argsToTry = Arrays.copyOfRange(args, startarg, endarg);
+                canUse = canUse && areTypesAssignable(constructors[i],argsToTry) ;
+            }
+        }
+        return canUse;
     }
 
-    static boolean areTypesAssignable() {
+    static boolean areTypesAssignable(Constructor<?> constructor,Object[] args) {
+        return Invoker.canInvokeMethod(constructor, args) ;
         return true;
     }
 
