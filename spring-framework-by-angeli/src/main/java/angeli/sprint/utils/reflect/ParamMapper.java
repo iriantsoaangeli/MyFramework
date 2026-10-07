@@ -49,7 +49,7 @@ public class ParamMapper {
                 break;
         }
         // Dit dans catalina.out si les parametres peuvent etre utilises pour les constructeurs donnes
-        System.out.println("Can I use params: " + canUse);
+        System.out.println("Can  use params: " + canUse);
         return canUse;
     }
 
