@@ -24,15 +24,15 @@ public class URLChecker {
             result[2] = false;
         } else {
             result[1] = doesUrlHaveView(Url, urlMethodMap);
-            result[2] = isUrlAnAPI(Url, urlMethodMap);
+            result[2] = isUrlAnAPI(Url, urlMethodMap, result[1]);
         }
         return result;
     }
 
-    static boolean isUrlAnAPI(String url, Map<String, URLMethod> urlMethodMap) {
+    static boolean isUrlAnAPI(String url, Map<String, URLMethod> urlMethodMap, boolean doesUrlHaveView) {
         Method calledMethod = urlMethodMap.get(url).getMethod();
         boolean val = calledMethod.isAnnotationPresent(angeli.sprint.annotation.WebAPI.class)
-                && !doesUrlHaveView(url, urlMethodMap);
+                && !doesUrlHaveView;
 
         // Print si c'est une api ou non
         if (val)
