@@ -8,7 +8,7 @@ import java.util.Map;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
-import angeli.sprint.utils.reflect.Reflector;
+import angeli.sprint.utils.reflect.Invoker;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -105,7 +105,7 @@ public class FrontControllerServlet extends HttpServlet {
             // Envoie en json
             if (UrlisAnAPI) {
                 try {
-                    PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, args),
+                    PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args),
                             URLChecker.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -113,7 +113,7 @@ public class FrontControllerServlet extends HttpServlet {
             }
             if (UrlHasView) {
                 try {
-                    ModelAndView modelAndView = (ModelAndView) Reflector.invokeMethod(calledMethod, args);
+                    ModelAndView modelAndView = (ModelAndView) Invoker.invokeMethod(calledMethod, args);
 
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);

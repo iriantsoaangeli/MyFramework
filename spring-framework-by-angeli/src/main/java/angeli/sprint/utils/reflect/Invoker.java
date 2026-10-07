@@ -5,10 +5,10 @@ import java.lang.reflect.Method;
 
 /**
  * 
- * Reflector
+ * Invoker
  * Classe utilitaire pour faire la reflection
  */
-public class Reflector {
+public class Invoker {
     public static Object invokeMethod(Method method, Object[] args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
         if (canInvokeMethod(method, args)) {
