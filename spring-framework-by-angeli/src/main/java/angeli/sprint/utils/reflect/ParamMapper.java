@@ -31,10 +31,10 @@ public class ParamMapper {
         return null;
     }
 
-    static boolean canIUseParams(Class<?>[] clazz, Object[] args) {
+    static boolean canUseParams(Class<?>[] clazz, Object[] args) {
         int length = clazz.length;
         boolean canUse = true;
-        Constructor<?>[] constructors = new Constructor<?>[length];
+        Constructor<?>[] constructors = getConstructors(clazz) ;
         int endarg = 0;
         int startarg = 0;
         for (int i = 0; i < length; i++) {
@@ -48,6 +48,8 @@ public class ParamMapper {
             if (!canUse)
                 break;
         }
+        // Dit dans catalina.out si les parametres peuvent etre utilises pour les constructeurs donnes
+        System.out.println("Can I use params: " + canUse);
         return canUse;
     }
 
