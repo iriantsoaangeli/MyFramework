@@ -19,8 +19,13 @@ public class URLChecker {
     public static boolean[] checkUrl(String Url, Map<String, URLMethod> urlMethodMap) {
         boolean[] result = new boolean[3];
         result[0] = doesUrlExist(Url, urlMethodMap);
-        result[1] = doesUrlHaveView(Url, urlMethodMap);
-        result[2] = isUrlAnAPI(Url, urlMethodMap);
+        if (!result[0]) {
+            result[1] = false;
+            result[2] = false;
+        } else {
+            result[1] = doesUrlHaveView(Url, urlMethodMap);
+            result[2] = isUrlAnAPI(Url, urlMethodMap);
+        }
         return result;
     }
 
