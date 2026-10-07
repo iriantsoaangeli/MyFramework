@@ -14,7 +14,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import angeli.sprint.utils.URLHandler;
+import angeli.sprint.utils.  URLChecker;
 
 /**
  * Servlet du spring-framework-by-Angeli
@@ -77,9 +77,9 @@ public class FrontControllerServlet extends HttpServlet {
             args = req.getParameterMap().values().toArray();
         }
 
-        boolean UrlExists = URLHandler.doesUrlExist(url, urlMethodMap);
-        boolean UrlHasView = URLHandler.doesUrlHaveView(url, urlMethodMap);
-        boolean UrlisAnAPI = URLHandler.isUrlAnAPI(url, urlMethodMap);
+        boolean UrlExists =   URLChecker.doesUrlExist(url, urlMethodMap);
+        boolean UrlHasView =   URLChecker.doesUrlHaveView(url, urlMethodMap);
+        boolean UrlisAnAPI =   URLChecker.isUrlAnAPI(url, urlMethodMap);
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
@@ -101,7 +101,7 @@ public class FrontControllerServlet extends HttpServlet {
             if (UrlisAnAPI) {
                 try {
                     PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, args),
-                            URLHandler.getContentTypeForUrl(url, urlMethodMap));
+                              URLChecker.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

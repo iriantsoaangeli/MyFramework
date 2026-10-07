@@ -33,7 +33,7 @@ spring-framework-by-angeli/
     ├── url/
     │   └── URLMethod.java
     └── utils/
-        ├── URLHandler.java
+        ├──   URLChecker.java
         ├── URLParser.java
         └── reflect/
             ├── ClassPathScanner.java
@@ -91,7 +91,7 @@ Il :
 ### `URLParser`
 Extrait l’URI depuis la requête HTTP pour comparer avec les routes enregistrées.
 
-### `URLHandler`
+### `  URLChecker`
 Vérifie si :
 - l’URL existe,
 - elle retourne une vue,
@@ -115,7 +115,7 @@ URL -> méthode Java
 3. `Mapper` stocke les méthodes dans des maps GET/POST.
 4. Une requête arrive dans `FrontControllerServlet`.
 5. `URLParser` extrait l’URI.
-6. `URLHandler` vérifie si l’URL existe.
+6. `  URLChecker` vérifie si l’URL existe.
 7. La méthode associée est invoquée.
 8. Si la méthode retourne `ModelAndView`, la vue est affichée.
 9. Sinon, la réponse est écrite directement comme JSON/texte.
@@ -181,6 +181,6 @@ public class HomeController {
 - Le démarrage est piloté par `ContextListener`.
 - `ModelAndView` sert pour les pages web.
 - `@WebAPI` sert pour les réponse JSON/texte.
-- Le mapping principal se fait via `ClassPathScanner` + `Mapper` + `URLHandler`.
+- Le mapping principal se fait via `ClassPathScanner` + `Mapper` + `  URLChecker`.
 
 C’est la base minimale pour reprendre le framework et l’étendre sans perdre le fil.
