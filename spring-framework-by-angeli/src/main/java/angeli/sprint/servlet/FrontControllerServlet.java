@@ -96,9 +96,14 @@ public class FrontControllerServlet extends HttpServlet {
             return;
         }
         if (UrlExists && !UrlHasView && !UrlisAnAPI) {
+            Method calledMethod = urlMethodMap.get(url).getMethod();
             // Dans ce cas si l'url a chemin et doit print du texte
-            System.out.println("Ni vue ni API Mais Url Existe");
-            PageWriter.print(req, rep, args,null);
+            try {
+                System.out.println("Ni vue ni API Mais Url Existe");
+                PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args), null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (UrlExists) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
             // Si l'url est un objet different de modelAndView
