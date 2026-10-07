@@ -22,6 +22,7 @@ public class ParamMapper {
             int endarg = 0;
             for (Class<?> c : clazz) {
                 Constructor<?> constructor = c.getConstructor();
+                endarg += constructor.getParameterCount() + startarg - 1;
                 Object[] argsToTry = Arrays.copyOfRange(args, startarg, endarg);
                 result[i] = constructor.newInstance(argsToTry);
                 i++;
