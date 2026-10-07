@@ -35,7 +35,10 @@ public class URLChecker {
                 && !doesUrlHaveView(url, urlMethodMap);
 
         // Print si c'est une api ou non
-        System.out.println("URL is an API");
+        if (val)
+            System.out.println("URL is an API");
+        else
+            System.out.println("URL is not an API");
         return val;
     }
 
