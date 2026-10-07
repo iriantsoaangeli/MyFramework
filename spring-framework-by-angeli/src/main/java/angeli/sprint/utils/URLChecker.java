@@ -30,17 +30,13 @@ public class URLChecker {
     }
 
     static boolean isUrlAnAPI(String url, Map<String, URLMethod> urlMethodMap) {
-        if (urlMethodMap.containsKey(url)) {
-            Method calledMethod = urlMethodMap.get(url).getMethod();
-            boolean val = calledMethod.isAnnotationPresent(angeli.sprint.annotation.WebAPI.class)
-                    && !doesUrlHaveView(url, urlMethodMap);
+        Method calledMethod = urlMethodMap.get(url).getMethod();
+        boolean val = calledMethod.isAnnotationPresent(angeli.sprint.annotation.WebAPI.class)
+                && !doesUrlHaveView(url, urlMethodMap);
 
-            // Print si c'est une api ou non
-            System.out.println("URL is an API");
-            return val;
-        }
-        System.out.println("URL is not an API:");
-        return false;
+        // Print si c'est une api ou non
+        System.out.println("URL is an API");
+        return val;
     }
 
     static String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
