@@ -95,7 +95,11 @@ public class FrontControllerServlet extends HttpServlet {
             }
             return;
         }
-        if (UrlExists) {
+        if (UrlExists && !UrlHasView && !UrlisAnAPI) {
+            // Dans ce cas si l'url a chemin et doit print du texte
+            System.out.println("Ni vue ni API Mais Url Existe");
+            PageWriter.print(req, rep, args, "text/html");
+        } else if (UrlExists) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
             // Si l'url est un objet different de modelAndView
             // Envoie en json
@@ -109,7 +113,6 @@ public class FrontControllerServlet extends HttpServlet {
             }
             if (UrlHasView) {
                 try {
-
                     ModelAndView modelAndView = (ModelAndView) Reflector.invokeMethod(calledMethod, args);
 
                     // Print le ModelAndView en String dans catalina.out
@@ -122,16 +125,8 @@ public class FrontControllerServlet extends HttpServlet {
                     e.printStackTrace();
                 }
             }
-
-        } else if (UrlExists && !UrlHasView && !UrlisAnAPI) {
-
-            // Dans ce cas si l'url a chemin et doit print du texte
-            System.out.println("Ni vue ni API Mais Url Existe");
-            PageWriter.print(req, rep, args, "text/html");
-
         } else {
             PageWriter.urlNotFound(rep);
-
         }
     }
 
