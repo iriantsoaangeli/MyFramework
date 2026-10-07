@@ -1,5 +1,7 @@
 package angeli.sprint.utils.reflect;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -24,7 +26,7 @@ public class Invoker {
     /**
      * Verifie si les arguments sont valides pour la methode
      */
-    static boolean areArgsValid(Method method, Object[] args) {
+    static boolean areArgsValid(Executable method, Object[] args) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length != args.length) {
             return false;
@@ -55,5 +57,12 @@ public class Invoker {
         if (areArgsValid(method, args))
             return true;
         return false;
+    }
+
+    static boolean canInvokeConstructor(Constructor<?> constructor, Object[] args) {
+        if (areArgsValid(constructor, args))
+            return true;
+        else
+            return false;
     }
 }
