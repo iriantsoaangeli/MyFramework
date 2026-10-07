@@ -102,12 +102,13 @@ public class PageWriter {
                     printHtml(wr, message);
                     break;
                 default:
-                    printJson(wr, message) ;
+                    printJson(wr, message);
                     rep.setContentType("application/json");
                     break;
             }
         } else {
-            wr.println(message);
+            printJson(wr, message);
+            rep.setContentType("application/json");
         }
     }
 }
