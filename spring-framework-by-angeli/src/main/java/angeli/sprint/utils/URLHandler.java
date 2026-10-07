@@ -20,10 +20,11 @@ public class URLHandler {
             boolean val = calledMethod.isAnnotationPresent(angeli.sprint.annotation.WebAPI.class)
                     && !(calledMethod.getReturnType().getClass().equals(ModelAndView.class));
 
-            // Print la methode appelee
-            System.out.println(calledMethod);
+            // Print si c'est une api ou non
+            System.out.println("URL is an API");
             return val;
         }
+        System.out.println("URL is not an API:");
         return false;
     }
 
@@ -66,7 +67,7 @@ public class URLHandler {
     public static boolean doesUrlExist(String url, Map<String, URLMethod> urlMethodMap) {
         if (urlMethodMap.containsKey(url)) {
 
-            //Print si l'url existe dans catalina.out
+            // Print si l'url existe dans catalina.out
             System.out.println("URL exists: " + url);
             return true;
         }
