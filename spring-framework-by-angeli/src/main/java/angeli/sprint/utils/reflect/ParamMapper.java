@@ -12,7 +12,21 @@ import angeli.sprint.utils.reflect.Invoker;
  * respecitfs de chacun des argument
  */
 public class ParamMapper {
-    public static Object constructObject(Class<?>[] clazz, Object[] args) throws IllegalArgumentException {
+    public static Object[] constructObject(Class<?>[] clazz, Object[] args)
+            throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException,
+            java.lang.reflect.InvocationTargetException {
+        if (canIUseParams(clazz, args)) {
+            Object[] result = new Object[clazz.length];
+            int i = 0;
+            int startarg = 0;
+            int endarg = 0;
+            for (Class<?> c : clazz) {
+                Constructor<?> constructor = c.getConstructor();
+                Object[] argsToTry = Arrays.copyOfRange(args, startarg, endarg);
+                result[i] = constructor.newInstance(argsToTry);
+                i++;
+            }
+        }
         return null;
     }
 
