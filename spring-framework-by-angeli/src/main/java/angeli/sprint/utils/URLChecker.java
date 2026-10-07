@@ -39,7 +39,7 @@ public class URLChecker {
         return val;
     }
 
-    static String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
+    public static String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
         if (urlMethodMap.containsKey(url)) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
             angeli.sprint.annotation.WebAPI annotation = calledMethod
