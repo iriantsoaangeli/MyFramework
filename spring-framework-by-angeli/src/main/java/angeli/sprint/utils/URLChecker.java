@@ -51,7 +51,7 @@ public class URLChecker {
         return "application/json";
     }
 
-    public static boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
+    static boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
 
         // Print url dont on veut savoir si elle a une vue dans catalina.out
         System.out.println("Checking if URL has view: " + url);
