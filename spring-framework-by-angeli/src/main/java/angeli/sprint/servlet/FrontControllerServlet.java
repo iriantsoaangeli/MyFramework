@@ -14,7 +14,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import angeli.sprint.utils.  URLChecker;
+import angeli.sprint.utils.URLChecker;
 
 /**
  * Servlet du spring-framework-by-Angeli
@@ -49,15 +49,15 @@ public class FrontControllerServlet extends HttpServlet {
      * @throws IOException
      */
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep, String method) throws IOException {
-    System.out.println("===============================================================");
+        System.out.println("===============================================================");
 
         String url = URLParser.getUrlFromRequest(req)[1];
 
         // Affiche la methode utilisee
         System.out.println("Method: " + method);
 
-        //Affiche l'url sur la page web
-        System.out.println("Application url : "+req.getContextPath()+ url);
+        // Affiche l'url sur la page web
+        System.out.println("Application url : " + req.getContextPath() + url);
 
         Map<String, URLMethod> urlMethodMap = null;
 
@@ -77,9 +77,10 @@ public class FrontControllerServlet extends HttpServlet {
             args = req.getParameterMap().values().toArray();
         }
 
-        boolean UrlExists =   URLChecker.doesUrlExist(url, urlMethodMap);
-        boolean UrlHasView =   URLChecker.doesUrlHaveView(url, urlMethodMap);
-        boolean UrlisAnAPI =   URLChecker.isUrlAnAPI(url, urlMethodMap);
+        boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);
+        boolean UrlExists = checkUrl[0];
+        boolean UrlHasView = checkUrl[1];
+        boolean UrlisAnAPI = checkUrl[2];
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
@@ -101,7 +102,7 @@ public class FrontControllerServlet extends HttpServlet {
             if (UrlisAnAPI) {
                 try {
                     PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, args),
-                              URLChecker.getContentTypeForUrl(url, urlMethodMap));
+                            URLChecker.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -123,8 +124,8 @@ public class FrontControllerServlet extends HttpServlet {
             }
 
         } else if (UrlExists && !UrlHasView && !UrlisAnAPI) {
-            
-            //Dans ce cas si l'url a chemin et doit print du texte 
+
+            // Dans ce cas si l'url a chemin et doit print du texte
             System.out.println("Ni vue ni API Mais Url Existe");
             PageWriter.print(req, rep, args, "text/html");
 
