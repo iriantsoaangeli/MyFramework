@@ -13,14 +13,28 @@ import java.lang.reflect.Method;
 public class Invoker {
     public static Object invokeMethod(Method method, Object[] args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
-        if (canInvokeMethod(method, args)) {
-
+        boolean canInvoke = canInvokeMethod(method, args);
+        boolean canUseParams = ParamMapper.canUseParams(method.getParameterTypes(), args);
+        Class<?>[] parameterTypes = method.getParameterTypes();
+       Object ret = null ;
+        if (canInvoke) {
             // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
             // donnes
             System.out.println("Can invoke method" + method.getName());
-            return method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args);
-        } else
+            ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), args);
+        }
+        if (canUseParams) {
+            // Construit les arguments pour la methode avec les parametres donnes
+            System.out.println("Argument construit depuis la requete ");
+            ret = method.invoke(ParamMapper.constructObject(parameterTypes, args));
+        }
+        // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
+        // arguments donnes
+        if (!canInvoke && !canUseParams) {
+            System.out.println("Cannot invoke method" + method.getName());
             throw new IllegalArgumentException("Cannot invoke method with the given arguments.");
+        }
+        return ret;
     }
 
     /**
