@@ -40,16 +40,14 @@ public class URLChecker {
     }
 
     public static String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
-        if (urlMethodMap.containsKey(url)) {
-            Method calledMethod = urlMethodMap.get(url).getMethod();
-            angeli.sprint.annotation.WebAPI annotation = calledMethod
-                    .getAnnotation(angeli.sprint.annotation.WebAPI.class);
-            if (annotation != null) {
-                return annotation.contentType();
-            }
-            return "application/json";
+        Method calledMethod = urlMethodMap.get(url).getMethod();
+        angeli.sprint.annotation.WebAPI annotation = calledMethod
+                .getAnnotation(angeli.sprint.annotation.WebAPI.class);
+        if (annotation != null) {
+            return annotation.contentType();
         }
         return "application/json";
+
     }
 
     static boolean doesUrlHaveView(String url, Map<String, URLMethod> urlMethodMap) {
