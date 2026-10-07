@@ -92,17 +92,18 @@ public class PageWriter {
         PrintWriter wr = rep.getWriter();
 
         if (contentType != null) {
+            rep.setContentType(contentType);
             switch (contentType) {
                 case "application/json":
                     printJson(wr, message);
-                    rep.setContentType("application/json");
                     break;
 
                 case "text/html":
                     printHtml(wr, message);
-                    rep.setContentType("text/html");
                     break;
                 default:
+                    printJson(wr, message) ;
+                    rep.setContentType("application/json");
                     break;
             }
         } else {
