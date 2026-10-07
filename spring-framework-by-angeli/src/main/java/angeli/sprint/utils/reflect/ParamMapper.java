@@ -15,7 +15,7 @@ public class ParamMapper {
     public static Object[] constructObject(Class<?>[] clazz, Object[] args)
             throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
-        if (canIUseParams(clazz, args)) {
+        if (canUseParams(clazz, args)) {
             Object[] result = new Object[clazz.length];
             int i = 0;
             int startarg = 0;
