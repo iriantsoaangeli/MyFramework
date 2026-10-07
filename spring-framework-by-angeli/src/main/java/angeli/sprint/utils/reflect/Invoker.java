@@ -65,4 +65,14 @@ public class Invoker {
         else
             return false;
     }
+
+    static boolean doNumbersMatch(Constructor<?>[] cons, int nb) {
+        int sum = 0;
+        for (Constructor<?> co : cons) {
+            sum = co.getParameterCount() + sum;
+            if (sum > nb)
+                return false;
+        }
+        return true;
+    }
 }
