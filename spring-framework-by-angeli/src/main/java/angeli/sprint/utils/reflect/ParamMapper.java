@@ -20,7 +20,6 @@ public class ParamMapper {
         int length = clazz.length;
         boolean canUse = true;
         Constructor<?>[] constructors = new Constructor<?>[length];
-        int nbarg = 0;
         int endarg = 0;
         int startarg = 0;
         for (int i = 0; i < length; i++) {
@@ -29,14 +28,16 @@ public class ParamMapper {
             else {
                 endarg = constructors[i].getParameterCount() + startarg - 1;
                 Object[] argsToTry = Arrays.copyOfRange(args, startarg, endarg);
-                canUse = canUse && areTypesAssignable(constructors[i],argsToTry) ;
+                canUse = canUse && areTypesAssignable(constructors[i], argsToTry);
             }
+            if (!canUse)
+                break;
         }
         return canUse;
     }
 
-    static boolean areTypesAssignable(Constructor<?> constructor,Object[] args) {
-        return Invoker.canInvokeConstructor(constructor, args) ;
+    static boolean areTypesAssignable(Constructor<?> constructor, Object[] args) {
+        return Invoker.canInvokeConstructor(constructor, args);
     }
 
     static Constructor<?>[] getConstructors(Class<?>[] clazz) {
