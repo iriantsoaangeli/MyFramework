@@ -15,7 +15,7 @@ public class Invoker {
     public static Object invokeMethod(Method method, Map<String, String[]> args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
         boolean canInvoke = canInvokeMethod(method, args);
-        boolean canUseParams = ParamBinder.canUseParams(method.getParameterTypes(), args);
+        boolean canUseParams = ParamBinder.canBuildArgs(method.getParameterTypes(), args);
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object ret = null;
         if (canInvoke) {
@@ -43,7 +43,8 @@ public class Invoker {
     /**
      * Verifie si les arguments sont valides pour la methode
      */
-    static boolean areArgsValid(Executable method, Map<String, String[]> args) {
+    static boolean areArgsValid(Executable method, Map<String, String[]> param) {
+       Class<?>[] argTypes = method.getParameterTypes();
 
         return true;
     }
