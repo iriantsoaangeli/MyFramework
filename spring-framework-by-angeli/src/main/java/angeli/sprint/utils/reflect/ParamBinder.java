@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import angeli.sprint.utils.reflect.Invoker;
 
@@ -47,7 +48,14 @@ public class ParamBinder {
      */
     static Object[] getParamValues(Map<String, String[]> args) {
         Object[] paramValues = new Object[args.size()];
-        paramValues = args.values().toArray();
+        AtomicInteger index = new AtomicInteger(0) ;
+        args.forEach((key,val) -> {
+            if(val.length < 2)
+                paramValues[index.get()] = args.get(key)[0] ;
+            if(val.length >= 2)
+                paramValues[index.get()] = args.get(key) ;  
+            index.incrementAndGet();    
+        });
         return paramValues;
     }
 }
