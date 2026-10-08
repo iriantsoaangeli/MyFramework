@@ -25,8 +25,8 @@ public class Invoker {
         }
         if (canUseParams) {
             // Construit les arguments pour la methode avec les parametres donnes
-            System.out.println("Argument construit depuis la requete ");
-            ret = method.invoke(ParamMapper.constructObject(parameterTypes, args));
+            System.out.println("Argument peut etre construit depuis la requete ");
+            // ret = method.invoke(ParamMapper.constructObject(parameterTypes, args));
         }
         // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
         // arguments donnes
