@@ -19,7 +19,7 @@ public class ParamBinder {
             return null;
     }
 
-    static boolean canUseParams(Class<?>[] clazz, Map<String, String[]> args) {
+    static boolean canBuildArgs(Class<?>[] clazz, Map<String, String[]> args) {
         boolean canUse = true;
         // Dit dans catalina.out si les parametres peuvent etre utilises pour les
         // constructeurs donnes
@@ -39,14 +39,4 @@ public class ParamBinder {
         return constructors;
     }
 
-    /**
-     * Prend une indexe du tableau d'arguments et verifie le tableau de param
-     * jusqu'a depasser le max ou trouver tout les constructeurs
-     */
-    static void testArgsForConstructors(Class<?> clazz, Object[] args, Integer index) {
-        Constructor<?>[] constructors = clazz.getConstructors();
-        for (Constructor<?> constructor : constructors) {
-
-        }
-    }
 }
