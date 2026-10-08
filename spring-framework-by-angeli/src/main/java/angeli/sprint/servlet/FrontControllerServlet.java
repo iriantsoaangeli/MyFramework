@@ -71,11 +71,11 @@ public class FrontControllerServlet extends HttpServlet {
                 break;
         }
 
-        Object args[] = null;
+        Map<String, Object> args = null;
 
         //Manmijery izy raha manome zavatra .next()
         if (req.getParameterNames().hasMoreElements()) {
-            args = req.getParameterMap().values().toArray();
+            args = req.getParameterMap();
         }
 
         boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);

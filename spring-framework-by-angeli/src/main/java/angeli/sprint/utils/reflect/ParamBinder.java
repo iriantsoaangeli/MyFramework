@@ -3,6 +3,7 @@ package angeli.sprint.utils.reflect;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import angeli.sprint.utils.reflect.Invoker;
 
@@ -13,44 +14,13 @@ import angeli.sprint.utils.reflect.Invoker;
  * respecitfs de chacun des argument
  */
 public class ParamBinder {
-    public static Object[] constructObject(Class<?>[] clazz, Object[] args)
-            throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException,
-            java.lang.reflect.InvocationTargetException {
-
-        if (canUseParams(clazz, args)) {
-            Object[] result = new Object[clazz.length];
-            int i = 0;
-            int startarg = 0;
-            int endarg = 0;
-            for (Class<?> c : clazz) {
-                Constructor<?> constructor = c.getConstructor();
-                endarg += constructor.getParameterCount() + startarg - 1;
-                Object[] argsToTry = Arrays.copyOfRange(args, startarg, endarg);
-                result[i] = constructor.newInstance(argsToTry);
-                i++;
-            }
-            return result;
-        } else
+    public static Object[] constructObject(Class<?>[] clazz, Map<String, Object> args)
+            throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
             return null;
     }
 
-    static boolean canUseParams(Class<?>[] clazz, Object[] args) {
-        int length = clazz.length;
+    static boolean canUseParams(Class<?>[] clazz, Map<String, Object> args) {
         boolean canUse = true;
-        Constructor<?>[] constructors = getConstructors(clazz);
-        int endarg = 0;
-        int startarg = 0;
-        for (int i = 0; i < length; i++) {
-            if (constructors[i].getParameterCount() == 0)
-                canUse = canUse && true;
-            else {
-                endarg = constructors[i].getParameterCount() + startarg - 1;
-                Object[] argsToTry = Arrays.copyOfRange(args, startarg, endarg);
-                canUse = canUse && areTypesAssignable(constructors[i], argsToTry);
-            }
-            if (!canUse)
-                break;
-        }
         // Dit dans catalina.out si les parametres peuvent etre utilises pour les
         // constructeurs donnes
         System.out.println("Can  use params: " + canUse);
