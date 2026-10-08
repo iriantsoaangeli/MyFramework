@@ -71,7 +71,7 @@ public class FrontControllerServlet extends HttpServlet {
                 break;
         }
 
-        Map<String, Object> args = null;
+        Map<String, String[]> args = null;
 
         //Manmijery izy raha manome zavatra .next()
         if (req.getParameterNames().hasMoreElements()) {

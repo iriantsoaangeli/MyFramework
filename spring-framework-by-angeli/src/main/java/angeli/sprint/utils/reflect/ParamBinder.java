@@ -14,12 +14,12 @@ import angeli.sprint.utils.reflect.Invoker;
  * respecitfs de chacun des argument
  */
 public class ParamBinder {
-    public static Object[] constructObject(Class<?>[] clazz, Map<String, Object> args)
+    public static Object[] constructObject(Class<?>[] clazz, Map<String, String[]> args)
             throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
             return null;
     }
 
-    static boolean canUseParams(Class<?>[] clazz, Map<String, Object> args) {
+    static boolean canUseParams(Class<?>[] clazz, Map<String, String[]> args) {
         boolean canUse = true;
         // Dit dans catalina.out si les parametres peuvent etre utilises pour les
         // constructeurs donnes

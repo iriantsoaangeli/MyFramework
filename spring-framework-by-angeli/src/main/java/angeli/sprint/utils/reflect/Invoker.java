@@ -12,7 +12,7 @@ import java.util.Map;
  * Classe utilitaire pour faire la reflection
  */
 public class Invoker {
-    public static Object invokeMethod(Method method, Map<String, Object> args)
+    public static Object invokeMethod(Method method, Map<String, String[]> args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
         boolean canInvoke = canInvokeMethod(method, args);
         boolean canUseParams = ParamBinder.canUseParams(method.getParameterTypes(), args);
@@ -43,7 +43,7 @@ public class Invoker {
     /**
      * Verifie si les arguments sont valides pour la methode
      */
-    static boolean areArgsValid(Executable method, Map<String, Object> args) {
+    static boolean areArgsValid(Executable method, Map<String, String[]> args) {
 
         return true;
     }
@@ -59,7 +59,7 @@ public class Invoker {
     /**
      * Verifie si la methode peut etre invoquee avec les arguments donnes
      */
-    static boolean canInvokeMethod(Method method, Map<String, Object> args) {
+    static boolean canInvokeMethod(Method method, Map<String, String[]> args) {
         if (!doesItHaveArgs(method)) {
             return true;
         }
