@@ -14,7 +14,7 @@ public class Invoker {
     public static Object invokeMethod(Method method, Object[] args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
         boolean canInvoke = canInvokeMethod(method, args);
-        boolean canUseParams = ParamMapper.canUseParams(method.getParameterTypes(), args);
+        boolean canUseParams = ParamBinder.canUseParams(method.getParameterTypes(), args);
         Class<?>[] parameterTypes = method.getParameterTypes();
        Object ret = null ;
         if (canInvoke) {
