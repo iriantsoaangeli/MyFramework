@@ -12,7 +12,7 @@ import angeli.sprint.utils.reflect.Invoker;
  * Associe les parametres envoyes dans la requete avec les constructeurs
  * respecitfs de chacun des argument
  */
-public class ParamMapper {
+public class ParamBinder {
     public static Object[] constructObject(Class<?>[] clazz, Object[] args)
             throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
