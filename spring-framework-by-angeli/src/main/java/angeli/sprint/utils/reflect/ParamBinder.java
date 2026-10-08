@@ -15,8 +15,9 @@ import angeli.sprint.utils.reflect.Invoker;
  */
 public class ParamBinder {
     public static Object[] constructObject(Class<?>[] clazz, Map<String, String[]> args)
-            throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
-            return null;
+            throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException,
+            java.lang.reflect.InvocationTargetException {
+        return null;
     }
 
     static boolean canBuildArgs(Class<?>[] clazz, Map<String, String[]> args) {
@@ -39,4 +40,14 @@ public class ParamBinder {
         return constructors;
     }
 
+    /**
+     * Prend les valeurs dans la map et les met dans un Objet[] si il y a plusieurs
+     * valeur sur un nom de parametre
+     * 
+     */
+    static Object[] getParamValues(Map<String, String[]> args) {
+        Object[] paramValues = new Object[args.size()];
+        paramValues = args.values().toArray();
+        return paramValues;
+    }
 }
