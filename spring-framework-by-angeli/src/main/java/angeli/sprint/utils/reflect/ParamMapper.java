@@ -68,11 +68,26 @@ public class ParamMapper {
         return constructors;
     }
 
+    static Class<?>[] getClasses(Object[] args) {
+        Class<?>[] classes = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            classes[i] = args[i].getClass();
+        }
+        return classes;
+    }
+
     /**
      * Prend une indexe du tableau d'arguments et verifie le tableau de param
      * jusqu'a depasser le max ou trouver tout les constructeurs
      */
-    static void testArgsForConstructors(Class<?> clazz, Object[] args, Integer ndex) {
-
+    static void testArgsForConstructors(Class<?> clazz, Object[] args, Integer index) {
+        for (int i = 0; i < args.length; i++) {
+            Object[] subArray = Arrays.copyOfRange(args, index, i + 1);
+            try {
+                Constructor<?> constructor = clazz.getConstructor(getClasses(subArray));
+            } catch (NoSuchMethodException e) {
+                continue;
+            }
+        }
     }
 }
