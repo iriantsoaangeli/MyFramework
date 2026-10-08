@@ -44,8 +44,6 @@ public class Invoker {
      * Verifie si les arguments sont valides pour la methode
      */
     static boolean areArgsValid(Executable method, Map<String, String[]> param) {
-       Class<?>[] argTypes = method.getParameterTypes();
-
         return true;
     }
 
@@ -73,13 +71,8 @@ public class Invoker {
         return false;
     }
 
-    static boolean doNumbersMatch(Constructor<?>[] cons, int nb) {
-        int sum = 0;
-        for (Constructor<?> co : cons) {
-            sum = co.getParameterCount() + sum;
-            if (sum > nb)
-                return false;
-        }
-        return true;
-    }
+
+    // static boolean canConvert(Object from , Object to ){
+        
+    // }
 }
