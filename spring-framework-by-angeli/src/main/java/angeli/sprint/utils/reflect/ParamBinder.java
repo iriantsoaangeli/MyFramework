@@ -9,7 +9,7 @@ import angeli.sprint.utils.reflect.Invoker;
 
 /**
  * 
- * ParamMapper
+ * ParamBinder
  * Associe les parametres envoyes dans la requete avec les constructeurs
  * respecitfs de chacun des argument
  */

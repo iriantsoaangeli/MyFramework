@@ -23,13 +23,13 @@ public class Invoker {
             // donnes
             System.out.println("Can invoke method :" + method.getName());
             // ret =
-            // method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
-            // args);
+            method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
+                    args);
         }
         if (canUseParams) {
             // Construit les arguments pour la methode avec les parametres donnes
             System.out.println("Argument peut etre construit depuis la requete ");
-            // ret = method.invoke(ParamMapper.constructObject(parameterTypes, args));
+            ret = method.invoke(ParamBinder.constructObject(parameterTypes, args));
         }
         // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
         // arguments donnes
