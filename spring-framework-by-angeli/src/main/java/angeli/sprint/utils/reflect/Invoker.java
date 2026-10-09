@@ -25,30 +25,37 @@ public class Invoker {
             // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
             // donnes
             System.out.println("Invoking method with given params :" + method.getName());
-            if (!doesItHaveArgs(method))
+            if (!doesItHaveArgs(method)) {
+                System.out.println("No arguments : Params go to hell");
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
                         null);
-            else {
+            } else {
                 Object[] convertedArgs = bindArgs(method, args);
 
-                System.out.println(convertedArgs);
+                //Print la list apres conversoin 
+                System.out.print("List after conversion : ");
+                for (Object arg : convertedArgs) {
+                    System.out.print(arg+",");
+                }
+
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
                         convertedArgs);
             }
 
         } catch (Exception e) {
 
-            throw e;
-            // try {
-            // // Construit les arguments pour la methode avec les parametres donnes
-            // System.out.println("Argument peut etre construit depuis la requete ");
-            // ret = method.invoke(ParamBinder.constructObject(parameterTypes, args));
-            // } catch (Exception e2) {
-            // // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
-            // // arguments donnes
-            // System.out.println("Cannot invoke method" + method.getName());
-            // throw e2;
-            // }
+            System.out.print("Cannot invoke method " + method.getName() + " with given params : ");
+
+            try {
+            // Construit les arguments pour la methode avec les parametres donnes
+            System.out.println("Argument peut etre construit depuis la requete ");
+            ret = method.invoke(ParamBinder.constructObject(parameterTypes, args));
+            } catch (Exception e2) {
+            // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
+            // arguments donnes
+            System.out.println("Cannot invoke method" + method.getName());
+            throw e2;
+            }
         }
         return ret;
 
