@@ -31,10 +31,6 @@ public class ParamBinder {
         return canUse;
     }
 
-    static boolean areTypesAssignable(Constructor<?> constructor, Object[] args) {
-        return Invoker.canInvokeConstructor(constructor, args);
-    }
-
     static Constructor<?>[] getConstructors(Class<?>[] clazz) {
         Constructor<?>[] constructors = new Constructor[clazz.length];
         for (int i = 0; i < clazz.length; i++) {
