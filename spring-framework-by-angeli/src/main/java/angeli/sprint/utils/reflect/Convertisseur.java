@@ -29,11 +29,10 @@ class Convertiesseur {
             Map.entry(java.math.BigDecimal.class, java.math.BigDecimal::new),
             Map.entry(java.math.BigInteger.class, java.math.BigInteger::new),
 
-            //String 
-            Map.entry(java.lang.String.class,java.lang.String::valueOf)
-    );
+            // String
+            Map.entry(java.lang.String.class, java.lang.String::valueOf));
 
-    public static Object convert(String value, Class<?> targetType) {
+    static Object convert(String value, Class<?> targetType) {
         Function<String, Object> convertisseur = CONVERTISSEURS.get(targetType);
         if (convertisseur != null) {
             return convertisseur.apply(value);
