@@ -16,56 +16,46 @@ import java.util.Map;
  */
 public class Invoker {
     public static Object invokeMethod(Method method, Map<String, String[]> args)
-            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
+            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
+            ParseException {
         boolean canUseParams = ParamBinder.canBuildArgs(method.getParameterTypes(), args);
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object ret = null;
         try {
             // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
             // donnes
-            System.out.println("Can invoke method :" + method.getName());
+            System.out.println("Invoking method with given params :" + method.getName());
             if (!doesItHaveArgs(method))
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
                         null);
             else {
-                Object[] convertedArgs = invokeMethod(method, args.values().toArray());
+                Object[] convertedArgs = bindArgs(method, args);
+
+                System.out.println(convertedArgs);
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
                         convertedArgs);
             }
 
         } catch (Exception e) {
-            try {
-                // Construit les arguments pour la methode avec les parametres donnes
-                System.out.println("Argument peut etre construit depuis la requete ");
-                ret = method.invoke(ParamBinder.constructObject(parameterTypes, args));
-            } catch (Exception e2) {
-                // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
-                // arguments donnes
-                System.out.println("Cannot invoke method" + method.getName());
-                throw new IllegalArgumentException("Cannot invoke method with the given arguments.");
-            }
+
+            throw e;
+            // try {
+            // // Construit les arguments pour la methode avec les parametres donnes
+            // System.out.println("Argument peut etre construit depuis la requete ");
+            // ret = method.invoke(ParamBinder.constructObject(parameterTypes, args));
+            // } catch (Exception e2) {
+            // // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
+            // // arguments donnes
+            // System.out.println("Cannot invoke method" + method.getName());
+            // throw e2;
+            // }
         }
         return ret;
 
     }
 
-    static Object[] invokeMethod(Executable method, Object[] args) throws ParseException {
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        int index = 0;
-        Object[] convertedArgs = new Object[args.length];
-        for (Object c : parameterTypes) {
-            if (c instanceof Number n) {
-                convertedArgs[index] = NumberFormat.getInstance(Locale.US).parse(args[index].toString());
-            }
-            if (c instanceof String) {
-                convertedArgs[index] = args[index].toString();
-            } else {
-                // On va juste mettre et on verra si il y a un probleme
-                convertedArgs[index] = args[index];
-            }
-            index++;
-        }
-        ;
+    static Object[] bindArgs(Executable method, Map<String, String[]> args) throws ParseException {
+        Object[] convertedArgs = ParamBinder.bindInOrder(method, args);
         return convertedArgs;
     }
 
