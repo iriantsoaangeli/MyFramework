@@ -35,7 +35,7 @@ public class Invoker {
                 //Print la list apres conversoin 
                 System.out.print("List after conversion : ");
                 for (Object arg : convertedArgs) {
-                    System.out.print(arg+"as+"+arg.getClass()+"+,");
+                    System.out.print(arg+" : "+arg.getClass()+"+,");
                 }
 
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
