@@ -23,13 +23,6 @@ public class ParamBinder {
         return null;
     }
 
-    static boolean canBuildArgs(Class<?>[] clazz, Map<String, String[]> args) {
-        boolean canUse = true;
-        // Dit dans catalina.out si les parametres peuvent etre utilises pour les
-        // constructeurs donnes
-        System.out.println("Can  use params: " + canUse);
-        return canUse;
-    }
 
     static Constructor<?>[] getConstructors(Class<?>[] clazz) {
         Constructor<?>[] constructors = new Constructor[clazz.length];
