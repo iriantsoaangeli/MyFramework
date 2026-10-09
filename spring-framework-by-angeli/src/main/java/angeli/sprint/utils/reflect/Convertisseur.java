@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-class Convertiesseur {
+class Convertisseur {
 
     static Object createArray(String[] values, Class<?> targetType) {
         Class<?> comp = targetType.getComponentType();

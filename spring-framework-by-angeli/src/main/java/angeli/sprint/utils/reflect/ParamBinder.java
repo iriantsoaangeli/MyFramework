@@ -60,7 +60,7 @@ public class ParamBinder {
             else
                 System.out.println("Binding param: " + name + " with value: " + args.get(name)[0] + " to type: "
                         + paramTypes[index]);
-            orderedArgs[index] = Convertiesseur.convert(args.get(name)[0], (Class<?>) paramTypes[index]);
+            orderedArgs[index] = Convertisseur.convert(args.get(name)[0], (Class<?>) paramTypes[index]);
             index++;
         }
         return orderedArgs;
