@@ -24,10 +24,10 @@ public class ParamBinder {
     }
 
 
-    static Constructor<?>[] getConstructors(Class<?>[] clazz) {
-        Constructor<?>[] constructors = new Constructor[clazz.length];
+    static Constructor<?>[][] getConstructors(Class<?>[] clazz) {
+        Constructor<?>[][] constructors = new Constructor[clazz.length][];
         for (int i = 0; i < clazz.length; i++) {
-            constructors[i] = clazz[i].getConstructors()[0];
+            constructors[i] = clazz[i].getDeclaredConstructors() ;
         }
         return constructors;
     }
@@ -53,4 +53,6 @@ public class ParamBinder {
         }
         return orderedArgs;
     }
+
+
 }
