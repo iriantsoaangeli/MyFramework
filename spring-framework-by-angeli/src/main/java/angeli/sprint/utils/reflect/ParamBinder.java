@@ -1,6 +1,7 @@
 package angeli.sprint.utils.reflect;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -48,14 +49,25 @@ public class ParamBinder {
      */
     static Object[] getParamValues(Map<String, String[]> args) {
         Object[] paramValues = new Object[args.size()];
-        AtomicInteger index = new AtomicInteger(0) ;
-        args.forEach((key,val) -> {
-            if(val.length < 2)
-                paramValues[index.get()] = args.get(key)[0] ;
-            if(val.length >= 2)
-                paramValues[index.get()] = args.get(key) ;  
-            index.incrementAndGet();    
+        AtomicInteger index = new AtomicInteger(0);
+        args.forEach((key, val) -> {
+            if (val.length < 2)
+                paramValues[index.get()] = args.get(key)[0];
+            if (val.length >= 2)
+                paramValues[index.get()] = args.get(key);
+            index.incrementAndGet();
         });
         return paramValues;
+    }
+
+    static Object[] bindInOrder(Executable method, Map<String, String[]> args) {
+        Object[] orderedArgs = new Object[args.size()];
+        Integer index = 0;
+        List<String> paramNames = Arrays.stream(method.getParameters()).map(p -> p.getName()).toList();
+        for (String name : paramNames) {
+            orderedArgs[index] = args.get(name);
+            index++;
+        }
+        return orderedArgs;
     }
 }
