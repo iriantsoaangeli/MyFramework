@@ -2,13 +2,10 @@ package angeli.sprint.utils.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import angeli.sprint.utils.reflect.Invoker;
 
 /**
  * 
@@ -23,11 +20,10 @@ public class ParamBinder {
         return null;
     }
 
-
     static Constructor<?>[][] getConstructors(Class<?>[] clazz) {
         Constructor<?>[][] constructors = new Constructor[clazz.length][];
         for (int i = 0; i < clazz.length; i++) {
-            constructors[i] = clazz[i].getDeclaredConstructors() ;
+            constructors[i] = clazz[i].getDeclaredConstructors();
         }
         return constructors;
     }
@@ -38,13 +34,14 @@ public class ParamBinder {
      * 
      */
     static Object[] bindInOrder(Executable method, Map<String, String[]> args) {
+        
         Object[] orderedArgs = new Object[args.size()];
         Integer index = 0;
         List<String> paramNames = Arrays.stream(method.getParameters()).map(p -> p.getName()).toList();
         Object[] paramTypes = method.getParameterTypes();
         for (String name : paramNames) {
             if (!args.containsKey(name))
-                System.out.println("Warning: Missing parameter " + name + " for method " + method.getName());
+                throw new IllegalArgumentException("Missing parameter " + name + " for method " + method.getName());
             else
                 System.out.println("Binding param: " + name + " with value: " + args.get(name)[0] + " to type: "
                         + paramTypes[index]);
@@ -54,5 +51,21 @@ public class ParamBinder {
         return orderedArgs;
     }
 
-
+    static Map<Constructor<?>, Object[]> findMatch(Constructor<?>[][] constructors, Map<String, String[]> args) {
+        Map<Constructor<?>, Object[]> retMap = new java.util.HashMap<>();
+        for (Constructor<?>[] construct : constructors) {
+            for (Constructor<?> co : construct) {
+                if (co.getParameterCount() > 0) {
+                    String[] paramNames = Arrays.stream(co.getParameters()).map(p -> p.getName())
+                            .toArray(String[]::new);
+                    if (args.keySet().containsAll(Arrays.asList(paramNames))) {
+                        retMap.put(co, bindInOrder(co, args));
+                    }
+                } else {
+                    retMap.put(co, null);
+                }
+            }
+        }
+        return retMap;
+    }
 }
