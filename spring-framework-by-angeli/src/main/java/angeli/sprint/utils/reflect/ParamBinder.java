@@ -48,19 +48,6 @@ public class ParamBinder {
      * valeur sur un nom de parametre
      * 
      */
-    static Object[] getParamValues(Map<String, String[]> args) {
-        Object[] paramValues = new Object[args.size()];
-        AtomicInteger index = new AtomicInteger(0);
-        args.forEach((key, val) -> {
-            if (val.length < 2)
-                paramValues[index.get()] = args.get(key)[0];
-            if (val.length >= 2)
-                paramValues[index.get()] = args.get(key);
-            index.incrementAndGet();
-        });
-        return paramValues;
-    }
-
     static Object[] bindInOrder(Executable method, Map<String, String[]> args) {
         Object[] orderedArgs = new Object[args.size()];
         Integer index = 0;
