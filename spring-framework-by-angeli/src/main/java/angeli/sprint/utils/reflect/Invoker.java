@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
@@ -47,8 +48,11 @@ public class Invoker {
 
             try {
                 // Construit les arguments pour la methode avec les parametres donnes
-                System.out.println("Argument peut etre construit depuis la requete ");
-                ret = method.invoke(ParamBinder.constructObject(parameterTypes, args));
+                System.out.println("Arguments peut etre construit depuis la requete ");
+                Map<Constructor<?>, Object[]> constructorsAndArgs = ParamBinder.getConstructorsAndArgs(parameterTypes,
+                        args);
+                Object[] newArgs = createArgs(constructorsAndArgs);
+                ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), newArgs);
             } catch (Exception e2) {
                 // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
                 // arguments donnes
@@ -73,5 +77,16 @@ public class Invoker {
         return parameterTypes.length > 0;
     }
 
+    static Object[] createArgs(Map<Constructor<?>, Object[]> args)
+            throws IllegalArgumentException, InstantiationException, IllegalAccessException,
+            InvocationTargetException {
+        Object[] ret = new Object[args.size()];
+        int i = 0;
+        for (Map.Entry<Constructor<?>, Object[]> entry : args.entrySet()) {
+            ret[i] = entry.getKey().newInstance(entry.getValue());
+            i++;
+        }
+        return ret;
+    }
 
 }
