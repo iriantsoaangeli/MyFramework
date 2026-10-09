@@ -41,7 +41,8 @@ class Convertiesseur {
         }
     }
 
-    static Object[] createObjects(Map<String,String[]> map, Class<?> args){
-
+    static Object[] createObjects(Map<String, String[]> map, Class<?>[] args) {
+        Object[] objects = new Object[args.length];
+        return objects;
     }
 }
