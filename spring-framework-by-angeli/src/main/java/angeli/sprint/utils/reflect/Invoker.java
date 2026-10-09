@@ -25,7 +25,7 @@ public class Invoker {
             // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
             // donnes
             System.out.println("Invoking method with given params :" + method.getName());
-            if (!doesItHaveArgs(method)) {
+            if (!(method.getParameterCount() > 0 )) {
                 System.out.println("No arguments : Params go to hell");
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
                         null);
@@ -69,13 +69,6 @@ public class Invoker {
         return convertedArgs;
     }
 
-    /**
-     * Verifie si la methode a des arguments
-     */
-    static boolean doesItHaveArgs(Method method) {
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        return parameterTypes.length > 0;
-    }
 
     static Object[] createArgs(Map<Constructor<?>, Object[]> args)
             throws IllegalArgumentException, InstantiationException, IllegalAccessException,
