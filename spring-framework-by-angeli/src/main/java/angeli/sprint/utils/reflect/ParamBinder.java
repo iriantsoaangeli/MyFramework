@@ -72,10 +72,7 @@ public class ParamBinder {
             else
                 System.out.println("Binding param: " + name + " with value: " + args.get(name)[0] + " to type: "
                         + paramTypes[index]);
-            if (paramTypes[index] instanceof Number)
-                orderedArgs[index] = NumberFormat.getInstance().format(args.get(name)[0]);
-            if (paramTypes[index] instanceof String)
-                orderedArgs[index] = args.get(name)[0];
+            orderedArgs[index] = Convertiesseur.convert(args.get(name)[0], (Class<?>) paramTypes[index]);
             index++;
         }
         return orderedArgs;
