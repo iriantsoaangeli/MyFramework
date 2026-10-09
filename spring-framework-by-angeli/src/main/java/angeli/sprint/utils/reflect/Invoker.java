@@ -18,7 +18,6 @@ public class Invoker {
     public static Object invokeMethod(Method method, Map<String, String[]> args)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             ParseException {
-        boolean canUseParams = ParamBinder.canBuildArgs(method.getParameterTypes(), args);
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object ret = null;
         try {
@@ -32,10 +31,10 @@ public class Invoker {
             } else {
                 Object[] convertedArgs = bindArgs(method, args);
 
-                //Print la list apres conversoin 
+                // Print la list apres conversoin
                 System.out.print("List after conversion : ");
                 for (Object arg : convertedArgs) {
-                    System.out.print(arg+" : "+arg.getClass()+",");
+                    System.out.print(arg + " : " + arg.getClass() + ",");
                 }
 
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
@@ -47,14 +46,14 @@ public class Invoker {
             System.out.print("Cannot invoke method " + method.getName() + " with given params : ");
 
             try {
-            // Construit les arguments pour la methode avec les parametres donnes
-            System.out.println("Argument peut etre construit depuis la requete ");
-            ret = method.invoke(ParamBinder.constructObject(parameterTypes, args));
+                // Construit les arguments pour la methode avec les parametres donnes
+                System.out.println("Argument peut etre construit depuis la requete ");
+                ret = method.invoke(ParamBinder.constructObject(parameterTypes, args));
             } catch (Exception e2) {
-            // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
-            // arguments donnes
-            System.out.println("Cannot invoke method" + method.getName());
-            throw e2;
+                // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
+                // arguments donnes
+                System.out.println("Cannot invoke method" + method.getName());
+                throw e2;
             }
         }
         return ret;
@@ -74,9 +73,6 @@ public class Invoker {
         return parameterTypes.length > 0;
     }
 
-    static boolean canInvokeConstructor(Constructor<?> constructor, Object[] args) {
-        return false;
-    }
 
     // static boolean canConvert(Object from , Object to ){
 

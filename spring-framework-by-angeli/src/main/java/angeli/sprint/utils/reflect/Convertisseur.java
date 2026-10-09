@@ -40,4 +40,8 @@ class Convertiesseur {
             throw new IllegalArgumentException("Pas de convertisseur pour le type : " + targetType.getName());
         }
     }
+
+    static Object[] createObjects(Map<String,String[]> map, Class<?> args){
+
+    }
 }
