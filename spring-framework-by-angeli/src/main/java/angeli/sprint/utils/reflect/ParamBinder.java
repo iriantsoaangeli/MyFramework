@@ -2,7 +2,6 @@ package angeli.sprint.utils.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
-import java.lang.reflect.Parameter;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -65,11 +64,7 @@ public class ParamBinder {
     static Object[] bindInOrder(Executable method, Map<String, String[]> args) {
         Object[] orderedArgs = new Object[args.size()];
         Integer index = 0;
-        Parameter[] ps = method.getParameters(); // declaration order, guaranteed
-        String[] paramNames = new String[ps.length];
-        for (int i = 0; i < ps.length; i++) {
-            paramNames[i] = ps[i].getName(); // "nom", "age"... (needs -parameters)
-        }
+        List<String> paramNames = Arrays.stream(method.getParameters()).map(p -> p.getName()).toList();
         Object[] paramTypes = method.getParameterTypes();
         for (String name : paramNames) {
             if (!args.containsKey(name))
@@ -78,7 +73,7 @@ public class ParamBinder {
                 System.out.println("Binding param: " + name + " with value: " + args.get(name)[0] + " to type: "
                         + paramTypes[index]);
             if (paramTypes[index] instanceof Number)
-                orderedArgs[index] = NumberFormat.getInstance().format(args.get(name)[0].toString());
+                orderedArgs[index] = NumberFormat.getInstance().format(args.get(name)[0]);
             if (paramTypes[index] instanceof String)
                 orderedArgs[index] = args.get(name)[0];
             index++;
