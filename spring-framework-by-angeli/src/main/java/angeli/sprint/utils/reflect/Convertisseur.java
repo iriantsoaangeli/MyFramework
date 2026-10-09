@@ -27,7 +27,11 @@ class Convertiesseur {
 
             // grands nombres (pas de valueOf(String))
             Map.entry(java.math.BigDecimal.class, java.math.BigDecimal::new),
-            Map.entry(java.math.BigInteger.class, java.math.BigInteger::new));
+            Map.entry(java.math.BigInteger.class, java.math.BigInteger::new),
+
+            //String 
+            Map.entry(java.lang.String.class,java.lang.String::valueOf)
+    );
 
     public static Object convert(String value, Class<?> targetType) {
         Function<String, Object> convertisseur = CONVERTISSEURS.get(targetType);
