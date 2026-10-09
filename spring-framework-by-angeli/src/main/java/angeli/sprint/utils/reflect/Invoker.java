@@ -4,6 +4,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -24,9 +27,11 @@ public class Invoker {
             if (!doesItHaveArgs(method))
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
                         null);
-            else
+            else {
+                Object[] convertedArgs = invokeMethod(method, args.values().toArray());
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
-                        args);
+                        convertedArgs);
+            }
 
         } catch (Exception e) {
             try {
@@ -44,9 +49,24 @@ public class Invoker {
 
     }
 
-    static Object invokeMethod(Executable method, Object[] args) {
-        Object ret = null;
-        return ret;
+    static Object[] invokeMethod(Executable method, Object[] args) throws ParseException {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        int index = 0;
+        Object[] convertedArgs = new Object[args.length];
+        for (Object c : parameterTypes) {
+            if (c instanceof Number n) {
+                convertedArgs[index] = NumberFormat.getInstance(Locale.US).parse(args[index].toString());
+            }
+            if (c instanceof String) {
+                convertedArgs[index] = args[index].toString();
+            } else {
+                // On va juste mettre et on verra si il y a un probleme
+                convertedArgs[index] = args[index];
+            }
+            index++;
+        }
+        ;
+        return convertedArgs;
     }
 
     /**
