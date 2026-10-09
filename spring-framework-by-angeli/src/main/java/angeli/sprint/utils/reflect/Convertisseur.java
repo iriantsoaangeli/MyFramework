@@ -1,9 +1,26 @@
 package angeli.sprint.utils.reflect;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 class Convertiesseur {
+
+    static Object createArray(String[] values, Class<?> targetType) {
+        Class<?> comp = targetType.getComponentType();
+        Object[] array = (Object[]) java.lang.reflect.Array.newInstance(comp, values.length);
+        for (int i = 0; i < values.length; i++) {
+            array[i] = convert(values[i], comp);
+        }
+        return array;
+    }
+
+    static Object createList(Object[] values, Class<?> type) {
+        if (type == List.class ) 
+              return List.of(values);
+        return null ;
+    }
+
     private static final Map<Class<?>, Function<String, Object>> CONVERTISSEURS = Map.ofEntries(
             // primitifs
             Map.entry(byte.class, Byte::valueOf),
@@ -45,4 +62,5 @@ class Convertiesseur {
         Object[] objects = new Object[args.length];
         return objects;
     }
+
 }
