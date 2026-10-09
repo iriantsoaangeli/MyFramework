@@ -11,13 +11,28 @@ import java.util.Map;
  * 
  * ParamBinder
  * Associe les parametres envoyes dans la requete avec les constructeurs
- * respecitfs de chacun des argument
+ * respecitfs de chacun des argumentu
  */
 public class ParamBinder {
-    public static Object[] constructObject(Class<?>[] clazz, Map<String, String[]> args)
+    public static Map<Constructor<?>, Object[]> getConstructorsAndArgs(Class<?>[] paramTypes, Map<String, String[]> args)
             throws IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
-        return null;
+                Map<Constructor<?>, Object[]> retMap = new java.util.HashMap<>();
+                if(paramTypes.length == 1){
+                    Constructor<?>[] constructors = paramTypes[0].getDeclaredConstructors();
+                    for (Constructor<?> constructor : constructors) {
+                        if(constructor.getParameterCount() == args.size()){
+                            try{
+                                retMap.put(constructor, bindInOrder(constructor, args));
+                            }
+                            catch(IllegalArgumentException e){
+                                continue;
+                            }
+                        }
+                    }
+                return retMap ;
+                }
+        return retMap;
     }
 
     static Constructor<?>[][] getConstructors(Class<?>[] clazz) {
