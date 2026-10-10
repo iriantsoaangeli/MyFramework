@@ -88,4 +88,11 @@ public class Invoker {
         return ret;
     }
 
+    static String getType(String[] values){
+        if(values.length > 1)
+            return "array";
+        else
+            return "single";
+    }
+
 }
