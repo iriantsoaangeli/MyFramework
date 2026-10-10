@@ -59,10 +59,12 @@ public class Descriptor<T> {
         return field.getType();
     }
 
-   Object creaObject(Map<String,String[]> map){
-       String[] etage1 = ParamParser.parseNames(map.keySet().toArray(new String[0]), 1);
-       List<Object> args = new ArrayList<Object>() ;
+   Object creaObject(Map<String,String[]> map,Integer etage){
+    if (etage == null)
+        etage = 0;
 
+       String[] etageSuivant = ParamParser.parseNames(map.keySet().toArray(new String[0]), etage+1);
+       List<Object> args = new ArrayList<Object>() ;
        return null;
     }
 }
