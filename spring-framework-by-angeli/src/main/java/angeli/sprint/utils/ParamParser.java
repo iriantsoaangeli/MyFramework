@@ -39,4 +39,25 @@ public class ParamParser {
             return null;
         return nextParams;
     }
+
+    static boolean checkClosestEtage(int profondeur, String str, String classe) {
+        int index = 0;
+        for (String name : str.split(".")) {
+            if (name.equals(classe) && index == profondeur) {
+                return true;
+            } else if (index == profondeur) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static String[] getParams(String[] list,String prefix,int profondeur){
+        List<String> ret = new ArrayList<String>() ;
+        for (String string : list) {
+            if(string.contains(prefix)&& ){
+
+            }
+        }
+    }
 }
