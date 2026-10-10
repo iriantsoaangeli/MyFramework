@@ -9,11 +9,12 @@ import angeli.sprint.utils.reflect.Descriptor;
 
 public class ParamParser {
 
-    public static String[] parseArgs(String[] paramNames,String className ,int profondeur) {
+    public static String[] parseArgs(String[] paramNames, String className, int profondeur) {
         List<String> namesList = new ArrayList<>();
         String split = ".";
         for (String string : paramNames) {
-            if (!string.split(split)[profondeur].isEmpty() && string.contains(className) && checkClosestEtage(profondeur, string, className))
+            if (!string.split(split)[profondeur].isEmpty() && string.contains(className)
+                    && checkClosestEtage(profondeur, string, className))
                 namesList.add(string.split(split)[profondeur]);
         }
 
