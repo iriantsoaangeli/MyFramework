@@ -50,4 +50,9 @@ public class Descriptor<T> {
         }
         throw new NoSuchMethodException("No matching constructor found");
     }
+
+    static Class<?> getFieldType(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        Field field = clazz.getDeclaredField(fieldName);
+        return field.getType();
+    }
 }
