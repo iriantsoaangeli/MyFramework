@@ -3,6 +3,7 @@ package angeli.sprint.utils.reflect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,15 @@ public class Descriptor<T> {
 
     public Descriptor(Class<T> clazz, String argName) {
         this.clazz = clazz;
+        this.argName = argName;
+    }
+
+    public Class<T> getClazz() {
+        return clazz;
+    }
+
+    public String getArgName() {
+        return argName;
     }
 
     public Constructor<T> getConstructor(String[] paramNames) throws NoSuchMethodException {
@@ -32,21 +42,32 @@ public class Descriptor<T> {
                     if (!argNames.contains(paramName)) {
                         break;
                     }
-                    return matchingConstructor;
+
                 }
             }
         }
-        throw new NoSuchMethodException("No matching constructor found");
+        return matchingConstructor;
     }
 
-    Object creaObject(Map<String, String[]> map, Integer etage) throws NoSuchMethodException , InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
+    Object creaObject(Map<String, String[]> map, Integer etage) throws NoSuchMethodException, InstantiationException,
+            IllegalAccessException, java.lang.reflect.InvocationTargetException {
+
+        if (TypeChecker.isSimple(clazz)) {
+            String[] values = map.get(argName);
+            if (values != null && values.length > 0) {
+                return Convertisseur.convert(values[0], clazz);
+            } else {
+                throw new RuntimeException("Cannot create instance of " + clazz.getName());
+            }
+        }
+
         if (etage == null)
             etage = 0;
-
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage + 1);
         List<Object> args = new ArrayList<Object>();
         Constructor<T> constructor = getConstructor(etageSuivant);
         Parameter[] parameters = constructor.getParameters();
+
         for (Parameter parameter : parameters) {
             Descriptor<?> descriptor = new Descriptor<>(parameter.getType(), parameter.getName());
             Object arg = descriptor.creaObject(map, etage + 1);
