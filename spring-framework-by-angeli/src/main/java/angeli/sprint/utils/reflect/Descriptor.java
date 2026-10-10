@@ -14,11 +14,13 @@ import java.util.Map;
 public class Descriptor<T> {
     private Class<T> clazz;
     private String argName;
+    private String prefix = null;
 
-    public Descriptor(Class<T> clazz, String argName) {
-        System.out.println("Creating descriptor for class: " + clazz.getName() + " with arg name: " + argName);
+    public Descriptor(Class<T> clazz, String argName, String prefix) {
+        System.out.println("new descriptor : " + clazz.getName() + " , " + argName);
         this.clazz = clazz;
         this.argName = argName;
+        this.prefix = prefix;
     }
 
     public Class<T> getClazz() {
@@ -63,7 +65,7 @@ public class Descriptor<T> {
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
 
         if (TypeChecker.isSimple(clazz)) {
-            String[] values = map.get(argName);
+            String[] values = map.get(prefix + argName);
             if (values != null && values.length > 0) {
                 System.out.println("Creating simple instance of " + clazz.getName() + "associated with param name: "
                         + argName + " with values: " + List.of(values));
@@ -96,7 +98,7 @@ public class Descriptor<T> {
         Parameter[] parameters = constructor.getParameters();
 
         for (Parameter parameter : parameters) {
-            Descriptor<?> descriptor = new Descriptor<>(parameter.getType(), parameter.getName());
+            Descriptor<?> descriptor = new Descriptor<>(parameter.getType(), parameter.getName(), argName + ".");
             Object arg = descriptor.creaObject(map, etage + 1);
             args.add(arg);
         }
