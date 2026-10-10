@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import angeli.sprint.utils.ParamParser;
 /**
  * Descripteur pour un parametre d'une methode
  */
@@ -16,24 +14,6 @@ public class Descriptor<T> {
 
     public Descriptor(Class<T> clazz, String argName) {
         this.clazz = clazz;
-    }
-
-    boolean doesFieldExist(String fieldName) {
-        try {
-            Field field = clazz.getDeclaredField(fieldName);
-            return true;
-        } catch (NoSuchFieldException e) {
-            return false;
-        }
-    }
-
-    public boolean isFieldSimple(String fieldName) throws NoSuchFieldException {
-        if (!doesFieldExist(fieldName))
-            return false;
-        if (TypeChecker.isSimple(clazz.getDeclaredField(fieldName).getType())) {
-            return true;
-        }
-        return false;
     }
 
     public Constructor<T> getConstructor(String[] paramNames) throws NoSuchMethodException {
@@ -57,10 +37,6 @@ public class Descriptor<T> {
         throw new NoSuchMethodException("No matching constructor found");
     }
 
-    Class<?> getFieldType(Class<?> clazz, String fieldName) throws NoSuchFieldException {
-        Field field = clazz.getDeclaredField(fieldName);
-        return field.getType();
-    }
 
     Object creaObject(Map<String, String[]> map, Integer etage) {
         if (etage == null)
