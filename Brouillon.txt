@@ -1,2 +1,13 @@
 1. On a une map avec La liste des param et les valeurs associees 
-2.On verifie si ce sont des type primitifs ou des Wrapper ou des String
+2.On verifie si ce sont des type primitifs ou des Wrapper ou des String ou si elle n'a pas d'arguments
+    2.a Ca marche 
+    2.b Ca ne marche pas 
+        3. On Prend la liste des champs et on cree une autre liste par etage ( un point = un etage)
+        4. On regarde l'etage 1 et on a  une liste de Descriptor 
+        5.On boucle chaque Descriptor pour voir si ils ont un champs correspondant a un nom de l'etage superieur
+            Si oui on met dans la map du Descriptor le champ et le String associees et on retire l'objet de la liste
+            Si non la boucle continue 
+            6.a Il y a une exception si il reste un objet dans une des List de nimporte quelle etage 
+            6.b Il n'y  a pas de reste et on peut alors construire les arguments
+            7.Pour chaque Descriptor de l'etage 1  On appelle une fonciton recursive pour instancer la map si l'objet est complexe , il appel son propre createur sinon c'est un type simple 
+            
