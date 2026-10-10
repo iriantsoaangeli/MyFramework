@@ -17,7 +17,7 @@ public class ParamParser {
         return descriptors;
     }
 
-    static String[] parseNames(String[] paramNames, int profondeur) {
+    public static String[] parseNames(String[] paramNames, int profondeur) {
         List<String> namesList = new ArrayList<>();
         String split = ".";
         for (String string : paramNames) {
