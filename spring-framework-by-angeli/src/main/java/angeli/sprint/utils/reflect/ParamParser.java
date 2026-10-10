@@ -18,7 +18,7 @@ class ParamParser {
                     .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
             if (!string.split(split)[profondeur].isEmpty()
                     && checkClosestEtage(profondeur, string, className))
-                namesList.add(string.split(split)[profondeur]);
+                namesList.add(string.split(split)[profondeur+1]);
         }
 
         System.out.println("Params after parsing for class: " + className + " at profondeur: " + profondeur + " are: "
@@ -29,9 +29,7 @@ class ParamParser {
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
         if (profondeur >= str.split("\\.").length)
             return false;
-        if (profondeur == 0)
-            return true;
-        String name = str.split("\\.")[profondeur - 1];
+        String name = str.split("\\.")[profondeur];
         if (name.equals(classe)) {
             System.out.println("Found closest etage for class: " + classe + " at profondeur: " + profondeur);
             return true;
@@ -51,5 +49,13 @@ class ParamParser {
             }
         }
         return ret.toArray(new String[0]);
+    }
+    static int getArray(String[] tab){
+        String temp = "";
+        for(int i = 0; i < tab.length; i++){
+            temp = tab[i].split("\\.")[1];
+            
+        }
+        return -1 ;
     }
 }
