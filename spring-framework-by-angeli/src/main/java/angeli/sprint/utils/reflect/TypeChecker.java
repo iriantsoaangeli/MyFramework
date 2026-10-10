@@ -1,10 +1,12 @@
 package angeli.sprint.utils.reflect;
 
+import java.util.Map;
+import java.util.function.Function;
+
 class TypeChecker {
     static boolean isSimple(Class<?> clazz){
-        if(
-                clazz.getClass().isPrimitive() ||
-                clazz.getClass().equals(String.class) ) {
+        Map<Class<?>, Function<String, Object>> convertisseurs = Convertisseur.getConvertisseurs();
+        if(convertisseurs.containsKey(clazz)){
             return true;
         }
         return false ;
