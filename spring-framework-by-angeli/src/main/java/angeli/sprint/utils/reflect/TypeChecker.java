@@ -4,11 +4,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 class TypeChecker {
-    static boolean isSimple(Class<?> clazz){
+    static boolean isSimple(Class<?> clazz) {
         Map<Class<?>, Function<String, Object>> convertisseurs = Convertisseur.getConvertisseurs();
-        if(convertisseurs.containsKey(clazz)){
-            return true;
-        }
-        return false ;
+        return convertisseurs.containsKey(clazz);
+
     }
 }
