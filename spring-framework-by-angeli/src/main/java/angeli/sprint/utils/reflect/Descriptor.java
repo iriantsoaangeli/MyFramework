@@ -12,7 +12,7 @@ public class Descriptor<T> {
         this.clazz = clazz;
     }
 
-    public boolean doesFieldExist(String fieldName) {
+     boolean doesFieldExist(String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
             return true;
