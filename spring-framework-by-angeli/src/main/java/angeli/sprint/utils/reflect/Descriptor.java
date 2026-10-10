@@ -9,4 +9,15 @@ public class Descriptor<T> {
     public Descriptor(Class<T> clazz) {
         this.clazz = clazz;
     }
+
+    public boolean doesFieldExist(String fieldName) {
+        try {
+            Field field = clazz.getDeclaredField(fieldName);
+            return true;
+        } catch (NoSuchFieldException e) {
+            return false;
+        }
+    }
+
+    
 }
