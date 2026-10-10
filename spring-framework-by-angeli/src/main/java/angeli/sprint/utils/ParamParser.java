@@ -9,6 +9,9 @@ import angeli.sprint.utils.reflect.Descriptor;
 
 public class ParamParser {
 
+    /**
+     * Parse les parametres de la requete pour recuperer les parametres d'un objet
+     */
     public static String[] parseArgs(String[] paramNames, String className, int profondeur) {
         List<String> namesList = new ArrayList<>();
         String split = ".";
@@ -53,6 +56,9 @@ public class ParamParser {
         return false;
     }
 
+    /**
+     * Recupere les parametres  ayant ce prefix et cette profondeur
+     */
     public static String[] getParams(String[] list, String prefix, int profondeur) {
         List<String> ret = new ArrayList<String>();
         for (String string : list) {
