@@ -12,7 +12,7 @@ import java.util.Map;
      */
      static String[] parseArgs(String[] paramNames, String className, int profondeur) {
         List<String> namesList = new ArrayList<>();
-        String split = ".";
+        String split = "\\.";
         for (String string : paramNames) {
             if (!string.split(split)[profondeur].isEmpty() && string.contains(className)
                     && checkClosestEtage(profondeur, string, className))
@@ -23,7 +23,7 @@ import java.util.Map;
     }
 
     static String nextEtage(String name) {
-        String nouveauString = name.substring(name.indexOf(".") + 1);
+        String nouveauString = name.substring(name.indexOf("\\.") + 1);
         if (nouveauString.isBlank()) {
             return null;
         } else {
@@ -44,7 +44,7 @@ import java.util.Map;
 
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
         int index = 1;
-        for (String name : str.split(".")) {
+        for (String name : str.split("\\.")) {
             if (name.equals(classe) && index == profondeur) {
                 return true;
             } else if (index == profondeur) {
