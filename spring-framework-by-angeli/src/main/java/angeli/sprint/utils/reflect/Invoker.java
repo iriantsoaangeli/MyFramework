@@ -88,6 +88,9 @@ public class Invoker {
         return ret;
     }
 
+    /**
+     * Dis si c'est un champ simple ou sinon un array ou une liste 
+     */
     static String getType(String[] values){
         if(values.length > 1)
             return "array";
