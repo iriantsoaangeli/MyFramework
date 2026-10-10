@@ -16,7 +16,7 @@ import java.util.Map;
         for (String string : paramNames) {
             if (!string.split(split)[profondeur].isEmpty() && string.contains(className)
                     && checkClosestEtage(profondeur, string, className))
-                namesList.add(string.split(split)[profondeur]);
+                namesList.add(string.split(split)[profondeur-1]);
         }
 
         return namesList.toArray(new String[0]);
@@ -50,6 +50,7 @@ import java.util.Map;
             } else if (index == profondeur) {
                 return false;
             }
+            index++;
         }
         return false;
     }
