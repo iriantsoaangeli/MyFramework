@@ -88,6 +88,11 @@ public class Descriptor<T> {
             return array;
         }
 
+        if(List.class.isAssignableFrom(clazz)){
+            Object list = Convertisseur.createList(map.get(prefix+argName), clazz);
+            return list;
+        }
+
         if (etage == null)
             etage = 0;
         else
