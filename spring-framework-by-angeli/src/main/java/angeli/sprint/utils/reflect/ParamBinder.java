@@ -2,6 +2,8 @@ package angeli.sprint.utils.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,7 @@ import java.util.Map;
  * respecitfs de chacun des argumentu
  */
 public class ParamBinder {
- 
+
     static Constructor<?>[][] getConstructors(Class<?>[] clazz) {
         Constructor<?>[][] constructors = new Constructor[clazz.length][];
         for (int i = 0; i < clazz.length; i++) {
@@ -63,11 +65,12 @@ public class ParamBinder {
         return retMap;
     }
 
-    static Descriptor<?>[] getDescriptors(Class<?>[] paramTypes,String[] paramNames) {
-        Descriptor<?>[] descriptors = new Descriptor[paramTypes.length];
-        for (int i = 0; i < paramTypes.length; i++) {
-            descriptors[i] = new Descriptor<>(paramTypes[i]);
+    static Descriptor<?>[] getDescriptors(Executable method , Map<String, String[]> args){
+        Parameter[] parameters = method.getParameters();
+        List<Descriptor<?>> descriptors = new ArrayList<>();
+        for (Parameter parameter : parameters) {
+            descriptors.add(new Descriptor<>(parameter.getType()));
         }
-        return descriptors;
+        return descriptors.toArray(new Descriptor<?>[0]);
     }
 }
