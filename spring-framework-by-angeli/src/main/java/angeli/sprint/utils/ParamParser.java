@@ -9,11 +9,11 @@ import angeli.sprint.utils.reflect.Descriptor;
 
 public class ParamParser {
 
-    public static String[] parseNames(String[] paramNames, int profondeur) {
+    public static String[] parseArgs(String[] paramNames,String className ,int profondeur) {
         List<String> namesList = new ArrayList<>();
         String split = ".";
         for (String string : paramNames) {
-            if (!string.split(split)[profondeur].isEmpty())
+            if (!string.split(split)[profondeur].isEmpty() && string.contains(className) && checkClosestEtage(profondeur, string, className))
                 namesList.add(string.split(split)[profondeur]);
         }
 
@@ -41,7 +41,7 @@ public class ParamParser {
     }
 
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
-        int index = 0;
+        int index = 1;
         for (String name : str.split(".")) {
             if (name.equals(classe) && index == profondeur) {
                 return true;
