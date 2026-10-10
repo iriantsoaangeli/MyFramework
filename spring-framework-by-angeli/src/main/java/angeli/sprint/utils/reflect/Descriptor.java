@@ -16,6 +16,7 @@ public class Descriptor<T> {
     private String argName;
 
     public Descriptor(Class<T> clazz, String argName) {
+        System.out.println("Creating descriptor for class: " + clazz.getName() + " with arg name: " + argName);
         this.clazz = clazz;
         this.argName = argName;
     }
@@ -42,8 +43,9 @@ public class Descriptor<T> {
 
                 for (String paramName : paramNames) {
                     if (!argNames.contains(paramName)) {
-                       
-                        System.out.println("Constructor " + constructor + " does not match parameter names: " + String.join(", ", paramNames));
+
+                        System.out.println("Constructor " + constructor + " does not match parameter names: "
+                                + String.join(", ", paramNames));
                         found = false;
                         break;
                     }
@@ -63,12 +65,14 @@ public class Descriptor<T> {
         if (TypeChecker.isSimple(clazz)) {
             String[] values = map.get(argName);
             if (values != null && values.length > 0) {
+                System.out.println("Creating simple instance of " + clazz.getName() + "associated with param name: "
+                        + argName + " with values: " + List.of(values));
                 return Convertisseur.convert(values[0], clazz);
             } else {
                 throw new RuntimeException("Cannot create instance of " + clazz.getName());
             }
         }
-        if(map == null || map.isEmpty())
+        if (map == null || map.isEmpty())
             try {
                 return clazz.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
@@ -83,7 +87,10 @@ public class Descriptor<T> {
             etage++;
 
         System.out.println("Creating instance of " + clazz.getName() + " at etage " + etage);
+        System.out.println("param names :" + List.of(map.keySet().toArray(new String[0])));
+
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
+
         List<Object> args = new ArrayList<Object>();
         Constructor<T> constructor = getConstructor(etageSuivant);
         Parameter[] parameters = constructor.getParameters();
