@@ -24,7 +24,7 @@ public class Invoker {
 
         //Cas 1 : Type primitif,nombre,String , ou pas de parametre 
         try {
-            
+
             // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
             // donnes
             System.out.println("Invoking method with given params :" + method.getName());
@@ -45,6 +45,7 @@ public class Invoker {
                         convertedArgs);
             }
 
+            //Cas 2 : Type complexe (objet) , on essaye de construire l'objet avec les parametres donnes
         } catch (Exception e) {
 
             System.out.print("Cannot invoke method " + method.getName() + " with given params : ");
