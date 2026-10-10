@@ -52,12 +52,13 @@ public class ParamParser {
         return false;
     }
 
-    public static String[] getParams(String[] list,String prefix,int profondeur){
-        List<String> ret = new ArrayList<String>() ;
+    public static String[] getParams(String[] list, String prefix, int profondeur) {
+        List<String> ret = new ArrayList<String>();
         for (String string : list) {
-            if(string.contains(prefix)&& ){
-
+            if (string.contains(prefix) && checkClosestEtage(profondeur, string, prefix)) {
+                ret.add(string);
             }
         }
+        return ret.toArray(new String[0]);
     }
 }
