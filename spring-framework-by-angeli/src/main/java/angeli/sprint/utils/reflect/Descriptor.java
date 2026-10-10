@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import angeli.sprint.utils.ParamParser;
-
+/**
+ * Descripteur pour un parametre d'une methode
+ */
 public class Descriptor<T> {
     private Class<T> clazz;
     private String argName;

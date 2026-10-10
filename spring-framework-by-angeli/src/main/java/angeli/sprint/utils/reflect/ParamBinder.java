@@ -65,6 +65,9 @@ public class ParamBinder {
         return retMap;
     }
 
+    /**
+     * Retourne un tableau de Descripteur pour chaque parametre de la methode
+     */
     static Descriptor<?>[] getDescriptors(Executable method) {
         Parameter[] parameters = method.getParameters();
         List<Descriptor<?>> descriptors = new ArrayList<>();
