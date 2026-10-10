@@ -22,7 +22,7 @@ public class Invoker {
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object ret = null;
 
-        //Cas 1 : Type primitif,nombre,String , ou pas de parametre 
+        // Cas 1 : Type primitif,nombre,String , ou pas de parametre
         try {
 
             // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
@@ -45,18 +45,25 @@ public class Invoker {
                         convertedArgs);
             }
 
-            //Cas 2 : Type complexe (objet) , on essaye de construire l'objet avec les parametres donnes
+            // Cas 2 : Type complexe (objet) , on essaye de construire l'objet avec les
+            // parametres donnes
         } catch (Exception e) {
 
             System.out.print("Cannot invoke method " + method.getName() + " with given params : ");
 
             try {
                 // Construit les arguments pour la methode avec les parametres donnes
-                // System.out.println("Arguments peut etre construit depuis la requete ");
-                // Map<Constructor<?>, Object[]> constructorsAndArgs = ParamBinder.getConstructorsAndArgs(parameterTypes,
-                //         args);
-                // Object[] newArgs = createArgs(constructorsAndArgs);
-                // ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), newArgs);
+                System.out.println("Arguments peut etre construit depuis la requete ");
+                Object[] newArgs = new Object[method.getParameterCount()];
+                Descriptor<?>[] descriptors = ParamBinder.getDescriptors(method);
+                int index = 0;
+                for (Descriptor<?> descriptor : descriptors) {
+                    newArgs[index] = descriptor.creaObject(args, null);
+                    index++;
+                }
+                ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
+                        newArgs);
+
             } catch (Exception e2) {
                 // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
                 // arguments donnes
@@ -69,7 +76,7 @@ public class Invoker {
     }
 
     /**
-     * Ne prend que les nombre primitifs ou non  et les String 
+     * Ne prend que les nombre primitifs ou non et les String
      */
     static Object[] bindArgs(Executable method, Map<String, String[]> args) throws ParseException {
         Object[] convertedArgs = ParamBinder.bindInOrder(method, args);
@@ -89,10 +96,10 @@ public class Invoker {
     }
 
     /**
-     * Dis si c'est un champ simple ou sinon un array ou une liste 
+     * Dis si c'est un champ simple ou sinon un array ou une liste
      */
-    static String getType(String[] values){
-        if(values.length > 1)
+    static String getType(String[] values) {
+        if (values.length > 1)
             return "array";
         else
             return "single";
