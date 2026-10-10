@@ -68,6 +68,9 @@ public class Invoker {
 
     }
 
+    /**
+     * Ne prend que les nombre primitifs ou non  et les String 
+     */
     static Object[] bindArgs(Executable method, Map<String, String[]> args) throws ParseException {
         Object[] convertedArgs = ParamBinder.bindInOrder(method, args);
         return convertedArgs;
