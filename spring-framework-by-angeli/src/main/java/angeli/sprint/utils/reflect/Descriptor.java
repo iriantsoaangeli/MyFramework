@@ -38,15 +38,21 @@ public class Descriptor<T> {
                     argNames.add(constructor.getParameters()[i].getName());
                 }
                 matchingConstructor = (Constructor<T>) constructor;
+                boolean found = true;
+
                 for (String paramName : paramNames) {
                     if (!argNames.contains(paramName)) {
+                        found = false;
                         break;
                     }
-
                 }
+                if (found)
+                    return matchingConstructor;
             }
         }
-        return matchingConstructor;
+        throw new NoSuchMethodException("No matching constructor found for class " + clazz.getName()
+                + " with parameter names: " + String.join(", ", paramNames));
+
     }
 
     Object creaObject(Map<String, String[]> map, Integer etage) throws NoSuchMethodException, InstantiationException,
@@ -60,6 +66,14 @@ public class Descriptor<T> {
                 throw new RuntimeException("Cannot create instance of " + clazz.getName());
             }
         }
+        if(map == null || map.isEmpty())
+            try {
+                return clazz.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error creating instance of " + clazz.getName());
+                throw new RuntimeException("Cannot create instance of " + clazz.getName());
+            }
 
         if (etage == null)
             etage = 0;
