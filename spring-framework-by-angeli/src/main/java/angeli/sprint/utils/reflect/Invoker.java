@@ -52,11 +52,11 @@ public class Invoker {
 
             try {
                 // Construit les arguments pour la methode avec les parametres donnes
-                System.out.println("Arguments peut etre construit depuis la requete ");
-                Map<Constructor<?>, Object[]> constructorsAndArgs = ParamBinder.getConstructorsAndArgs(parameterTypes,
-                        args);
-                Object[] newArgs = createArgs(constructorsAndArgs);
-                ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), newArgs);
+                // System.out.println("Arguments peut etre construit depuis la requete ");
+                // Map<Constructor<?>, Object[]> constructorsAndArgs = ParamBinder.getConstructorsAndArgs(parameterTypes,
+                //         args);
+                // Object[] newArgs = createArgs(constructorsAndArgs);
+                // ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(), newArgs);
             } catch (Exception e2) {
                 // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
                 // arguments donnes

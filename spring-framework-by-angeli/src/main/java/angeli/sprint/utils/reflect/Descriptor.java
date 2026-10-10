@@ -63,7 +63,7 @@ public class Descriptor<T> {
     if (etage == null)
         etage = 0;
 
-       String[] etageSuivant = ParamParser.parseNames(map.keySet().toArray(new String[0]), etage+1);
+       String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), clazz.getSimpleName(), etage+1);
        List<Object> args = new ArrayList<Object>() ;
        return null;
     }
