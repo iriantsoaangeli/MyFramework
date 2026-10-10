@@ -10,9 +10,9 @@ import angeli.sprint.utils.ParamParser;
 
 public class Descriptor<T> {
     private Class<T> clazz;
-    private String refName;
+    private String argName;
 
-    public Descriptor(Class<T> clazz,String refName) {
+    public Descriptor(Class<T> clazz, String argName) {
         this.clazz = clazz;
     }
 
@@ -60,12 +60,12 @@ public class Descriptor<T> {
         return field.getType();
     }
 
-   Object creaObject(Map<String,String[]> map,Integer etage){
-    if (etage == null)
-        etage = 0;
+    Object creaObject(Map<String, String[]> map, Integer etage) {
+        if (etage == null)
+            etage = 0;
 
-       String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), clazz.getSimpleName(), etage+1);
-       List<Object> args = new ArrayList<Object>() ;
-       return null;
+        String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage + 1);
+        List<Object> args = new ArrayList<Object>();
+        return null;
     }
 }
