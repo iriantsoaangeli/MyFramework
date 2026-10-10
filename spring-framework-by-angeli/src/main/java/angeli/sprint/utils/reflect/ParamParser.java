@@ -16,45 +16,24 @@ class ParamParser {
         for (String string : paramNames) {
             System.out
                     .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
-            if (!string.split(split)[profondeur].isEmpty() && string.contains(className)
+            if (!string.split(split)[profondeur].isEmpty()
                     && checkClosestEtage(profondeur, string, className))
                 namesList.add(string.split(split)[profondeur]);
         }
+
         System.out.println("Params after parsing for class: " + className + " at profondeur: " + profondeur + " are: "
                 + String.join(", ", namesList));
         return namesList.toArray(new String[0]);
     }
 
-    static String nextEtage(String name) {
-        String nouveauString = name.substring(name.indexOf("\\.") + 1);
-        if (nouveauString.isBlank()) {
-            return null;
-        } else {
-            return nouveauString;
-        }
-    }
-
-    static Map<String, String[]> next(Map<String, String[]> params) {
-        Map<String, String[]> nextParams = new HashMap<>();
-        for (Map.Entry<String, String[]> entry : params.entrySet()) {
-            if (nextEtage(entry.getKey()) != null)
-                nextParams.put(nextEtage(entry.getKey()), entry.getValue());
-        }
-        if (nextParams.isEmpty())
-            return null;
-        return nextParams;
-    }
-
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
-        int index = 0;
-        for (String name : str.split("\\.")) {
-            if (name.equals(classe) && index == profondeur) {
-                return true;
-            } else if (index == profondeur) {
-                return false;
-            }
-            index++;
+        int index = 1;
+        String name = str.split("\\.")[index];
+        if (name.equals(classe) && index == profondeur) {
+            System.out.println("Found closest etage for class: " + classe + " at profondeur: " + profondeur);
+            return true;
         }
+        System.out.println("Did not find closest etage for class: " + classe + " at profondeur: " + profondeur);
         return false;
     }
 
