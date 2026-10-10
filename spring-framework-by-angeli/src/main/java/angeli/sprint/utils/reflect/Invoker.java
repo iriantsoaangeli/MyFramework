@@ -21,11 +21,14 @@ public class Invoker {
             ParseException {
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object ret = null;
+
+        //Cas 1 : Type primitif,nombre,String , ou pas de parametre 
         try {
+            
             // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
             // donnes
             System.out.println("Invoking method with given params :" + method.getName());
-            if (!(method.getParameterCount() > 0 )) {
+            if (!(method.getParameterCount() > 0)) {
                 System.out.println("No arguments : Params go to hell");
                 ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
                         null);
@@ -68,7 +71,6 @@ public class Invoker {
         Object[] convertedArgs = ParamBinder.bindInOrder(method, args);
         return convertedArgs;
     }
-
 
     static Object[] createArgs(Map<Constructor<?>, Object[]> args)
             throws IllegalArgumentException, InstantiationException, IllegalAccessException,
