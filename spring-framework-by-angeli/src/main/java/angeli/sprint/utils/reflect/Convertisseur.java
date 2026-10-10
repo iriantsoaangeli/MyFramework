@@ -63,4 +63,8 @@ class Convertisseur {
         return objects;
     }
 
+    static Map<Class<?>, Function<String, Object>> getConvertisseurs() {
+        return CONVERTISSEURS;
+    }
+
 }
