@@ -4,6 +4,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import angeli.sprint.utils.ParamParser;
 
 public class Descriptor<T> {
     private Class<T> clazz;
@@ -54,5 +57,9 @@ public class Descriptor<T> {
     static Class<?> getFieldType(Class<?> clazz, String fieldName) throws NoSuchFieldException {
         Field field = clazz.getDeclaredField(fieldName);
         return field.getType();
+    }
+
+    static Object creaObject(Map<String,String[]> map){
+       String[] etage1 = ParamParser.parseNames(map.keySet().toArray(new String[0]), 1);
     }
 }
