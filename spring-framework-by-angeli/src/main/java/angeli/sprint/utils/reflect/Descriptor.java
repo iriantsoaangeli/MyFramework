@@ -77,6 +77,8 @@ public class Descriptor<T> {
 
         if (etage == null)
             etage = 0;
+        
+        System.out.println("Creating instance of " + clazz.getName() + " at etage " + etage);
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage + 1);
         List<Object> args = new ArrayList<Object>();
         Constructor<T> constructor = getConstructor(etageSuivant);
