@@ -5,20 +5,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
- class ParamParser {
+class ParamParser {
 
     /**
      * Parse les parametres de la requete pour recuperer les parametres d'un objet
      */
-     static String[] parseArgs(String[] paramNames, String className, int profondeur) {
+    static String[] parseArgs(String[] paramNames, String className, int profondeur) {
         List<String> namesList = new ArrayList<>();
         String split = "\\.";
         for (String string : paramNames) {
+            System.out
+                    .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
             if (!string.split(split)[profondeur].isEmpty() && string.contains(className)
                     && checkClosestEtage(profondeur, string, className))
-                namesList.add(string.split(split)[profondeur-1]);
+                namesList.add(string.split(split)[profondeur]);
         }
-
+        System.out.println("Params after parsing for class: " + className + " at profondeur: " + profondeur + " are: "
+                + String.join(", ", namesList));
         return namesList.toArray(new String[0]);
     }
 
@@ -31,7 +34,7 @@ import java.util.Map;
         }
     }
 
-     static Map<String, String[]> next(Map<String, String[]> params) {
+    static Map<String, String[]> next(Map<String, String[]> params) {
         Map<String, String[]> nextParams = new HashMap<>();
         for (Map.Entry<String, String[]> entry : params.entrySet()) {
             if (nextEtage(entry.getKey()) != null)
@@ -43,7 +46,7 @@ import java.util.Map;
     }
 
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
-        int index = 1;
+        int index = 0;
         for (String name : str.split("\\.")) {
             if (name.equals(classe) && index == profondeur) {
                 return true;
@@ -56,9 +59,9 @@ import java.util.Map;
     }
 
     /**
-     * Recupere les parametres  ayant ce prefix et cette profondeur
+     * Recupere les parametres ayant ce prefix et cette profondeur
      */
-     static String[] getParams(String[] list, String prefix, int profondeur) {
+    static String[] getParams(String[] list, String prefix, int profondeur) {
         List<String> ret = new ArrayList<String>();
         for (String string : list) {
             if (string.contains(prefix) && checkClosestEtage(profondeur, string, prefix)) {
