@@ -65,11 +65,11 @@ public class ParamBinder {
         return retMap;
     }
 
-    static Descriptor<?>[] getDescriptors(Executable method , Map<String, String[]> args){
+    static Descriptor<?>[] getDescriptors(Executable method) {
         Parameter[] parameters = method.getParameters();
         List<Descriptor<?>> descriptors = new ArrayList<>();
         for (Parameter parameter : parameters) {
-            descriptors.add(new Descriptor<>(parameter.getType(),parameter.getName()));
+            descriptors.add(new Descriptor<>(parameter.getType(), parameter.getName()));
         }
         return descriptors.toArray(new Descriptor<?>[0]);
     }
