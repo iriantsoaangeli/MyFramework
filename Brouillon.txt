@@ -1,0 +1,2 @@
+1. On a une map avec La liste des param et les valeurs associees 
+2.On verifie si ce sont des type primitifs ou des Wrapper ou des String
