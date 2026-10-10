@@ -15,7 +15,7 @@ public class Descriptor<T> {
         this.clazz = clazz;
     }
 
-     boolean doesFieldExist(String fieldName) {
+    boolean doesFieldExist(String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
             return true;
@@ -54,12 +54,15 @@ public class Descriptor<T> {
         throw new NoSuchMethodException("No matching constructor found");
     }
 
-    static Class<?> getFieldType(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+    Class<?> getFieldType(Class<?> clazz, String fieldName) throws NoSuchFieldException {
         Field field = clazz.getDeclaredField(fieldName);
         return field.getType();
     }
 
-    static Object creaObject(Map<String,String[]> map){
+   Object creaObject(Map<String,String[]> map){
        String[] etage1 = ParamParser.parseNames(map.keySet().toArray(new String[0]), 1);
+       List<Object> args = new ArrayList<Object>() ;
+
+       return null;
     }
 }

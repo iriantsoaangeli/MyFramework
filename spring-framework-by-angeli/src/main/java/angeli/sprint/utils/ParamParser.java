@@ -8,14 +8,6 @@ import java.util.Map;
 import angeli.sprint.utils.reflect.Descriptor;
 
 public class ParamParser {
-    public static List<Descriptor<?>> parseParams(String[] paramNames, Class<?>[] paramTypes)
-            throws ClassNotFoundException {
-        List<Descriptor<?>> descriptors = new ArrayList<Descriptor<?>>();
-        for (Class<?> type : paramTypes) {
-            descriptors.add(new Descriptor<>(type));
-        }
-        return descriptors;
-    }
 
     public static String[] parseNames(String[] paramNames, int profondeur) {
         List<String> namesList = new ArrayList<>();
