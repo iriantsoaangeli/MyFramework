@@ -27,9 +27,12 @@ class ParamParser {
     }
 
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
-        int index = 1;
-        String name = str.split("\\.")[index];
-        if (name.equals(classe) && index == profondeur) {
+        if (profondeur >= str.split("\\.").length)
+            return false;
+        if (profondeur == 0)
+            return true;
+        String name = str.split("\\.")[profondeur - 1];
+        if (name.equals(classe)) {
             System.out.println("Found closest etage for class: " + classe + " at profondeur: " + profondeur);
             return true;
         }
