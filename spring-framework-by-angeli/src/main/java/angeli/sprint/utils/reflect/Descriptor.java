@@ -83,6 +83,11 @@ public class Descriptor<T> {
                 throw new RuntimeException("Cannot create instance of " + clazz.getName());
             }
 
+        if (clazz.isArray()) {
+            Object array = Convertisseur.createArray(map.get(prefix+argName), clazz);
+            return array;
+        }
+
         if (etage == null)
             etage = 0;
         else
@@ -102,6 +107,7 @@ public class Descriptor<T> {
             Object arg = descriptor.creaObject(map, etage + 1);
             args.add(arg);
         }
+
         return constructor.newInstance(args.toArray());
     }
 }
