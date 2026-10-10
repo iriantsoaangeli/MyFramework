@@ -10,8 +10,9 @@ import angeli.sprint.utils.ParamParser;
 
 public class Descriptor<T> {
     private Class<T> clazz;
+    private String refName;
 
-    public Descriptor(Class<T> clazz) {
+    public Descriptor(Class<T> clazz,String refName) {
         this.clazz = clazz;
     }
 
