@@ -19,5 +19,13 @@ public class Descriptor<T> {
         }
     }
 
-    
+    public boolean isFieldSimple(String fieldName) throws NoSuchFieldException{
+        if (!doesFieldExist(fieldName))
+            return false;
+        if (clazz.getDeclaredField(fieldName).getType().isPrimitive() ||
+                clazz.getDeclaredField(fieldName).getType().equals(String.class) ) {
+            return true;
+        }
+        return false;
+    }
 }
