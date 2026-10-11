@@ -16,7 +16,7 @@ class Convertisseur {
     }
 
     static Object createList(Object[] values, Class<?> type) {
-        if (type == List.class ) 
+        if (type == List.class && values != null) 
               return List.of(values);
         return null ;
     }
