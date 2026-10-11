@@ -125,6 +125,33 @@ public class Descriptor {
         return elements;
     }
 
+    /**
+     * Construit une Map. Format : nom[cle]=valeur (valeur simple) ou
+     * nom[cle].champ=valeur (objet). La cle ne peut pas contenir . [ ou ] et doit
+     * etre d'un type simple.
+     */
+    Map<Object, Object> makeEntries(Map<String, String[]> map, Integer etage, Class<?> keyType, Class<?> valueType)
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException,
+            java.lang.reflect.InvocationTargetException {
+        if (!TypeChecker.isSimple(keyType))
+            throw new IllegalArgumentException(
+                    "La cle de la Map " + argName + " doit etre d'un type simple, pas " + keyType.getName());
+        String full = fullName();
+        Map<Object, Object> entries = new LinkedHashMap<>();
+        for (String k : ParamParser.getKeys(map.keySet(), full)) {
+            Object key = Convertisseur.convert(k, keyType);
+            if (TypeChecker.isSimple(valueType)) {
+                String[] values = map.get(full + "[" + k + "]");
+                if (values != null && values.length > 0)
+                    entries.put(key, Convertisseur.convert(values[0], valueType));
+            } else {
+                Descriptor value = new Descriptor(valueType, null, argName + "[" + k + "]", prefix);
+                entries.put(key, value.creaObject(map, etage));
+            }
+        }
+        return entries;
+    }
+
     Object creaObject(Map<String, String[]> map, Integer etage) throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
 
