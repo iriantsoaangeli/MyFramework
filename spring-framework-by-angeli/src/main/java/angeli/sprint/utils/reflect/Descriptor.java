@@ -95,22 +95,27 @@ public class Descriptor {
     List<Object> makeArray(Map<String, String[]> map, Integer etage, Class<?> comp)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
+        String full = fullName();
+        List<Object> elements = new ArrayList<>();
         if (TypeChecker.isSimple(comp)) {
-            Object array = Convertisseur.createArray(map.get(prefix + argName), clazz);
-            return array;
+            String[] values = map.get(full);
+            if (values != null) {
+                for (String value : values)
+                    elements.add(Convertisseur.convert(value, comp));
+            } else {
+                for (Integer i : ParamParser.getIndexes(map.keySet(), full)) {
+                    String[] indexed = map.get(full + "[" + i + "]");
+                    if (indexed != null && indexed.length > 0)
+                        elements.add(Convertisseur.convert(indexed[0], comp));
+                }
+            }
+            return elements;
         }
-        String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
-        List<Object> array = new ArrayList<>();
-        while (etageSuivant[index].contains(String.valueOf(index)) && index < etageSuivant.length) {
-            array.add(new Descriptor(comp, null, argName, prefix).creaObject(map, etage));
-            System.out.println("Created object for array at index " + index + " for class " + clazz.getName());
-            index++;
-            updateIndex();
-            etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
+        for (Integer i : ParamParser.getIndexes(map.keySet(), full)) {
+            Descriptor element = new Descriptor(comp, null, argName + "[" + i + "]", prefix);
+            elements.add(element.creaObject(map, etage));
         }
-        index = 0;
-        updateIndex();
-        return array.toArray();
+        return elements;
     }
 
     Object creaObject(Map<String, String[]> map, Integer etage) throws NoSuchMethodException, InstantiationException,
