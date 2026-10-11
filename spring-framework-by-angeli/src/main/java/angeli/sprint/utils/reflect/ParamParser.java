@@ -70,12 +70,21 @@ class ParamParser {
             if (!paramName.split(split)[profondeur].isEmpty()
                     && paramName.split(split).length >= profondeur) {
                 String cut = paramName.split(split)[profondeur];
-                if(cut.contains(arrayName) && TypeChecker.isNumber(cut.split("\\[")[1].split("\\]")[0])){
-                    indexes.add((Integer)Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class));
+                if (isIndexedElement(cut, arrayName)) {
+                    indexes.add((Integer) Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class));
                 }
             }
         }
         return indexes;
     }
 
+    static boolean isIndexedElement(String cut, String arrayName) {
+        String start = arrayName + "[";
+        if (!cut.startsWith(start))
+            return false;
+        int end = cut.indexOf(']', start.length());
+        if (end < 0)
+            return false;
+        return TypeChecker.isNumber(cut.substring(start.length(), end));
+    }
 }
