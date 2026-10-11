@@ -123,7 +123,7 @@ public class Descriptor {
         }
 
         if (List.class.isAssignableFrom(clazz)) {
-            Object list = List.of(makeArray(map, etage, (Class<?>) type.getRawType()));
+            Object list = List.of(makeArray(map, etage, (Class<?>) type.getActualTypeArguments()[0]));
             return List.of(list);
         }
 
