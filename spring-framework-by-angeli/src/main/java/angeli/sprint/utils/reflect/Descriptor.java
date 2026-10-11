@@ -125,14 +125,14 @@ public class Descriptor {
             etage = 0;
 
         if (TypeChecker.isSimple(clazz)) {
-            String[] values = map.get(prefix + "." + argName);
+            String[] values = map.get(fullName());
             if (values != null && values.length > 0) {
                 System.out.println("Creating simple instance of " + clazz.getName() + "associated with param name: "
                         + argName + " with values: " + List.of(values));
                 return Convertisseur.convert(values[0], clazz);
             } else {
-                throw new RuntimeException("Cannot create instance of " + clazz.getName() + ", param name: " + prefix
-                        + "." + argName + " not found in map");
+                throw new RuntimeException("Cannot create instance of " + clazz.getName() + ", param name: " + fullName()
+                        + " not found in map");
             }
         }
         if (map == null || map.isEmpty())
