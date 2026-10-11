@@ -3,6 +3,7 @@ package angeli.sprint.utils.reflect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,12 +69,15 @@ public class ParamBinder {
     /**
      * Retourne un tableau de Descripteur pour chaque parametre de la methode
      */
-    static Descriptor<?>[] getDescriptors(Executable method) {
+    static Descriptor[] getDescriptors(Executable method) {
         Parameter[] parameters = method.getParameters();
-        List<Descriptor<?>> descriptors = new ArrayList<>();
+        List<Descriptor> descriptors = new ArrayList<>();
         for (Parameter parameter : parameters) {
-            descriptors.add(new Descriptor<>(parameter.getType(), parameter.getName(),""));
+            if(parameter.getParameterizedType() instanceof ParameterizedType)
+                descriptors.add(new Descriptor(parameter.getType(),(ParameterizedType)parameter.getParameterizedType(), parameter.getName(),""));
+            else
+                descriptors.add(new Descriptor(parameter.getType(),null, parameter.getName(),""));
         }
-        return descriptors.toArray(new Descriptor<?>[0]);
+        return descriptors.toArray(new Descriptor[0]);
     }
 }
