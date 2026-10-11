@@ -29,6 +29,8 @@ class ParamParser {
         return namesList.toArray(new String[0]);
     }
 
+
+
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
         if (profondeur >= str.split("\\.").length)
             return false;
@@ -63,38 +65,23 @@ class ParamParser {
         return -1;
     }
 
-    static Map<Integer, List<String>> getAllIndexes(String[] paramNames, String arrayName, int profondeur) {
-        String split = "\\.";
-        Map<Integer, List<String>> indexes = new HashMap<>();
-        for (String paramName : paramNames) {
-            if (!paramName.split(split)[profondeur].isEmpty()
-                    && paramName.split(split).length > profondeur) {
-                String cut = paramName.split(split)[profondeur];
-                if (isIndexedElement(cut, arrayName)) {
-                    Integer key = Integer.parseInt(cut.split("\\[")[1].split("\\]")[0]);
-                    if (indexes.containsKey(
-                            key)) {
-                        indexes.get(key)
-                                .add(paramName);
-                    } else {
-                        List<String> list = new ArrayList<>();
-                        list.add(paramName);
-                        indexes.put(key,
-                                list);
-                    }
-                }
-            }
+    /**
+     * Index (tries) trouves dans les cles de la forme fullName[i] ou fullName[i].xxx
+     */
+    static java.util.SortedSet<Integer> getIndexes(Set<String> keys, String fullName) {
+        java.util.SortedSet<Integer> indexes = new java.util.TreeSet<>();
+        String start = fullName + "[";
+        for (String key : keys) {
+            if (!key.startsWith(start))
+                continue;
+            int end = key.indexOf(']', start.length());
+            if (end < 0)
+                continue;
+            String rest = key.substring(end + 1);
+            String number = key.substring(start.length(), end);
+            if ((rest.isEmpty() || rest.startsWith(".")) && TypeChecker.isNumber(number))
+                indexes.add(Integer.valueOf(number));
         }
         return indexes;
-    }
-
-    static boolean isIndexedElement(String cut, String arrayName) {
-        String start = arrayName + "[";
-        if (!cut.startsWith(start))
-            return false;
-        int end = cut.indexOf(']', start.length());
-        if (end < 0)
-            return false;
-        return TypeChecker.isNumber(cut.substring(start.length(), end));
     }
 }
