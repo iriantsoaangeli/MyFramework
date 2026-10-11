@@ -45,6 +45,8 @@ public class Descriptor {
     }
 
     public Constructor<?> getConstructor(String[] paramNames) throws NoSuchMethodException {
+        // nom[0], nom[1]... correspondent a un seul parametre de constructeur : nom
+        paramNames = Arrays.stream(paramNames).map(p -> p.split("\\[")[0]).distinct().toArray(String[]::new);
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         Constructor<?> matchingConstructor = null;
         for (Constructor<?> constructor : constructors) {
