@@ -30,7 +30,7 @@ class ParamParser {
     }
 
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
-        if (profondeur > str.split("\\.").length)
+        if (profondeur >= str.split("\\.").length)
             return false;
         String name = str.split("\\.")[profondeur];
         if (name.equals(classe)) {
@@ -68,17 +68,18 @@ class ParamParser {
         Map<Integer, List<String>> indexes = new HashMap<>();
         for (String paramName : paramNames) {
             if (!paramName.split(split)[profondeur].isEmpty()
-                    && paramName.split(split).length >= profondeur) {
+                    && paramName.split(split).length > profondeur) {
                 String cut = paramName.split(split)[profondeur];
                 if (isIndexedElement(cut, arrayName)) {
+                    Integer key = Integer.parseInt(cut.split("\\[")[1].split("\\]")[0]);
                     if (indexes.containsKey(
-                            (Integer) Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class))) {
-                        indexes.get((Integer) Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class))
+                            key)) {
+                        indexes.get(key)
                                 .add(paramName);
                     } else {
                         List<String> list = new ArrayList<>();
                         list.add(paramName);
-                        indexes.put((Integer) Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class),
+                        indexes.put(key,
                                 list);
                     }
                 }
