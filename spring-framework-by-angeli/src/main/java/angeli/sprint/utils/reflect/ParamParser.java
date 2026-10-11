@@ -2,8 +2,10 @@ package angeli.sprint.utils.reflect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 class ParamParser {
 
@@ -11,14 +13,14 @@ class ParamParser {
      * Parse les parametres de la requete pour recuperer les parametres d'un objet
      */
     static String[] parseArgs(String[] paramNames, String className, int profondeur) {
-        List<String> namesList = new ArrayList<>();
+        Set<String> namesList = new HashSet<>();
         String split = "\\.";
         for (String string : paramNames) {
-            System.out
-                    .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
+         System.out
+                     .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
             if (!string.split(split)[profondeur].isEmpty()
                     && checkClosestEtage(profondeur, string, className))
-                namesList.add(string.split(split)[profondeur+1]);
+                namesList.add(string.split(split)[profondeur + 1]);
         }
 
         System.out.println("Params after parsing for class: " + className + " at profondeur: " + profondeur + " are: "
@@ -50,12 +52,15 @@ class ParamParser {
         }
         return ret.toArray(new String[0]);
     }
-    static int getArray(String[] tab){
+
+    static int getArray(String[] tab) {
         String temp = "";
-        for(int i = 0; i < tab.length; i++){
+        for (int i = 0; i < tab.length; i++) {
             temp = tab[i].split("\\.")[1];
-            
+
         }
-        return -1 ;
+        return -1;
     }
+
+  
 }
