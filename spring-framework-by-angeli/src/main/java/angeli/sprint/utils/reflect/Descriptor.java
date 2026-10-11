@@ -145,12 +145,16 @@ public class Descriptor {
             }
 
         if (clazz.isArray()) {
-            return makeArray(map, etage, clazz.getComponentType());
+            Class<?> comp = clazz.getComponentType();
+            List<Object> elements = makeArray(map, etage, comp);
+            Object array = java.lang.reflect.Array.newInstance(comp, elements.size());
+            for (int i = 0; i < elements.size(); i++)
+                java.lang.reflect.Array.set(array, i, elements.get(i));
+            return array;
         }
 
         if (List.class.isAssignableFrom(clazz)) {
-            Object list = List.of(makeArray(map, etage, (Class<?>) type.getActualTypeArguments()[0]));
-            return List.of(list);
+            return new ArrayList<Object>(makeArray(map, etage, listElementType()));
         }
 
         System.out.println("Creating instance of " + clazz.getName() + " at etage " + etage);
