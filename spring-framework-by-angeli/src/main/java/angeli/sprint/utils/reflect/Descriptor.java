@@ -25,7 +25,7 @@ public class Descriptor {
         this.clazz = clazz;
         this.argName = argName;
         this.prefix = prefix;
-        if (List.class.isAssignableFrom(clazz) && parameter != null
+        if ((List.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) && parameter != null
                 && parameter.getParameterizedType() instanceof ParameterizedType pt)
             this.type = pt;
         if (clazz.isArray() || List.class.isAssignableFrom(clazz))
