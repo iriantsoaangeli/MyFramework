@@ -1,5 +1,6 @@
 package angeli.sprint.utils.reflect;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,8 +17,8 @@ class ParamParser {
         Set<String> namesList = new HashSet<>();
         String split = "\\.";
         for (String string : paramNames) {
-         System.out
-                     .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
+            System.out
+                    .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
             if (!string.split(split)[profondeur].isEmpty()
                     && checkClosestEtage(profondeur, string, className))
                 namesList.add(string.split(split)[profondeur + 1]);
@@ -29,7 +30,7 @@ class ParamParser {
     }
 
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
-        if (profondeur >= str.split("\\.").length)
+        if (profondeur > str.split("\\.").length)
             return false;
         String name = str.split("\\.")[profondeur];
         if (name.equals(classe)) {
@@ -62,5 +63,19 @@ class ParamParser {
         return -1;
     }
 
-  
+    static List<Integer> getAllIndexes(String[] paramNames, String arrayName, int profondeur) {
+        String split = "\\.";
+        List<Integer> indexes = new ArrayList<>();
+        for (String paramName : paramNames) {
+            if (!paramName.split(split)[profondeur].isEmpty()
+                    && paramName.split(split).length >= profondeur) {
+                String cut = paramName.split(split)[profondeur];
+                if(cut.contains(arrayName) && TypeChecker.isNumber(cut.split("\\[")[1].split("\\]")[0])){
+                    indexes.add((Integer)Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class));
+                }
+            }
+        }
+        return indexes;
+    }
+
 }
