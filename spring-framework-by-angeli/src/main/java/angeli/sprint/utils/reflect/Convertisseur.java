@@ -51,7 +51,7 @@ class Convertisseur {
 
     static Object convert(String value, Class<?> targetType) {
         Function<String, Object> convertisseur = CONVERTISSEURS.get(targetType);
-        if (convertisseur != null) {
+        if (convertisseur != null && !value.isEmpty()) {
             return convertisseur.apply(value);
         } else {
             throw new IllegalArgumentException("Pas de convertisseur pour le type : " + targetType.getName());
