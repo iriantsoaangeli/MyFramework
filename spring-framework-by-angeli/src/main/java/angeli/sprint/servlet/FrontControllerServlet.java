@@ -8,7 +8,7 @@ import java.util.Map;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
-import angeli.sprint.utils.reflect.Reflector;
+import angeli.sprint.utils.reflect.Invoker;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -71,10 +71,11 @@ public class FrontControllerServlet extends HttpServlet {
                 break;
         }
 
-        Object args[] = null;
+        Map<String, String[]> args = null;
 
+        //Manmijery izy raha manome zavatra .next()
         if (req.getParameterNames().hasMoreElements()) {
-            args = req.getParameterMap().values().toArray();
+            args = req.getParameterMap();
         }
 
         boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);
@@ -95,13 +96,22 @@ public class FrontControllerServlet extends HttpServlet {
             }
             return;
         }
-        if (UrlExists) {
+        if (UrlExists && !UrlHasView && !UrlisAnAPI) {
+            Method calledMethod = urlMethodMap.get(url).getMethod();
+            // Dans ce cas si l'url a chemin et doit print du texte
+            try {
+                System.out.println("Ni vue ni API Mais Url Existe");
+                PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args), null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (UrlExists) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
             // Si l'url est un objet different de modelAndView
             // Envoie en json
             if (UrlisAnAPI) {
                 try {
-                    PageWriter.print(req, rep, Reflector.invokeMethod(calledMethod, args),
+                    PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args),
                             URLChecker.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -109,8 +119,7 @@ public class FrontControllerServlet extends HttpServlet {
             }
             if (UrlHasView) {
                 try {
-
-                    ModelAndView modelAndView = (ModelAndView) Reflector.invokeMethod(calledMethod, args);
+                    ModelAndView modelAndView = (ModelAndView) Invoker.invokeMethod(calledMethod, args);
 
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);
@@ -122,16 +131,8 @@ public class FrontControllerServlet extends HttpServlet {
                     e.printStackTrace();
                 }
             }
-
-        } else if (UrlExists && !UrlHasView && !UrlisAnAPI) {
-
-            // Dans ce cas si l'url a chemin et doit print du texte
-            System.out.println("Ni vue ni API Mais Url Existe");
-            PageWriter.print(req, rep, args, "text/html");
-
         } else {
             PageWriter.urlNotFound(rep);
-
         }
     }
 
