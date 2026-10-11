@@ -188,7 +188,11 @@ public class Descriptor {
         }
 
         if (List.class.isAssignableFrom(clazz)) {
-            return new ArrayList<Object>(makeArray(map, etage, listElementType()));
+            return new ArrayList<Object>(makeArray(map, etage, typeArgument(0)));
+        }
+
+        if (Map.class.isAssignableFrom(clazz)) {
+            return makeEntries(map, etage, typeArgument(0), typeArgument(1));
         }
 
         System.out.println("Creating instance of " + clazz.getName() + " at etage " + etage);
