@@ -3,7 +3,7 @@ package angeli.sprint.utils.reflect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,19 +11,31 @@ import java.util.Map;
 /**
  * Descripteur pour un parametre d'une methode
  */
-public class Descriptor<T> {
-    private Class<T> clazz;
+public class Descriptor {
+    private Class<?> clazz;
     private String argName;
     private String prefix = null;
+    boolean isArray = false;
+    int index = 0;
+    private ParameterizedType type;
 
-    public Descriptor(Class<T> clazz, String argName, String prefix) {
-        System.out.println("new descriptor : " + clazz.getName() + " , " + argName);
+    public Descriptor(Class<?> clazz, ParameterizedType type, String argName, String prefix) {
+        System.out.println("new descriptor : " + clazz.getName() + " , " + prefix + "." + argName);
         this.clazz = clazz;
         this.argName = argName;
         this.prefix = prefix;
+        this.type = type;
+        if (clazz.isArray() || List.class.isAssignableFrom(clazz)) {
+            this.isArray = true;
+            this.argName += "[" + index + "]";
+        }
     }
 
-    public Class<T> getClazz() {
+    void updateIndex() {
+        this.argName += "[" + index + "]";
+    }
+
+    public Class<?> getClazz() {
         return clazz;
     }
 
@@ -31,20 +43,19 @@ public class Descriptor<T> {
         return argName;
     }
 
-    public Constructor<T> getConstructor(String[] paramNames) throws NoSuchMethodException {
+    public Constructor<?> getConstructor(String[] paramNames) throws NoSuchMethodException {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-        Constructor<T> matchingConstructor = null;
+        Constructor<?> matchingConstructor = null;
         for (Constructor<?> constructor : constructors) {
             if (constructor.getParameterCount() == paramNames.length) {
                 List<String> argNames = new ArrayList<>();
                 for (int i = 0; i < constructor.getParameterCount(); i++) {
                     argNames.add(constructor.getParameters()[i].getName());
                 }
-                matchingConstructor = (Constructor<T>) constructor;
+                matchingConstructor = (Constructor<?>) constructor;
                 boolean found = true;
-
                 for (String paramName : paramNames) {
-                    if (!argNames.contains(paramName)) {
+                    if (!argNames.contains(paramName.split("\\[")[0])) {
 
                         System.out.println("Constructor " + constructor + " does not match parameter names: "
                                 + String.join(", ", paramNames));
@@ -58,20 +69,44 @@ public class Descriptor<T> {
         }
         throw new NoSuchMethodException("No matching constructor found for class " + clazz.getName()
                 + " with parameter names: " + List.of(paramNames));
+    }
 
+    Object makeArray(Map<String, String[]> map, int etage, Class<?> comp)
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException,
+            java.lang.reflect.InvocationTargetException {
+        if (TypeChecker.isSimple(comp)) {
+            Object array = Convertisseur.createArray(map.get(prefix + argName), clazz);
+            return array;
+        }
+        String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
+        List<Object> array = new ArrayList<>();
+        while (etageSuivant[index].contains(String.valueOf(index))) {
+            array.add(new Descriptor(clazz, type, argName, prefix).creaObject(map, etage));
+            System.out.println("Created object for array at index " + index + " for class " + clazz.getName());
+            index++;
+            updateIndex();
+        }
+        index = 0;
+        return array.toArray();
     }
 
     Object creaObject(Map<String, String[]> map, Integer etage) throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
 
+        if (etage == null)
+            etage = 0;
+        else if (!clazz.isArray() && !List.class.isAssignableFrom(clazz))
+            etage++;
+
         if (TypeChecker.isSimple(clazz)) {
-            String[] values = map.get(prefix + argName);
+            String[] values = map.get(prefix + "." + argName);
             if (values != null && values.length > 0) {
                 System.out.println("Creating simple instance of " + clazz.getName() + "associated with param name: "
                         + argName + " with values: " + List.of(values));
                 return Convertisseur.convert(values[0], clazz);
             } else {
-                throw new RuntimeException("Cannot create instance of " + clazz.getName());
+                throw new RuntimeException("Cannot create instance of " + clazz.getName() + ", param name: " + prefix
+                        + "." + argName + " not found in map");
             }
         }
         if (map == null || map.isEmpty())
@@ -84,19 +119,13 @@ public class Descriptor<T> {
             }
 
         if (clazz.isArray()) {
-            Object array = Convertisseur.createArray(map.get(prefix+argName), clazz);
-            return array;
+            return makeArray(map, etage, clazz.getComponentType());
         }
 
-        if(List.class.isAssignableFrom(clazz)){
-            Object list = Convertisseur.createList(map.get(prefix+argName), clazz);
-            return list;
+        if (List.class.isAssignableFrom(clazz)) {
+            Object list = List.of(makeArray(map, etage, (Class<?>) type.getRawType()));
+            return List.of(list);
         }
-
-        if (etage == null)
-            etage = 0;
-        else
-            etage++;
 
         System.out.println("Creating instance of " + clazz.getName() + " at etage " + etage);
         System.out.println("param names :" + List.of(map.keySet().toArray(new String[0])));
@@ -104,11 +133,26 @@ public class Descriptor<T> {
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
 
         List<Object> args = new ArrayList<Object>();
-        Constructor<T> constructor = getConstructor(etageSuivant);
+        Constructor<?> constructor = getConstructor(etageSuivant);
         Parameter[] parameters = constructor.getParameters();
 
         for (Parameter parameter : parameters) {
-            Descriptor<?> descriptor = new Descriptor<>(parameter.getType(), parameter.getName(), argName + ".");
+            Descriptor descriptor = null;
+            boolean parameterized = parameter.getParameterizedType() instanceof ParameterizedType;
+            if (etage == 0) {
+                if (!parameterized)
+                    descriptor = new Descriptor(parameter.getType(), null, parameter.getName(), argName);
+                else
+                    descriptor = new Descriptor(parameter.getType(),
+                            (ParameterizedType) parameter.getParameterizedType(), parameter.getName(), argName);
+            } else {
+                if (parameterized)
+                    descriptor = new Descriptor(parameter.getType(),
+                            (ParameterizedType) parameter.getParameterizedType(), parameter.getName(),
+                            prefix + "." + argName);
+                else
+                    descriptor = new Descriptor(parameter.getType(), null, parameter.getName(), prefix + "." + argName);
+            }
             Object arg = descriptor.creaObject(map, etage + 1);
             args.add(arg);
         }
