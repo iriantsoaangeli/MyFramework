@@ -162,22 +162,27 @@ public class Descriptor {
 
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
 
+        return creaObject(map, etage, etageSuivant);
+    }
+
+    Object creaObject(Map<String, String[]> map, Integer etage, String[] etageSuivant)
+            throws NoSuchMethodException, InstantiationException,
+            IllegalAccessException, java.lang.reflect.InvocationTargetException {
         List<Object> args = new ArrayList<Object>();
         Constructor<?> constructor = getConstructor(etageSuivant);
         Parameter[] parameters = constructor.getParameters();
-
         for (Parameter parameter : parameters) {
             Descriptor descriptor = null;
-            if (etage == 0)
+            if (etage == 0) {
                 descriptor = new Descriptor(parameter.getType(), parameter, parameter.getName(), argName);
-            else
+            } else {
                 descriptor = new Descriptor(parameter.getType(), parameter, parameter.getName(),
                         prefix + "." + argName);
-
+            }
             Object arg = descriptor.creaObject(map, etage + 1);
             args.add(arg);
         }
-
         return constructor.newInstance(args.toArray());
     }
+
 }
