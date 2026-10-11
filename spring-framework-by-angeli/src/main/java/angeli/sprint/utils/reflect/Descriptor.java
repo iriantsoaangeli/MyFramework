@@ -81,10 +81,11 @@ public class Descriptor {
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
         List<Object> array = new ArrayList<>();
         while (etageSuivant[index].contains(String.valueOf(index)) && index < etageSuivant.length) {
-            array.add(new Descriptor(clazz, type, argName, prefix).creaObject(map, etage));
+            array.add(new Descriptor(comp, null, argName, prefix).creaObject(map, etage));
             System.out.println("Created object for array at index " + index + " for class " + clazz.getName());
             index++;
             updateIndex();
+            etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
         }
         index = 0;
         updateIndex();
@@ -96,8 +97,6 @@ public class Descriptor {
 
         if (etage == null)
             etage = 0;
-        else if (!clazz.isArray() && !List.class.isAssignableFrom(clazz))
-            etage++;
 
         if (TypeChecker.isSimple(clazz)) {
             String[] values = map.get(prefix + "." + argName);
