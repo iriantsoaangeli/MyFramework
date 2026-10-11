@@ -6,6 +6,7 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,11 +82,15 @@ public class Descriptor {
         return (prefix == null || prefix.isEmpty()) ? argName : prefix + "." + argName;
     }
 
-    private Class<?> listElementType() {
-        if (type != null && type.getActualTypeArguments()[0] instanceof Class<?> c)
+    /**
+     * i-eme argument generique : List<E> -> 0 pour E ; Map<K,V> -> 0 pour K, 1 pour V
+     */
+    private Class<?> typeArgument(int i) {
+        if (type != null && type.getActualTypeArguments().length > i
+                && type.getActualTypeArguments()[i] instanceof Class<?> c)
             return c;
         throw new IllegalArgumentException(
-                "Type des elements inconnu pour " + argName + " : declarer List<Type> et non List");
+                "Types generiques inconnus pour " + argName + " : declarer List<Type> / Map<Cle,Valeur> (types simples ou classes, sans generique imbrique)");
     }
 
     /**
