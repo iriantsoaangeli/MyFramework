@@ -55,9 +55,9 @@ public class Invoker {
                 // Construit les arguments pour la methode avec les parametres donnes
                 System.out.println("Arguments peut etre construit depuis la requete ");
                 Object[] newArgs = new Object[method.getParameterCount()];
-                Descriptor<?>[] descriptors = ParamBinder.getDescriptors(method);
+                Descriptor[] descriptors = ParamBinder.getDescriptors(method);
                 int index = 0;
-                for (Descriptor<?> descriptor : descriptors) {
+                for (Descriptor descriptor : descriptors) {
                     newArgs[index] = descriptor.creaObject(args, null);
                     index++;
                 }
