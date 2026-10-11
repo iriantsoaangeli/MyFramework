@@ -8,9 +8,9 @@ class Convertisseur {
 
     static Object createArray(String[] values, Class<?> targetType) {
         Class<?> comp = targetType.getComponentType();
-        Object[] array = (Object[]) java.lang.reflect.Array.newInstance(comp, values.length);
+        Object array = java.lang.reflect.Array.newInstance(comp, values.length);
         for (int i = 0; i < values.length; i++) {
-            array[i] = convert(values[i], comp);
+            java.lang.reflect.Array.set(array, i, convert(values[i], comp));
         }
         return array;
     }
