@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -16,20 +17,19 @@ public class Descriptor {
     private String argName;
     private String prefix = null;
     boolean isArray = false;
-    int index = 0;
     private ParameterizedType type;
+    int index = 0;
 
     public Descriptor(Class<?> clazz, Parameter parameter, String argName, String prefix) {
         System.out.println("new descriptor : " + clazz.getName() + " , " + prefix + "." + argName);
         this.clazz = clazz;
         this.argName = argName;
         this.prefix = prefix;
-        if (List.class.isAssignableFrom(clazz) && parameter != null)
-            this.type = (ParameterizedType) parameter.getParameterizedType();
-        if (clazz.isArray() || List.class.isAssignableFrom(clazz)) {
+        if (List.class.isAssignableFrom(clazz) && parameter != null
+                && parameter.getParameterizedType() instanceof ParameterizedType pt)
+            this.type = pt;
+        if (clazz.isArray() || List.class.isAssignableFrom(clazz))
             this.isArray = true;
-            this.argName += "[" + index + "]";
-        }
     }
 
     void updateIndex() {
