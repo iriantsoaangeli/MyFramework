@@ -73,10 +73,7 @@ public class ParamBinder {
         Parameter[] parameters = method.getParameters();
         List<Descriptor> descriptors = new ArrayList<>();
         for (Parameter parameter : parameters) {
-            if(parameter.getParameterizedType() instanceof ParameterizedType)
-                descriptors.add(new Descriptor(parameter.getType(),(ParameterizedType)parameter.getParameterizedType(), parameter.getName(),""));
-            else
-                descriptors.add(new Descriptor(parameter.getType(),null, parameter.getName(),""));
+            descriptors.add(new Descriptor(parameter.getType(), parameter, parameter.getName(), ""));
         }
         return descriptors.toArray(new Descriptor[0]);
     }

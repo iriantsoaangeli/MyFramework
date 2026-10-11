@@ -19,12 +19,13 @@ public class Descriptor {
     int index = 0;
     private ParameterizedType type;
 
-    public Descriptor(Class<?> clazz, ParameterizedType type, String argName, String prefix) {
+    public Descriptor(Class<?> clazz, Parameter parameter, String argName, String prefix) {
         System.out.println("new descriptor : " + clazz.getName() + " , " + prefix + "." + argName);
         this.clazz = clazz;
         this.argName = argName;
         this.prefix = prefix;
-        this.type = type;
+        if (List.class.isAssignableFrom(clazz) && parameter != null)
+            this.type = (ParameterizedType) parameter.getParameterizedType();
         if (clazz.isArray() || List.class.isAssignableFrom(clazz)) {
             this.isArray = true;
             this.argName += "[" + index + "]";
@@ -138,21 +139,12 @@ public class Descriptor {
 
         for (Parameter parameter : parameters) {
             Descriptor descriptor = null;
-            boolean parameterized = parameter.getParameterizedType() instanceof ParameterizedType;
-            if (etage == 0) {
-                if (!parameterized)
-                    descriptor = new Descriptor(parameter.getType(), null, parameter.getName(), argName);
-                else
-                    descriptor = new Descriptor(parameter.getType(),
-                            (ParameterizedType) parameter.getParameterizedType(), parameter.getName(), argName);
-            } else {
-                if (parameterized)
-                    descriptor = new Descriptor(parameter.getType(),
-                            (ParameterizedType) parameter.getParameterizedType(), parameter.getName(),
-                            prefix + "." + argName);
-                else
-                    descriptor = new Descriptor(parameter.getType(), null, parameter.getName(), prefix + "." + argName);
-            }
+            if (etage == 0)
+                descriptor = new Descriptor(parameter.getType(), parameter, parameter.getName(), argName);
+            else
+                descriptor = new Descriptor(parameter.getType(), parameter, parameter.getName(),
+                        prefix + "." + argName);
+
             Object arg = descriptor.creaObject(map, etage + 1);
             args.add(arg);
         }
