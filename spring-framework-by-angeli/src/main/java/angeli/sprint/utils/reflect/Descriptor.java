@@ -32,7 +32,7 @@ public class Descriptor {
     }
 
     void updateIndex() {
-        this.argName += "[" + index + "]";
+        this.argName = argName.split("\\[")[0] + "[" + index + "]";
     }
 
     public Class<?> getClazz() {
@@ -80,13 +80,14 @@ public class Descriptor {
         }
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
         List<Object> array = new ArrayList<>();
-        while (etageSuivant[index].contains(String.valueOf(index))) {
+        while (etageSuivant[index].contains(String.valueOf(index)) && index < etageSuivant.length) {
             array.add(new Descriptor(clazz, type, argName, prefix).creaObject(map, etage));
             System.out.println("Created object for array at index " + index + " for class " + clazz.getName());
             index++;
             updateIndex();
         }
         index = 0;
+        updateIndex();
         return array.toArray();
     }
 
