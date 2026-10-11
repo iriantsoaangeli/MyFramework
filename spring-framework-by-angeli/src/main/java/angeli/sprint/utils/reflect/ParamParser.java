@@ -19,9 +19,9 @@ class ParamParser {
         for (String string : paramNames) {
             System.out
                     .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
-            if (!string.split(split)[profondeur].isEmpty()
-                    && checkClosestEtage(profondeur, string, className))
-                namesList.add(string.split(split)[profondeur + 1]);
+            String[] parts = string.split(split);
+            if (checkClosestEtage(profondeur, string, className) && parts.length > profondeur + 1)
+                namesList.add(parts[profondeur + 1]);
         }
 
         System.out.println("Params after parsing for class: " + className + " at profondeur: " + profondeur + " are: "
