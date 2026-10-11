@@ -63,15 +63,24 @@ class ParamParser {
         return -1;
     }
 
-    static List<Integer> getAllIndexes(String[] paramNames, String arrayName, int profondeur) {
+    static Map<Integer, List<String>> getAllIndexes(String[] paramNames, String arrayName, int profondeur) {
         String split = "\\.";
-        List<Integer> indexes = new ArrayList<>();
+        Map<Integer, List<String>> indexes = new HashMap<>();
         for (String paramName : paramNames) {
             if (!paramName.split(split)[profondeur].isEmpty()
                     && paramName.split(split).length >= profondeur) {
                 String cut = paramName.split(split)[profondeur];
                 if (isIndexedElement(cut, arrayName)) {
-                    indexes.add((Integer) Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class));
+                    if (indexes.containsKey(
+                            (Integer) Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class))) {
+                        indexes.get((Integer) Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class))
+                                .add(paramName);
+                    } else {
+                        List<String> list = new ArrayList<>();
+                        list.add(paramName);
+                        indexes.put((Integer) Convertisseur.convert(cut.split("\\[")[1].split("\\]")[0], Integer.class),
+                                list);
+                    }
                 }
             }
         }
