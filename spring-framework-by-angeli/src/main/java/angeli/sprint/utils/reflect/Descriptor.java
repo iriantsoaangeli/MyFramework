@@ -72,7 +72,27 @@ public class Descriptor {
                 + " with parameter names: " + List.of(paramNames));
     }
 
-    Object makeArray(Map<String, String[]> map, int etage, Class<?> comp)
+    /**
+     * Chemin complet de ce parametre dans la requete : prefix.argName
+     */
+    private String fullName() {
+        return (prefix == null || prefix.isEmpty()) ? argName : prefix + "." + argName;
+    }
+
+    private Class<?> listElementType() {
+        if (type != null && type.getActualTypeArguments()[0] instanceof Class<?> c)
+            return c;
+        throw new IllegalArgumentException(
+                "Type des elements inconnu pour " + argName + " : declarer List<Type> et non List");
+    }
+
+    /**
+     * Construit les elements d'un tableau ou d'une liste.
+     * Objets : nom[0].champ , nom[1].champ ...
+     * Simples : nom[0] , nom[1] ... ou nom repete (nom=a&nom=b)
+     * Les index sont tries et compactes (0 et 2 donnent 2 elements)
+     */
+    List<Object> makeArray(Map<String, String[]> map, Integer etage, Class<?> comp)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
         if (TypeChecker.isSimple(comp)) {
