@@ -66,6 +66,33 @@ class ParamParser {
     }
 
     /**
+     * Cles (dans l'ordre de la requete) trouvees dans les cles de la forme
+     * fullName[cle] ou fullName[cle].xxx , pour les Map
+     */
+    static Set<String> getKeys(Set<String> keys, String fullName) {
+        Set<String> found = new java.util.LinkedHashSet<>();
+        String start = fullName + "[";
+        for (String key : keys) {
+            if (!key.startsWith(start))
+                continue;
+            int end = key.indexOf(']', start.length());
+            if (end < 0)
+                continue;
+            String rest = key.substring(end + 1);
+            if (!(rest.isEmpty() || rest.startsWith(".")))
+                continue;
+            String k = key.substring(start.length(), end);
+            if (k.isEmpty())
+                continue;
+            if (k.contains("."))
+                throw new IllegalArgumentException(
+                        "Cle invalide '" + k + "' dans " + key + " : le caractere '.' est interdit dans une cle de Map");
+            found.add(k);
+        }
+        return found;
+    }
+
+    /**
      * Index (tries) trouves dans les cles de la forme fullName[i] ou fullName[i].xxx
      */
     static java.util.SortedSet<Integer> getIndexes(Set<String> keys, String fullName) {
