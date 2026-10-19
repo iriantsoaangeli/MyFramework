@@ -212,9 +212,6 @@ public class Descriptor {
             throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
         List<Object> args = new ArrayList<Object>();
-        if (clazz.equals(HttpSession.class) && etage == 0) {
-
-        }
         Constructor<?> constructor = getConstructor(etageSuivant);
         Parameter[] parameters = constructor.getParameters();
         for (Parameter parameter : parameters) {

@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpSession;
+
 /**
  * 
  * Invoker
@@ -58,6 +60,9 @@ public class Invoker {
                 Descriptor[] descriptors = ParamBinder.getDescriptors(method);
                 int index = 0;
                 for (Descriptor descriptor : descriptors) {
+                    if (descriptor.getClazz().equals(HttpSession.class)) {
+                        newArgs[index] = null;
+                    }
                     newArgs[index] = descriptor.creaObject(args, null);
                     index++;
                 }
