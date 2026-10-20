@@ -1,6 +1,5 @@
 package angeli.sprint.session;
 
-
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,26 +8,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 /**
- * Il donne les instance de Session au classes controller (evite de donner HttpSession)
-*/
+ * Il donne les instance de Session au classes controller (evite de donner
+ * HttpSession)
+ */
 public class SessionManager {
     HttpServletRequest request;
-    Map<String, Object> sessions;
+    Map<String, HttpSession> sessions;
 
-    public Session getSession(){
-        Session session = new Session(this) ;
+    public Session getSession() {
+        Session session = new Session(this);
         HttpSession httpSession = request.getSession();
         Map<String, Object> sessionData = convertToMap(httpSession);
         session.setData(sessionData);
-        if(httpSession.isNew())
-        sessions.put(httpSession.getId(), session);
+        if (httpSession.isNew())
+            sessions.put(httpSession.getId(), httpSession);
         return session;
     }
-    public  void setRequest(HttpServletRequest request){
+
+    public void setRequest(HttpServletRequest request) {
         this.request = request;
     }
 
-    protected Map<String, Object> convertToMap(HttpSession httpSession){
+    protected Map<String, Object> convertToMap(HttpSession httpSession) {
         Map<String, Object> sessionData = new HashMap<>();
         Enumeration<String> attributeNames = httpSession.getAttributeNames();
         while (attributeNames.hasMoreElements()) {
