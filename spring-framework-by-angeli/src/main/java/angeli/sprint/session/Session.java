@@ -3,6 +3,10 @@ package angeli.sprint.session;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * Classe qui encapsule les donnees de session pour les controller
+*/
 public class Session {
     Map<String, Object> data;
     SessionManager sessionManager;

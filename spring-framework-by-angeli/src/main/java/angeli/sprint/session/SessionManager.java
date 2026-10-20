@@ -5,7 +5,9 @@ import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
+/**
+ * Il donne les instance de Session au classes controller (evite de donner HttpSession)
+*/
 public class SessionManager {
     HttpServletRequest request;
     public SessionManager(HttpServletRequest request) {
