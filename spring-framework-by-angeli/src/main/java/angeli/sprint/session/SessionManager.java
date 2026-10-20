@@ -1,21 +1,27 @@
 package angeli.sprint.session;
 
 
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Il donne les instance de Session au classes controller (evite de donner HttpSession)
 */
 public class SessionManager {
     HttpServletRequest request;
+    Map<String, Object> sessions;
 
     public Session getSession(){
         Session session = new Session(this) ;
         HttpSession httpSession = request.getSession();
         Map<String, Object> sessionData = convertToMap(httpSession);
         session.setData(sessionData);
+        if(httpSession.isNew())
+        sessions.put(httpSession.getId(), session);
         return session;
     }
     public  void setRequest(HttpServletRequest request){
