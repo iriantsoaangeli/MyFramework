@@ -53,6 +53,9 @@ public class FrontControllerServlet extends HttpServlet {
     private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep, String method) throws IOException {
         System.out.println("===============================================================");
 
+        
+        sessionManager.setRequest(req);
+
         String url = URLParser.getUrlFromRequest(req)[1];
 
         // Affiche la methode utilisee
