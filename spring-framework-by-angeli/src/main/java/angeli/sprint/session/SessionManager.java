@@ -17,7 +17,7 @@ public class SessionManager {
 
     public Session getSession() {
         HttpSession httpSession = request.getSession();
-        if (httpSession.isNew()) {
+        if (httpSession.isNew() || sessions.get(httpSession.getId()) == null) {
             Session session = new Session(this);
             Map<String, Object> sessionData = convertToMap(httpSession);
             sessions.put(httpSession.getId(), session);
@@ -30,6 +30,10 @@ public class SessionManager {
 
     public void setRequest(HttpServletRequest request) {
         this.request = request;
+    }
+
+    public SessionManager() {
+        sessions = new HashMap<>();
     }
 
     protected Map<String, Object> convertToMap(HttpSession httpSession) {
