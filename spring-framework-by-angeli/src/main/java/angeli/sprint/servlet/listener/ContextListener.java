@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import angeli.sprint.model.ModelAndView;
+import angeli.sprint.session.SessionManager;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.reflect.ClassPathScanner;
 import angeli.sprint.utils.reflect.Mapper;
@@ -34,6 +35,7 @@ public class ContextListener implements ServletContextListener {
         initMapper(context);
         initControllerList(context);
         initSuffixAndPrefix(context);
+        context.setAttribute("sessionManager", new SessionManager());
 
         ModelAndView.setAction((key, value) -> {
             context.setAttribute(key, value);
