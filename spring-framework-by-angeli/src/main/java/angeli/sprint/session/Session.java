@@ -5,13 +5,10 @@ import java.util.Map;
 
 public class Session {
     Map<String, Object> data;
+    SessionManager sessionManager;
 
-    public Session() {
-        data = new HashMap<String, Object>();
-    }
-
-    public Session(Map<String, Object> data) {
-        this.data = data;
+    public Session(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
     public void set(String key, Object value) {
