@@ -19,4 +19,7 @@ public class SessionManager {
         session.setData((Map<String, Object>)request.getSession());
         return session;
     }
+    public  void setRequest(HttpServletRequest request){
+        this.request = request;
+    }
 }
