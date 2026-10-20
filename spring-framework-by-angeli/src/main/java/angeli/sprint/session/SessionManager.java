@@ -16,13 +16,16 @@ public class SessionManager {
     Map<String, Session> sessions;
 
     public Session getSession() {
-        Session session = new Session(this);
         HttpSession httpSession = request.getSession();
-        Map<String, Object> sessionData = convertToMap(httpSession);
-        session.setData(sessionData);
-        if (httpSession.isNew())
-            sessions.put(httpSession.getId(),session);
-        return session;
+        if (httpSession.isNew()) {
+            Session session = new Session(this);
+            Map<String, Object> sessionData = convertToMap(httpSession);
+            sessions.put(httpSession.getId(), session);
+            session.setData(sessionData);
+            return session;
+        } else {
+            return sessions.get(httpSession.getId());
+        }
     }
 
     public void setRequest(HttpServletRequest request) {
