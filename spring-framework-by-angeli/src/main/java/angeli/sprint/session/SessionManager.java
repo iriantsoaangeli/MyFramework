@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
  */
 public class SessionManager {
     HttpServletRequest request;
-    Map<String, HttpSession> sessions;
+    Map<String, Session> sessions;
 
     public Session getSession() {
         Session session = new Session(this);
@@ -21,7 +21,7 @@ public class SessionManager {
         Map<String, Object> sessionData = convertToMap(httpSession);
         session.setData(sessionData);
         if (httpSession.isNew())
-            sessions.put(httpSession.getId(), httpSession);
+            sessions.put(httpSession.getId(),session);
         return session;
     }
 
