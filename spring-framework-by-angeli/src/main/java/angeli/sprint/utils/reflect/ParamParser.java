@@ -17,15 +17,15 @@ class ParamParser {
         Set<String> namesList = new HashSet<>();
         String split = "\\.";
         for (String string : paramNames) {
-            System.out
-                    .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
+            // System.out
+            //         .println("Parsing param: " + string + " for class: " + className + " at profondeur: " + profondeur);
             String[] parts = string.split(split);
             if (checkClosestEtage(profondeur, string, className) && parts.length > profondeur + 1)
                 namesList.add(parts[profondeur + 1]);
         }
 
-        System.out.println("Params after parsing for class: " + className + " at profondeur: " + profondeur + " are: "
-                + String.join(", ", namesList));
+        // System.out.println("Params after parsing for class: " + className + " at profondeur: " + profondeur + " are: "
+                // + String.join(", ", namesList));
         return namesList.toArray(new String[0]);
     }
 
