@@ -14,10 +14,17 @@ public class Session {
     public void set(String key, Object value) {
         data.put(key, value);
     }
-    public Object get(String key){
+
+    public Object get(String key) {
         return data.get(key);
     }
-    public Map<String, Object> getData(){
+
+    Map<String, Object> getData() {
         return data;
     }
+
+    void setData(Map<String, Object> data) {
+        this.data = data;
+    }
+
 }
