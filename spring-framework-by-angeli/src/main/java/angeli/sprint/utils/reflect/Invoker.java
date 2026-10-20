@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
+import angeli.sprint.session.Session;
 import angeli.sprint.session.SessionManager;
 import jakarta.servlet.http.HttpSession;
 
@@ -23,6 +24,8 @@ public class Invoker {
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             ParseException {
         Class<?>[] parameterTypes = method.getParameterTypes();
+        boolean sessionParam = false;
+        Session session = null; 
         Object ret = null;
 
         // Cas 1 : Type primitif,nombre,String , ou pas de parametre
@@ -62,7 +65,9 @@ public class Invoker {
                 int index = 0;
                 for (Descriptor descriptor : descriptors) {
                     if (descriptor.getClazz().equals(HttpSession.class)) {
+                         session = sessionManager.getSession();
                         newArgs[index] = sessionManager.getSession();
+                        sessionParam = true;
                         continue;
                     }
                     newArgs[index] = descriptor.creaObject(args, null);
@@ -77,6 +82,9 @@ public class Invoker {
                 System.out.println("Cannot invoke method" + method.getName());
                 throw e2;
             }
+        }
+        if(sessionParam) {
+            sessionManager.updateSessionData(session);
         }
         return ret;
 

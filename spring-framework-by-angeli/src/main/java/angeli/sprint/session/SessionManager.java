@@ -42,7 +42,7 @@ public class SessionManager {
         }
         return sessionData;
     }
-    void updateSessionData(Session session) {
+    public void updateSessionData(Session session) {
         HttpSession httpSession = request.getSession();
         Map<String, Object> sessionData = session.getData();
         for (Map.Entry<String, Object> entry : sessionData.entrySet()) {
