@@ -103,7 +103,7 @@ public class FrontControllerServlet extends HttpServlet {
             // Dans ce cas si l'url a chemin et doit print du texte
             try {
                 System.out.println("Ni vue ni API Mais Url Existe");
-                PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args), null);
+                PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args,sessionManager), null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -113,7 +113,7 @@ public class FrontControllerServlet extends HttpServlet {
             // Envoie en json
             if (UrlisAnAPI) {
                 try {
-                    PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args),
+                    PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args,sessionManager),
                             URLChecker.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,7 +121,7 @@ public class FrontControllerServlet extends HttpServlet {
             }
             if (UrlHasView) {
                 try {
-                    ModelAndView modelAndView = (ModelAndView) Invoker.invokeMethod(calledMethod, args);
+                    ModelAndView modelAndView = (ModelAndView) Invoker.invokeMethod(calledMethod, args,sessionManager);
 
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);

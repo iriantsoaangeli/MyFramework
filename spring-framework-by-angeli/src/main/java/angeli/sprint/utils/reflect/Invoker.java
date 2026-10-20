@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
+import angeli.sprint.session.SessionManager;
 import jakarta.servlet.http.HttpSession;
 
 /**
@@ -18,7 +19,7 @@ import jakarta.servlet.http.HttpSession;
  * Classe utilitaire pour faire la reflection
  */
 public class Invoker {
-    public static Object invokeMethod(Method method, Map<String, String[]> args)
+    public static Object invokeMethod(Method method, Map<String, String[]> args,SessionManager sessionManager)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             ParseException {
         Class<?>[] parameterTypes = method.getParameterTypes();
@@ -61,7 +62,8 @@ public class Invoker {
                 int index = 0;
                 for (Descriptor descriptor : descriptors) {
                     if (descriptor.getClazz().equals(HttpSession.class)) {
-                        newArgs[index] = null;
+                        newArgs[index] = sessionManager.getSession();
+                        continue;
                     }
                     newArgs[index] = descriptor.creaObject(args, null);
                     index++;
