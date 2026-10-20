@@ -64,7 +64,7 @@ public class Invoker {
                 Descriptor[] descriptors = ParamBinder.getDescriptors(method);
                 int index = 0;
                 for (Descriptor descriptor : descriptors) {
-                    if (descriptor.getClazz().equals(HttpSession.class)) {
+                    if (descriptor.getClazz().equals(Session.class)) {
                          session = sessionManager.getSession();
                         newArgs[index] = sessionManager.getSession();
                         sessionParam = true;
