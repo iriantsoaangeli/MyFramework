@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import angeli.sprint.model.ModelAndView;
+import angeli.sprint.session.SessionManager;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
 import angeli.sprint.utils.reflect.Invoker;
@@ -30,6 +31,7 @@ public class FrontControllerServlet extends HttpServlet {
     List<Method> methodList;
     Map<String, URLMethod> urlMethodMapGET;
     Map<String, URLMethod> urlMethodMapPOST;
+    SessionManager sessionManager;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
@@ -169,5 +171,6 @@ public class FrontControllerServlet extends HttpServlet {
         methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
         urlMethodMapGET = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapGET");
         urlMethodMapPOST = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapPOST");
+        sessionManager = (SessionManager) getServletContext().getAttribute("sessionManager");
     }
 }
