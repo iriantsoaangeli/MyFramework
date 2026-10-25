@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpSession;
+
 /**
  * Descripteur pour un parametre d'une methode
  */
@@ -83,14 +85,16 @@ public class Descriptor {
     }
 
     /**
-     * i-eme argument generique : List<E> -> 0 pour E ; Map<K,V> -> 0 pour K, 1 pour V
+     * i-eme argument generique : List<E> -> 0 pour E ; Map<K,V> -> 0 pour K, 1 pour
+     * V
      */
     private Class<?> typeArgument(int i) {
         if (type != null && type.getActualTypeArguments().length > i
                 && type.getActualTypeArguments()[i] instanceof Class<?> c)
             return c;
         throw new IllegalArgumentException(
-                "Types generiques inconnus pour " + argName + " : declarer List<Type> / Map<Cle,Valeur> (types simples ou classes, sans generique imbrique)");
+                "Types generiques inconnus pour " + argName
+                        + " : declarer List<Type> / Map<Cle,Valeur> (types simples ou classes, sans generique imbrique)");
     }
 
     /**
@@ -165,8 +169,9 @@ public class Descriptor {
                         + argName + " with values: " + List.of(values));
                 return Convertisseur.convert(values[0], clazz);
             } else {
-                throw new RuntimeException("Cannot create instance of " + clazz.getName() + ", param name: " + fullName()
-                        + " not found in map");
+                throw new RuntimeException(
+                        "Cannot create instance of " + clazz.getName() + ", param name: " + fullName()
+                                + " not found in map");
             }
         }
         if (map == null || map.isEmpty())
