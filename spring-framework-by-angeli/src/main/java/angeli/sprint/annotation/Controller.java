@@ -7,7 +7,7 @@ import java.lang.annotation.ElementType;
 
 /**
  * Annotation pour les controllers
- 
+ * @target TYPE : pour les classes
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

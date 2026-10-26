@@ -4,9 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * 
- * WebAPI
- * 
+ * Annotation pour les methodes d'API
  */
 @Target(java.lang.annotation.ElementType.METHOD)
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
