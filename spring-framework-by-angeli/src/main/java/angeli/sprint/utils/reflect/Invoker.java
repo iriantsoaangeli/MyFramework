@@ -28,7 +28,6 @@ public class Invoker {
         Session session = null;
         Object ret = null;
 
-        System.out.print("Cannot invoke method " + method.getName() + " with given params : ");
 
         try {
             // Construit les arguments pour la methode avec les parametres donnes
