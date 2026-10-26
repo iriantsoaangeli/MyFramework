@@ -3,11 +3,9 @@ package angeli.sprint.utils.reflect;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.github.classgraph.*;
-import io.github.classgraph.MethodInfoList.MethodInfoFilter;
 
 /**
  * La classe qui interagit avec les packages
@@ -45,6 +43,18 @@ public class ClassPathScanner {
     public List<String> scanPathForClassAnnotation(Class<? extends Annotation> annotationClass,
             String... paths) {
         List<String> clazz = new ArrayList<String>();
+        try (ScanResult scanResult = classGraph.enableAllInfo().acceptPackages(paths).scan()) {
+            ClassInfoList classInfoList = scanResult.getClassesWithAnnotation(annotationClass);
+            for (ClassInfo classInfo : classInfoList) {
+                clazz.add(classInfo.getName());
+            }
+        }
+        return clazz;
+    }
+
+    /**
+     * Recupere les classes avec les annotations donnees dans les paquets donnes
+     * Meme chose queayList<String>();
         try (ScanResult scanResult = classGraph.enableAllInfo().acceptPackages(paths).scan()) {
             ClassInfoList classInfoList = scanResult.getClassesWithAnnotation(annotationClass);
             for (ClassInfo classInfo : classInfoList) {

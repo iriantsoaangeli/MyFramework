@@ -1,11 +1,8 @@
 package angeli.sprint.utils.reflect;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 class ParamParser {
@@ -54,15 +51,6 @@ class ParamParser {
             }
         }
         return ret.toArray(new String[0]);
-    }
-
-    static int getArray(String[] tab) {
-        String temp = "";
-        for (int i = 0; i < tab.length; i++) {
-            temp = tab[i].split("\\.")[1];
-
-        }
-        return -1;
     }
 
     /**
