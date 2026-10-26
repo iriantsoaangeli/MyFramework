@@ -169,6 +169,9 @@ public class FrontControllerServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Verifie si la requete est multipart (pour les fichiers)
+     */
     boolean estMultipart(HttpServletRequest req) {
         String type = req.getContentType();
         return type != null && type.toLowerCase().startsWith("multipart/");
