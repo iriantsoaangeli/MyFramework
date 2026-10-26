@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
-import angeli.sprint.file.Fichier;
 import angeli.sprint.session.Session;
 import angeli.sprint.session.SessionManager;
 import jakarta.servlet.http.HttpSession;
@@ -21,7 +20,7 @@ import jakarta.servlet.http.HttpSession;
  * Classe utilitaire pour faire la reflection
  */
 public class Invoker {
-    public static Object invokeMethod(Method method, Map<String, String[]> args, SessionManager sessionManager,Fichier[] fichiers)
+    public static Object invokeMethod(Method method, Map<String, String[]> args, SessionManager sessionManager,Map<String,byte[]> fichiers)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             ParseException {
         boolean sessionParam = false;

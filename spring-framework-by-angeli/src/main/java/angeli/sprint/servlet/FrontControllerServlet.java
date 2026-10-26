@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import angeli.sprint.file.Fichier;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.session.SessionManager;
 import angeli.sprint.url.URLMethod;
@@ -84,7 +83,7 @@ public class FrontControllerServlet extends HttpServlet {
         if (req.getParameterNames().hasMoreElements()) {
             args = req.getParameterMap();
         }
-        Fichier[] fichiers = DataGeter.getFichiers(req);
+        Map<String,byte[]> fichiers = DataGeter.getFichiers(req);
 
         boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);
         boolean UrlExists = checkUrl[0];
