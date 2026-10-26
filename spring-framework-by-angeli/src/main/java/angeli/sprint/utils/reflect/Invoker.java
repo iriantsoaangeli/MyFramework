@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
+import angeli.sprint.file.Fichier;
 import angeli.sprint.session.Session;
 import angeli.sprint.session.SessionManager;
 import jakarta.servlet.http.HttpSession;
@@ -21,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
  */
 public class Invoker {
     public static Object invokeMethod(Method method, Map<String, String[]> args, SessionManager sessionManager,
-            Map<String, byte[]> fichiers)
+            Map<String, Fichier> fichiers)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             ParseException {
         boolean sessionParam = false;
@@ -42,7 +43,8 @@ public class Invoker {
                     continue;
                 }
                 if (descriptor.getClazz().equals(byte[].class)) {
-                    newArgs[index] = fichiers.get(args.get(descriptor.getArgName())[0]);
+                    System.out.println("Argument de type byte[] trouve, on le construit depuis les fichiers uploades"+descriptor.getArgName());
+                    newArgs[index] = fichiers.get(args.get(descriptor.getArgName())[0]).data();
                     index++;
                     continue;
                 }
