@@ -21,6 +21,8 @@ public class Descriptor {
     private String argName;
     private String prefix = null;
     boolean isArray = false;
+    boolean isFichier = false;
+    boolean isBytes = false;
     private ParameterizedType type;
     int index = 0;
 
@@ -32,8 +34,9 @@ public class Descriptor {
         if ((List.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) && parameter != null
                 && parameter.getParameterizedType() instanceof ParameterizedType pt)
             this.type = pt;
-        if (clazz.isArray() || List.class.isAssignableFrom(clazz))
-            this.isArray = true;
+        this.isBytes = clazz.equals(byte[].class);
+        this.isFichier = clazz.equals(Fichier.class);
+        this.isArray = (clazz.isArray() || List.class.isAssignableFrom(clazz));
     }
 
     void updateIndex() {
@@ -178,8 +181,11 @@ public class Descriptor {
             }
         }
 
-        if (clazz.equals(byte[].class)) {
+        if (isBytes) {
             return fichiers.get(map.get(getArgName())[0]).data();
+        }
+        if (isFichier) {
+            return fichiers.get(map.get(getArgName())[0]);
         }
 
         if (map == null || map.isEmpty())
