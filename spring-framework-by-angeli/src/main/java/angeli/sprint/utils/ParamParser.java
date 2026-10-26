@@ -1,16 +1,18 @@
-package angeli.sprint.utils.reflect;
+package angeli.sprint.utils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class ParamParser {
+import angeli.sprint.utils.reflect.mapping.TypeChecker;
+
+public class ParamParser {
 
     /**
      * Parse les parametres de la requete pour recuperer les parametres d'un objet
      */
-    static String[] parseArgs(String[] paramNames, String className, int profondeur) {
+    public static String[] parseArgs(String[] paramNames, String className, int profondeur) {
         Set<String> namesList = new HashSet<>();
         String split = "\\.";
         for (String string : paramNames) {
@@ -57,7 +59,7 @@ class ParamParser {
      * Cles (dans l'ordre de la requete) trouvees dans les cles de la forme
      * fullName[cle] ou fullName[cle].xxx , pour les Map
      */
-    static Set<String> getKeys(Set<String> keys, String fullName) {
+    public static Set<String> getKeys(Set<String> keys, String fullName) {
         Set<String> found = new java.util.LinkedHashSet<>();
         String start = fullName + "[";
         for (String key : keys) {
@@ -83,7 +85,7 @@ class ParamParser {
     /**
      * Index (tries) trouves dans les cles de la forme fullName[i] ou fullName[i].xxx
      */
-    static java.util.SortedSet<Integer> getIndexes(Set<String> keys, String fullName) {
+    public static java.util.SortedSet<Integer> getIndexes(Set<String> keys, String fullName) {
         java.util.SortedSet<Integer> indexes = new java.util.TreeSet<>();
         String start = fullName + "[";
         for (String key : keys) {

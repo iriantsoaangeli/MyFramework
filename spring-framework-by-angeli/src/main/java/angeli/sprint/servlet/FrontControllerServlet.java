@@ -10,7 +10,7 @@ import angeli.sprint.model.ModelAndView;
 import angeli.sprint.session.SessionManager;
 import angeli.sprint.url.URLMethod;
 import angeli.sprint.utils.URLParser;
-import angeli.sprint.utils.reflect.Invoker;
+import angeli.sprint.utils.reflect.method.Invoker;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;

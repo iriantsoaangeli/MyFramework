@@ -1,4 +1,4 @@
-package angeli.sprint.utils.reflect;
+package angeli.sprint.utils.reflect.mapping;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import angeli.sprint.utils.reflect.Descriptor;
 
 /**
  * 
@@ -29,7 +31,7 @@ public class ParamBinder {
      * valeur sur un nom de parametre
      * 
      */
-    static Object[] bindInOrder(Executable method, Map<String, String[]> args) {
+    public static Object[] bindInOrder(Executable method, Map<String, String[]> args) {
 
         Object[] orderedArgs = new Object[args.size()];
         Integer index = 0;
@@ -68,7 +70,7 @@ public class ParamBinder {
     /**
      * Retourne un tableau de Descripteur pour chaque parametre de la methode
      */
-    static Descriptor[] getDescriptors(Executable method) {
+    public static Descriptor[] getDescriptors(Executable method) {
         Parameter[] parameters = method.getParameters();
         List<Descriptor> descriptors = new ArrayList<>();
         for (Parameter parameter : parameters) {

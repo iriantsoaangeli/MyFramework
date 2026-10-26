@@ -1,10 +1,10 @@
-package angeli.sprint.utils.reflect;
+package angeli.sprint.utils.reflect.mapping;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-class Convertisseur {
+public class Convertisseur {
 
     static Object createArray(String[] values, Class<?> targetType) {
         Class<?> comp = targetType.getComponentType();
@@ -49,7 +49,7 @@ class Convertisseur {
             // String
             Map.entry(java.lang.String.class, java.lang.String::valueOf));
 
-    static Object convert(String value, Class<?> targetType) {
+    public static Object convert(String value, Class<?> targetType) {
         Function<String, Object> convertisseur = CONVERTISSEURS.get(targetType);
         if (convertisseur != null && !value.isEmpty()) {
             return convertisseur.apply(value);

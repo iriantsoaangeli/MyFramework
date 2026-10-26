@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import angeli.sprint.file.Fichier;
+import angeli.sprint.utils.ParamParser;
+import angeli.sprint.utils.reflect.mapping.Convertisseur;
+import angeli.sprint.utils.reflect.mapping.TypeChecker;
 
 /**
  * Descripteur pour un parametre d'une methode
@@ -159,7 +162,7 @@ public class Descriptor {
         return entries;
     }
 
-    Object creaObject(Map<String, String[]> map, Integer etage, Map<String, Fichier> fichiers)
+    public Object creaObject(Map<String, String[]> map, Integer etage, Map<String, Fichier> fichiers)
             throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
 

@@ -1,4 +1,4 @@
-package angeli.sprint.utils.reflect;
+package angeli.sprint.utils.reflect.method;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
@@ -10,6 +10,8 @@ import java.util.Map;
 import angeli.sprint.file.Fichier;
 import angeli.sprint.session.Session;
 import angeli.sprint.session.SessionManager;
+import angeli.sprint.utils.reflect.Descriptor;
+import angeli.sprint.utils.reflect.mapping.ParamBinder;
 
 /**
  * 

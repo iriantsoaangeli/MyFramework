@@ -1,4 +1,4 @@
-package angeli.sprint.utils.reflect;
+package angeli.sprint.utils.reflect.mapping;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

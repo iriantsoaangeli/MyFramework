@@ -12,8 +12,8 @@ import java.util.Map;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.session.SessionManager;
 import angeli.sprint.url.URLMethod;
-import angeli.sprint.utils.reflect.ClassPathScanner;
-import angeli.sprint.utils.reflect.Mapper;
+import angeli.sprint.utils.reflect.classpath.ClassPathScanner;
+import angeli.sprint.utils.reflect.mapping.Mapper;
 
 /**
  * Listner du context des servlets
