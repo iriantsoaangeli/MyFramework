@@ -20,13 +20,13 @@ import jakarta.servlet.http.HttpSession;
  * Classe utilitaire pour faire la reflection
  */
 public class Invoker {
-    public static Object invokeMethod(Method method, Map<String, String[]> args, SessionManager sessionManager,Map<String,byte[]> fichiers)
+    public static Object invokeMethod(Method method, Map<String, String[]> args, SessionManager sessionManager,
+            Map<String, byte[]> fichiers)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             ParseException {
         boolean sessionParam = false;
         Session session = null;
         Object ret = null;
-
 
         try {
             // Construit les arguments pour la methode avec les parametres donnes
@@ -39,6 +39,11 @@ public class Invoker {
                     session = sessionManager.getSession();
                     newArgs[index] = sessionManager.getSession();
                     sessionParam = true;
+                    continue;
+                }
+                if (descriptor.getClazz().equals(byte[].class)) {
+                    newArgs[index] = fichiers.get(args.get(descriptor.getArgName())[0]);
+                    index++;
                     continue;
                 }
                 newArgs[index] = descriptor.creaObject(args, null);
