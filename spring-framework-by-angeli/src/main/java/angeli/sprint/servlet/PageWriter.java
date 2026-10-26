@@ -23,6 +23,9 @@ public class PageWriter {
         wr.print(o);
     }
 
+    /**
+    * Print manuel dans la reponse , par defaut json
+    */
     public static void print(HttpServletRequest req, HttpServletResponse rep, Object message, String contentType)
             throws IOException {
         PrintWriter wr = rep.getWriter();
