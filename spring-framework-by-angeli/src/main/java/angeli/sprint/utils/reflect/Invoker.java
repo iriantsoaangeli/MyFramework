@@ -23,7 +23,6 @@ public class Invoker {
     public static Object invokeMethod(Method method, Map<String, String[]> args, SessionManager sessionManager)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             ParseException {
-        Class<?>[] parameterTypes = method.getParameterTypes();
         boolean sessionParam = false;
         Session session = null;
         Object ret = null;
