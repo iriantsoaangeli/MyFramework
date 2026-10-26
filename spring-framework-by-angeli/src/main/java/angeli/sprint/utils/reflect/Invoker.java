@@ -42,13 +42,14 @@ public class Invoker {
                     sessionParam = true;
                     continue;
                 }
-                if (descriptor.getClazz().equals(byte[].class)) {
-                    System.out.println("Argument de type byte[] trouve, on le construit depuis les fichiers uploades"+descriptor.getArgName());
-                    newArgs[index] = fichiers.get(args.get(descriptor.getArgName())[0]).data();
-                    index++;
-                    continue;
-                }
-                newArgs[index] = descriptor.creaObject(args, null);
+                // if (descriptor.getClazz().equals(byte[].class)) {
+                //     System.out.println("Argument de type byte[] trouve, on le construit depuis les fichiers uploades"
+                //             + descriptor.getArgName());
+                //     newArgs[index] = fichiers.get(args.get(descriptor.getArgName())[0]).data();
+                //     index++;
+                //     continue;
+                // }
+                newArgs[index] = descriptor.creaObject(args, null, fichiers);
                 index++;
             }
             ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),

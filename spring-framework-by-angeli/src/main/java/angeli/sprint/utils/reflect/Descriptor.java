@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.file.Fichier;
 import jakarta.servlet.http.HttpSession;
 
 /**
@@ -103,7 +104,7 @@ public class Descriptor {
      * Simples : nom[0] , nom[1] ... ou nom repete (nom=a&nom=b)
      * Les index sont tries et compactes (0 et 2 donnent 2 elements)
      */
-    List<Object> makeArray(Map<String, String[]> map, Integer etage, Class<?> comp)
+    List<Object> makeArray(Map<String, String[]> map, Integer etage, Class<?> comp, Map<String, Fichier> fichiers)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
         String full = fullName();
@@ -124,7 +125,7 @@ public class Descriptor {
         }
         for (Integer i : ParamParser.getIndexes(map.keySet(), full)) {
             Descriptor element = new Descriptor(comp, null, argName + "[" + i + "]", prefix);
-            elements.add(element.creaObject(map, etage));
+            elements.add(element.creaObject(map, etage, fichiers));
         }
         return elements;
     }
@@ -134,7 +135,8 @@ public class Descriptor {
      * nom[cle].champ=valeur (objet). La cle ne peut pas contenir . [ ou ] et doit
      * etre d'un type simple.
      */
-    Map<Object, Object> makeEntries(Map<String, String[]> map, Integer etage, Class<?> keyType, Class<?> valueType)
+    Map<Object, Object> makeEntries(Map<String, String[]> map, Integer etage, Class<?> keyType, Class<?> valueType,
+            Map<String, Fichier> fichiers)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
         if (!TypeChecker.isSimple(keyType))
@@ -150,13 +152,14 @@ public class Descriptor {
                     entries.put(key, Convertisseur.convert(values[0], valueType));
             } else {
                 Descriptor value = new Descriptor(valueType, null, argName + "[" + k + "]", prefix);
-                entries.put(key, value.creaObject(map, etage));
+                entries.put(key, value.creaObject(map, etage, fichiers));
             }
         }
         return entries;
     }
 
-    Object creaObject(Map<String, String[]> map, Integer etage) throws NoSuchMethodException, InstantiationException,
+    Object creaObject(Map<String, String[]> map, Integer etage, Map<String, Fichier> fichiers)
+            throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
 
         if (etage == null)
@@ -174,6 +177,11 @@ public class Descriptor {
                                 + " not found in map");
             }
         }
+
+        if (clazz.equals(Fichier.class)) {
+            return fichiers.get(map.get(getArgName())[0]).data();
+        }
+
         if (map == null || map.isEmpty())
             try {
                 return clazz.getDeclaredConstructor().newInstance();
@@ -185,7 +193,7 @@ public class Descriptor {
 
         if (clazz.isArray()) {
             Class<?> comp = clazz.getComponentType();
-            List<Object> elements = makeArray(map, etage, comp);
+            List<Object> elements = makeArray(map, etage, comp, fichiers);
             Object array = java.lang.reflect.Array.newInstance(comp, elements.size());
             for (int i = 0; i < elements.size(); i++)
                 java.lang.reflect.Array.set(array, i, elements.get(i));
@@ -193,11 +201,11 @@ public class Descriptor {
         }
 
         if (List.class.isAssignableFrom(clazz)) {
-            return new ArrayList<Object>(makeArray(map, etage, typeArgument(0)));
+            return new ArrayList<Object>(makeArray(map, etage, typeArgument(0), fichiers));
         }
 
         if (Map.class.isAssignableFrom(clazz)) {
-            return makeEntries(map, etage, typeArgument(0), typeArgument(1));
+            return makeEntries(map, etage, typeArgument(0), typeArgument(1), fichiers);
         }
 
         System.out.println("Creating instance of " + clazz.getName() + " at etage " + etage);
@@ -205,10 +213,10 @@ public class Descriptor {
 
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
 
-        return creaObject(map, etage, etageSuivant);
+        return creaObject(map, etage, etageSuivant, fichiers);
     }
 
-    Object creaObject(Map<String, String[]> map, Integer etage, String[] etageSuivant)
+    Object creaObject(Map<String, String[]> map, Integer etage, String[] etageSuivant, Map<String, Fichier> fichiers)
             throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
         List<Object> args = new ArrayList<Object>();
@@ -222,7 +230,7 @@ public class Descriptor {
                 descriptor = new Descriptor(parameter.getType(), parameter, parameter.getName(),
                         prefix + "." + argName);
             }
-            Object arg = descriptor.creaObject(map, etage + 1);
+            Object arg = descriptor.creaObject(map, etage + 1, fichiers);
             args.add(arg);
         }
         return constructor.newInstance(args.toArray());
