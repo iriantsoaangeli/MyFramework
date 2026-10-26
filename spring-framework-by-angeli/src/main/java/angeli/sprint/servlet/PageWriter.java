@@ -2,13 +2,6 @@ package angeli.sprint.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import angeli.sprint.url.URLMethod;
-import angeli.sprint.utils.URLParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
