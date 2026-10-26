@@ -1,6 +1,5 @@
 package angeli.sprint.session;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
