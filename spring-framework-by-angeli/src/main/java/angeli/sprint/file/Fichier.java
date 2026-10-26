@@ -1,10 +1,12 @@
 package angeli.sprint.file;
 
 /**
- * 
- * Représente un fichier.
- * @param nom nom du fichier
- * @param attribute le nom d'attribut dans la requete http
- * @param data les donnees
+ * Fichier envoye dans une requete multipart.
+ * Peut etre recu tel quel en parametre d'une methode de controller,
+ * ou seulement son contenu avec un parametre {@code byte[]}.
+ *
+ * @param nom       nom du fichier envoye par le client
+ * @param attribute nom du champ dans la requete http
+ * @param data      contenu du fichier
  */
 public record Fichier(String nom , String attribute ,byte[] data) {}

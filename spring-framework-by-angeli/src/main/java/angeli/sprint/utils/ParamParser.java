@@ -7,10 +7,21 @@ import java.util.Set;
 
 import angeli.sprint.utils.reflect.mapping.TypeChecker;
 
+/**
+ * Lit les noms des parametres de la requete pour les objets imbriques.
+ * Les noms suivent la forme {@code objet.champ.sousChamp}, {@code liste[i].champ}
+ * ou {@code map[cle].champ} ; la profondeur est l'index du morceau dans le nom.
+ */
 public class ParamParser {
 
     /**
-     * Parse les parametres de la requete pour recuperer les parametres d'un objet
+     * Parse les parametres de la requete pour recuperer les parametres d'un objet.
+     * Exemple : ["eleve.nom", "eleve.age"], "eleve", 0 donne ["nom", "age"].
+     *
+     * @param paramNames les noms des parametres de la requete
+     * @param className  le nom attendu a la profondeur donnee
+     * @param profondeur l'index du morceau a comparer
+     * @return les noms (sans doublon) des champs de l'etage suivant
      */
     public static String[] parseArgs(String[] paramNames, String className, int profondeur) {
         Set<String> namesList = new HashSet<>();
@@ -30,6 +41,14 @@ public class ParamParser {
 
 
 
+    /**
+     * Retourne true si le morceau a cette profondeur est egal a classe.
+     *
+     * @param profondeur l'index du morceau a comparer
+     * @param str        le nom du parametre (ex : "eleve.nom")
+     * @param classe     le nom attendu
+     * @return true si le morceau a cette profondeur est egal a classe
+     */
     static boolean checkClosestEtage(int profondeur, String str, String classe) {
         if (profondeur >= str.split("\\.").length)
             return false;
@@ -44,6 +63,11 @@ public class ParamParser {
 
     /**
      * Recupere les parametres ayant ce prefix et cette profondeur
+     *
+     * @param list       les noms des parametres
+     * @param prefix     le nom attendu
+     * @param profondeur l'index du morceau a comparer
+     * @return les noms complets correspondants
      */
     static String[] getParams(String[] list, String prefix, int profondeur) {
         List<String> ret = new ArrayList<String>();
@@ -58,6 +82,11 @@ public class ParamParser {
     /**
      * Cles (dans l'ordre de la requete) trouvees dans les cles de la forme
      * fullName[cle] ou fullName[cle].xxx , pour les Map
+     *
+     * @param keys     les noms des parametres
+     * @param fullName le nom complet de la Map
+     * @return les cles trouvees, sans doublon
+     * @throws IllegalArgumentException si une cle contient un '.'
      */
     public static Set<String> getKeys(Set<String> keys, String fullName) {
         Set<String> found = new java.util.LinkedHashSet<>();
@@ -84,6 +113,10 @@ public class ParamParser {
 
     /**
      * Index (tries) trouves dans les cles de la forme fullName[i] ou fullName[i].xxx
+     *
+     * @param keys     les noms des parametres
+     * @param fullName le nom complet du tableau ou de la liste
+     * @return les index trouves, tries
      */
     public static java.util.SortedSet<Integer> getIndexes(Set<String> keys, String fullName) {
         java.util.SortedSet<Integer> indexes = new java.util.TreeSet<>();

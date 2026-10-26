@@ -16,17 +16,21 @@ import angeli.sprint.utils.reflect.classpath.ClassPathScanner;
 import angeli.sprint.utils.reflect.mapping.Mapper;
 
 /**
- * Listner du context des servlets
- * 
- * 
+ * Listener du context des servlets.
+ * Au demarrage de l'application : scanne le classpath pour trouver les
+ * controllers, construit les routes GET/POST et met tout ce dont le
+ * {@link angeli.sprint.servlet.FrontControllerServlet} a besoin dans le
+ * context du servlet.
  */
 @WebListener
 public class ContextListener implements ServletContextListener {
 
     /**
-     * Appele quand le context du servlet est initialisé
-     * ,Initialized misy Z sode adino
-     * 
+     * Appele quand le context du servlet est initialise.
+     * Lance toutes les initialisations et branche {@link ModelAndView} sur le
+     * context du servlet.
+     *
+     * @param sce l'evenement contenant le context du servlet
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -45,8 +49,10 @@ public class ContextListener implements ServletContextListener {
     }
 
     /**
-     * Met le scanner de pages dans le context du servlet
+     * Met le scanner de packages dans le context du servlet
      * Comme ca on peut l'utiliser dans le servlet
+     *
+     * @param context le context du servlet
      */
     void initPackageScanner(ServletContext context) {
         ClassPathScanner cpScanner = new ClassPathScanner();
@@ -57,6 +63,8 @@ public class ContextListener implements ServletContextListener {
     /**
      * Met la liste des controllers dans le context du servlet
      * Met la liste des methodes avec l'annotation @URL dans le context du servlet
+     *
+     * @param context le context du servlet
      */
     void initControllerList(ServletContext context) {
         ClassPathScanner cpScanner = (ClassPathScanner) context.getAttribute("cpScanner");
@@ -68,6 +76,8 @@ public class ContextListener implements ServletContextListener {
 
     /**
      * Met le mapper dans le context du servlet
+     *
+     * @param context le context du servlet
      */
     void initMapper(ServletContext context) {
         Mapper mapper = new Mapper();
@@ -76,7 +86,10 @@ public class ContextListener implements ServletContextListener {
 
     /**
      * Cree la liste des methodes avec l'annotation @URL et les associe avec leur
-     * URL
+     * URL, separement pour GET et POST
+     *
+     * @param context le context du servlet
+     * @throws RuntimeException si une classe controller est introuvable
      */
     @SuppressWarnings("unchecked")
     void mapUrlToMethod(ServletContext context) {
@@ -109,11 +122,10 @@ public class ContextListener implements ServletContextListener {
     }
 
     /**
-     * Met le prefix et le suffix dans le context du servlet
-     * Generalement on a pas besoin de les mettre dans le context du servlet mais
-     * c'est pour montrer comment on peut le faire
-     * 
-     * @param context
+     * Copie les parametres "prefix" et "suffix" du web.xml dans le context du
+     * servlet, ils servent a construire le chemin des vues
+     *
+     * @param context le context du servlet
      */
     void initSuffixAndPrefix(ServletContext context) {
         context.setAttribute("prefix", context.getInitParameter("prefix"));

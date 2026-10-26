@@ -15,18 +15,37 @@ import angeli.sprint.utils.reflect.mapping.Convertisseur;
 import angeli.sprint.utils.reflect.mapping.TypeChecker;
 
 /**
- * Descripteur pour un parametre d'une methode
+ * Descripteur pour un parametre d'une methode (ou un champ de constructeur).
+ * Sait construire la valeur du parametre a partir des parametres de la
+ * requete : type simple, objet (via son constructeur, recursivement),
+ * tableau, List, Map, {@link Fichier} ou byte[].
  */
 public class Descriptor {
+    /** Type du parametre. */
     private Class<?> clazz;
+    /** Nom du parametre, avec son index pour un element de liste (nom[i]). */
     private String argName;
+    /** Chemin du parent dans la requete (ex : "eleve.adresse"), vide a la racine. */
     private String prefix = null;
+    /** Le type est un tableau ou une List. */
     boolean isArray = false;
+    /** Le type est {@link Fichier}. */
     boolean isFichier = false;
+    /** Le type est byte[] (contenu d'un fichier). */
     boolean isBytes = false;
+    /** Type generique pour List et Map, null sinon. */
     private ParameterizedType type;
+    /** Index utilise par {@link #updateIndex()}. */
     int index = 0;
 
+    /**
+     * Cree le descripteur et detecte s'il s'agit d'un tableau, d'une liste, d'un Fichier ou de byte[].
+     *
+     * @param clazz     type du parametre
+     * @param parameter le parametre java, pour lire les types generiques ; peut etre null
+     * @param argName   nom du parametre dans la requete
+     * @param prefix    chemin du parent dans la requete, vide ou null a la racine
+     */
     public Descriptor(Class<?> clazz, Parameter parameter, String argName, String prefix) {
         System.out.println("new descriptor : " + clazz.getName() + " , " + prefix + "." + argName);
         this.clazz = clazz;
@@ -40,18 +59,40 @@ public class Descriptor {
         this.isArray = (clazz.isArray() || List.class.isAssignableFrom(clazz));
     }
 
+    /**
+     * Remplace l'index de argName par {@link #index} : nom[x] devient nom[index].
+     */
     void updateIndex() {
         this.argName = argName.split("\\[")[0] + "[" + index + "]";
     }
 
+    /**
+     * Retourne le type du parametre.
+     *
+     * @return le type du parametre
+     */
     public Class<?> getClazz() {
         return clazz;
     }
 
+    /**
+     * Retourne le nom du parametre.
+     *
+     * @return le nom du parametre
+     */
     public String getArgName() {
         return argName;
     }
 
+    /**
+     * Cherche le constructeur dont les noms de parametres sont exactement
+     * ceux donnes (en ignorant les index [i]).
+     * Necessite la compilation avec -parameters.
+     *
+     * @param paramNames les noms des champs envoyes dans la requete
+     * @return le constructeur correspondant
+     * @throws NoSuchMethodException si aucun constructeur ne correspond
+     */
     public Constructor<?> getConstructor(String[] paramNames) throws NoSuchMethodException {
         // nom[0], nom[1]... correspondent a un seul parametre de constructeur : nom
         paramNames = Arrays.stream(paramNames).map(p -> p.split("\\[")[0]).distinct().toArray(String[]::new);
@@ -84,14 +125,20 @@ public class Descriptor {
 
     /**
      * Chemin complet de ce parametre dans la requete : prefix.argName
+     *
+     * @return argName seul si pas de prefix
      */
     private String fullName() {
         return (prefix == null || prefix.isEmpty()) ? argName : prefix + "." + argName;
     }
 
     /**
-     * i-eme argument generique : List<E> -> 0 pour E ; Map<K,V> -> 0 pour K, 1 pour
+     * i-eme argument generique : {@code List<E>} : 0 pour E ; {@code Map<K,V>} : 0 pour K, 1 pour
      * V
+     *
+     * @param i l'index de l'argument generique
+     * @return la classe de l'argument generique
+     * @throws IllegalArgumentException si le type generique est absent ou imbrique
      */
     private Class<?> typeArgument(int i) {
         if (type != null && type.getActualTypeArguments().length > i
@@ -105,8 +152,18 @@ public class Descriptor {
     /**
      * Construit les elements d'un tableau ou d'une liste.
      * Objets : nom[0].champ , nom[1].champ ...
-     * Simples : nom[0] , nom[1] ... ou nom repete (nom=a&nom=b)
+     * Simples : nom[0] , nom[1] ... ou nom repete ({@code nom=a&nom=b})
      * Les index sont tries et compactes (0 et 2 donnent 2 elements)
+     *
+     * @param map      les parametres de la requete
+     * @param etage    la profondeur courante
+     * @param comp     le type des elements
+     * @param fichiers les fichiers de la requete
+     * @return les elements construits
+     * @throws NoSuchMethodException     si un element n'a pas de constructeur adapte
+     * @throws InstantiationException    si un element ne peut pas etre instancie
+     * @throws IllegalAccessException    si le constructeur n'est pas accessible
+     * @throws java.lang.reflect.InvocationTargetException si le constructeur lance une exception
      */
     List<Object> makeArray(Map<String, String[]> map, Integer etage, Class<?> comp, Map<String, Fichier> fichiers)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException,
@@ -129,7 +186,7 @@ public class Descriptor {
         }
         for (Integer i : ParamParser.getIndexes(map.keySet(), full)) {
             Descriptor element = new Descriptor(comp, null, argName + "[" + i + "]", prefix);
-            elements.add(element.creaObject(map, etage, fichiers));
+            elements.add(element.createObject(map, etage, fichiers));
         }
         return elements;
     }
@@ -138,6 +195,17 @@ public class Descriptor {
      * Construit une Map. Format : nom[cle]=valeur (valeur simple) ou
      * nom[cle].champ=valeur (objet). La cle ne peut pas contenir . [ ou ] et doit
      * etre d'un type simple.
+     *
+     * @param map       les parametres de la requete
+     * @param etage     la profondeur courante
+     * @param keyType   le type des cles (type simple)
+     * @param valueType le type des valeurs
+     * @param fichiers  les fichiers de la requete
+     * @return la Map construite, dans l'ordre de la requete
+     * @throws NoSuchMethodException     si une valeur n'a pas de constructeur adapte
+     * @throws InstantiationException    si une valeur ne peut pas etre instanciee
+     * @throws IllegalAccessException    si le constructeur n'est pas accessible
+     * @throws java.lang.reflect.InvocationTargetException si le constructeur lance une exception
      */
     Map<Object, Object> makeEntries(Map<String, String[]> map, Integer etage, Class<?> keyType, Class<?> valueType,
             Map<String, Fichier> fichiers)
@@ -156,13 +224,30 @@ public class Descriptor {
                     entries.put(key, Convertisseur.convert(values[0], valueType));
             } else {
                 Descriptor value = new Descriptor(valueType, null, argName + "[" + k + "]", prefix);
-                entries.put(key, value.creaObject(map, etage, fichiers));
+                entries.put(key, value.createObject(map, etage, fichiers));
             }
         }
         return entries;
     }
 
-    public Object creaObject(Map<String, String[]> map, Integer etage, Map<String, Fichier> fichiers)
+    /**
+     * Construit la valeur de ce parametre a partir de la requete.
+     * Type simple : converti depuis la valeur. Fichier / byte[] : pris dans les
+     * fichiers. Tableau, List, Map : voir makeArray et makeEntries.
+     * Objet : construit via le constructeur qui correspond aux champs envoyes.
+     * Sans parametre dans la requete, un objet est cree avec son constructeur vide.
+     *
+     * @param map      les parametres de la requete
+     * @param etage    la profondeur courante, null pour 0
+     * @param fichiers les fichiers de la requete, peut etre null
+     * @return la valeur construite
+     * @throws NoSuchMethodException     si aucun constructeur ne correspond
+     * @throws InstantiationException    si l'objet ne peut pas etre instancie
+     * @throws IllegalAccessException    si le constructeur n'est pas accessible
+     * @throws java.lang.reflect.InvocationTargetException si le constructeur lance une exception
+     * @throws RuntimeException          si un parametre simple est absent de la requete
+     */
+    public Object createObject(Map<String, String[]> map, Integer etage, Map<String, Fichier> fichiers)
             throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
 
@@ -220,10 +305,24 @@ public class Descriptor {
 
         String[] etageSuivant = ParamParser.parseArgs(map.keySet().toArray(new String[0]), argName, etage);
 
-        return creaObject(map, etage, etageSuivant, fichiers);
+        return createObject(map, etage, etageSuivant, fichiers);
     }
 
-    Object creaObject(Map<String, String[]> map, Integer etage, String[] etageSuivant, Map<String, Fichier> fichiers)
+    /**
+     * Construit un objet avec le constructeur qui correspond aux noms de
+     * l'etage suivant ; chaque argument est construit recursivement.
+     *
+     * @param map          les parametres de la requete
+     * @param etage        la profondeur courante
+     * @param etageSuivant les noms des champs de l'objet envoyes dans la requete
+     * @param fichiers     les fichiers de la requete
+     * @return l'objet construit
+     * @throws NoSuchMethodException     si aucun constructeur ne correspond
+     * @throws InstantiationException    si l'objet ne peut pas etre instancie
+     * @throws IllegalAccessException    si le constructeur n'est pas accessible
+     * @throws java.lang.reflect.InvocationTargetException si le constructeur lance une exception
+     */
+    Object createObject(Map<String, String[]> map, Integer etage, String[] etageSuivant, Map<String, Fichier> fichiers)
             throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, java.lang.reflect.InvocationTargetException {
         List<Object> args = new ArrayList<Object>();
@@ -237,7 +336,7 @@ public class Descriptor {
                 descriptor = new Descriptor(parameter.getType(), parameter, parameter.getName(),
                         prefix + "." + argName);
             }
-            Object arg = descriptor.creaObject(map, etage + 1, fichiers);
+            Object arg = descriptor.createObject(map, etage + 1, fichiers);
             args.add(arg);
         }
         return constructor.newInstance(args.toArray());
