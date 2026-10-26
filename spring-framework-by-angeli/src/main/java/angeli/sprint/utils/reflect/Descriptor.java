@@ -178,7 +178,7 @@ public class Descriptor {
             }
         }
 
-        if (clazz.equals(Fichier.class)) {
+        if (clazz.equals(byte[].class)) {
             return fichiers.get(map.get(getArgName())[0]).data();
         }
 
