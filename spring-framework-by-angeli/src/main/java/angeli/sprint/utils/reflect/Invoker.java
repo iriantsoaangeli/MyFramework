@@ -20,70 +20,42 @@ import jakarta.servlet.http.HttpSession;
  * Classe utilitaire pour faire la reflection
  */
 public class Invoker {
-    public static Object invokeMethod(Method method, Map<String, String[]> args,SessionManager sessionManager)
+    public static Object invokeMethod(Method method, Map<String, String[]> args, SessionManager sessionManager)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             ParseException {
         Class<?>[] parameterTypes = method.getParameterTypes();
         boolean sessionParam = false;
-        Session session = null; 
+        Session session = null;
         Object ret = null;
 
-        // Cas 1 : Type primitif,nombre,String , ou pas de parametre
+        System.out.print("Cannot invoke method " + method.getName() + " with given params : ");
+
         try {
-
-            // Dit dans catalina.out si la methode peut etre invoquee avec les arguments
-            // donnes
-            System.out.println("Invoking method with given params :" + method.getName());
-            if (!(method.getParameterCount() > 0)) {
-                System.out.println("No arguments : Params go to hell");
-                ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
-                        null);
-            } else {
-                Object[] convertedArgs = bindArgs(method, args);
-
-                // Print la list apres conversoin
-                System.out.print("List after conversion : ");
-                for (Object arg : convertedArgs) {
-                    System.out.print(arg + " : " + arg.getClass() + ",");
+            // Construit les arguments pour la methode avec les parametres donnes
+            System.out.println("Arguments peut etre construit depuis la requete ");
+            Object[] newArgs = new Object[method.getParameterCount()];
+            Descriptor[] descriptors = ParamBinder.getDescriptors(method);
+            int index = 0;
+            for (Descriptor descriptor : descriptors) {
+                if (descriptor.getClazz().equals(Session.class)) {
+                    session = sessionManager.getSession();
+                    newArgs[index] = sessionManager.getSession();
+                    sessionParam = true;
+                    continue;
                 }
-
-                ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
-                        convertedArgs);
+                newArgs[index] = descriptor.creaObject(args, null);
+                index++;
             }
+            ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
+                    newArgs);
 
-            // Cas 2 : Type complexe (objet) , on essaye de construire l'objet avec les
-            // parametres donnes
-        } catch (Exception e) {
-
-            System.out.print("Cannot invoke method " + method.getName() + " with given params : ");
-
-            try {
-                // Construit les arguments pour la methode avec les parametres donnes
-                System.out.println("Arguments peut etre construit depuis la requete ");
-                Object[] newArgs = new Object[method.getParameterCount()];
-                Descriptor[] descriptors = ParamBinder.getDescriptors(method);
-                int index = 0;
-                for (Descriptor descriptor : descriptors) {
-                    if (descriptor.getClazz().equals(Session.class)) {
-                         session = sessionManager.getSession();
-                        newArgs[index] = sessionManager.getSession();
-                        sessionParam = true;
-                        continue;
-                    }
-                    newArgs[index] = descriptor.creaObject(args, null);
-                    index++;
-                }
-                ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
-                        newArgs);
-
-            } catch (Exception e2) {
-                // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
-                // arguments donnes
-                System.out.println("Cannot invoke method" + method.getName());
-                throw e2;
-            }
+        } catch (Exception e2) {
+            // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
+            // arguments donnes
+            System.out.println("Cannot invoke method" + method.getName());
+            throw e2;
         }
-        if(sessionParam) {
+        if (sessionParam) {
             sessionManager.updateSessionData(session);
         }
         return ret;
