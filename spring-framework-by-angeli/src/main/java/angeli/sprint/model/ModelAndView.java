@@ -2,19 +2,15 @@ package angeli.sprint.model;
 
 import java.util.function.BiConsumer;
 
-import jakarta.servlet.ServletContext;
-
 /**
  * ModelAndView class
  * L'objet qui prend la vue et les donnees du model pour les passer a la vue
- * 
- *  
  */
 public class ModelAndView {
     String view;
     static BiConsumer<String, Object> action;
 
-    public ModelAndView(String view, ServletContext context) {
+    public ModelAndView(String view) {
         setView(view);
     }
 
