@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.file.Fichier;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.session.SessionManager;
 import angeli.sprint.url.URLMethod;
@@ -34,12 +35,12 @@ public class FrontControllerServlet extends HttpServlet {
     SessionManager sessionManager;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse rep) throws IOException, ServletException {
         ProcessRequest(req, rep, "GET");
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse rep) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse rep) throws IOException, ServletException {
         ProcessRequest(req, rep, "POST");
     }
 
@@ -49,11 +50,12 @@ public class FrontControllerServlet extends HttpServlet {
      * @param req la requete http
      * @param rep la reponse http
      * @throws IOException
+     * @throws ServletException
      */
-    private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep, String method) throws IOException {
+    private void ProcessRequest(HttpServletRequest req, HttpServletResponse rep, String method)
+            throws IOException, ServletException {
         System.out.println("===============================================================");
 
-        
         sessionManager.setRequest(req);
 
         String url = URLParser.getUrlFromRequest(req)[1];
@@ -78,10 +80,11 @@ public class FrontControllerServlet extends HttpServlet {
 
         Map<String, String[]> args = null;
 
-        //Manmijery izy raha manome zavatra .next()
+        // Manmijery izy raha manome zavatra .next()
         if (req.getParameterNames().hasMoreElements()) {
             args = req.getParameterMap();
         }
+        Fichier[] fichiers = DataGeter.getFichiers(req);
 
         boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);
         boolean UrlExists = checkUrl[0];
@@ -106,7 +109,7 @@ public class FrontControllerServlet extends HttpServlet {
             // Dans ce cas si l'url a chemin et doit print du texte
             try {
                 System.out.println("Ni vue ni API Mais Url Existe");
-                PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args,sessionManager), null);
+                PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args, sessionManager, fichiers), null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -116,7 +119,7 @@ public class FrontControllerServlet extends HttpServlet {
             // Envoie en json
             if (UrlisAnAPI) {
                 try {
-                    PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args,sessionManager),
+                    PageWriter.print(req, rep, Invoker.invokeMethod(calledMethod, args, sessionManager, fichiers),
                             URLChecker.getContentTypeForUrl(url, urlMethodMap));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,7 +127,8 @@ public class FrontControllerServlet extends HttpServlet {
             }
             if (UrlHasView) {
                 try {
-                    ModelAndView modelAndView = (ModelAndView) Invoker.invokeMethod(calledMethod, args,sessionManager);
+                    ModelAndView modelAndView = (ModelAndView) Invoker.invokeMethod(calledMethod, args, sessionManager,
+                            fichiers);
 
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);
