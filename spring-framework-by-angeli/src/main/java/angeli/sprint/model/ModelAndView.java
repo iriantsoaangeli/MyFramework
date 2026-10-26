@@ -8,6 +8,10 @@ import java.util.function.BiConsumer;
  */
 public class ModelAndView {
     String view;
+    /**
+     * La methode a appeler pour mettre les attributs dans le context du servlet
+     *Comme ca on donne pas le Servlet contexte aux controllers 
+     */
     static BiConsumer<String, Object> action;
 
     public ModelAndView(String view) {
@@ -16,7 +20,6 @@ public class ModelAndView {
 
     /**
      * Set la methode a appeler pour mettre les attributs dans le context du servlet
-     * 
      */
     public static void setAction(BiConsumer<String, Object> action) {
         ModelAndView.action = action;
