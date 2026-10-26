@@ -181,6 +181,7 @@ public class FrontControllerServlet extends HttpServlet {
      * Initialisation du servlet, recupere la liste des controllers depuis le
      * context du servlet
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void init() throws ServletException {
         super.init();

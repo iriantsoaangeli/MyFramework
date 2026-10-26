@@ -78,6 +78,7 @@ public class ContextListener implements ServletContextListener {
      * Cree la liste des methodes avec l'annotation @URL et les associe avec leur
      * URL
      */
+    @SuppressWarnings("unchecked")
     void mapUrlToMethod(ServletContext context) {
 
         ClassPathScanner cpScanner = (ClassPathScanner) context.getAttribute("cpScanner");
