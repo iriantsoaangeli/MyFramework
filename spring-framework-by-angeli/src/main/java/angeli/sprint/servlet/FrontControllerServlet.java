@@ -15,6 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import angeli.sprint.utils.URLChecker;
 
 /**
@@ -83,7 +84,8 @@ public class FrontControllerServlet extends HttpServlet {
         if (req.getParameterNames().hasMoreElements()) {
             args = req.getParameterMap();
         }
-        Map<String,byte[]> fichiers = DataGeter.getFichiers(req);
+        Map<String, byte[]> fichiers = estMultipart(req) ? DataGeter.getFichiers(req) : null;
+        System.out.println("est  multipart: " + estMultipart(req));
 
         boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);
         boolean UrlExists = checkUrl[0];
@@ -164,6 +166,11 @@ public class FrontControllerServlet extends HttpServlet {
         } catch (ServletException e) {
             e.printStackTrace();
         }
+    }
+
+    boolean estMultipart(HttpServletRequest req) {
+        String type = req.getContentType();
+        return type != null && type.toLowerCase().startsWith("multipart/");
     }
 
     /**
