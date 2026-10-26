@@ -13,7 +13,13 @@ public class DataGeter {
     static Fichier[] getFichiers(HttpServletRequest request) throws IOException, ServletException {
         Part[] parts = request.getParts().toArray(new Part[0]);
         List<Fichier> fichiers = new ArrayList<>();
-
+        for (Part part : parts) {
+            if (part.getContentType() != null) {
+                String name = part.getSubmittedFileName();
+                byte[] data = part.getInputStream().readAllBytes();
+                fichiers.add(new Fichier(name, data));
+            }
+        }
         return fichiers.toArray(new Fichier[0]);
     }
 }
