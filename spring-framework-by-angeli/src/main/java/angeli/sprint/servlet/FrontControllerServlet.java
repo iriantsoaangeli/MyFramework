@@ -131,7 +131,8 @@ public class FrontControllerServlet extends HttpServlet {
             try {
 
             /**
-             * Le forward c'est un doGet ou un doPost avec le dispatcher qui dit quelle est la resource specifiee : jsp par exemple
+             * Le forward c'est un doGet ou un doPost(le navigateur voit ca comme un redirect COMMME !!!!) avec le dispatcher qui dit quelle est la resource specifiee : jsp par exemple,
+             * Include traite la resource ici donc j'evite c chiant si la page se duplique
              */
                 req.getServletContext().getNamedDispatcher("jsp").forward(req, rep);
             } catch (ServletException e) {
