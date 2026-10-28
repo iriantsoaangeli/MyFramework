@@ -125,8 +125,14 @@ public class FrontControllerServlet extends HttpServlet {
 
             // Afficher le path du jsp dans catalina.out
             System.out.println("Forward detecte, on sert: " + targetPath);
+
+            //Cet attribut est celui de la resource jsp a servir
             req.setAttribute("org.apache.catalina.jsp_file", targetPath);
             try {
+
+            /**
+             * Le forward c'est un doGet ou un doPost avec le dispatcher qui dit quelle est la resource specifiee : jsp par exemple
+             */
                 req.getServletContext().getNamedDispatcher("jsp").forward(req, rep);
             } catch (ServletException e) {
                 e.printStackTrace();
