@@ -269,5 +269,6 @@ public class FrontControllerServlet extends HttpServlet {
         auth = context.getInitParameter("angeli.sprint.auth") != null
                 && !context.getInitParameter("angeli.sprint.auth").isEmpty();
         authKey = auth ? context.getInitParameter("angeli.sprint.auth") : null;
+        roleKey = auth ? context.getInitParameter("angeli.sprint.role") : null;
     }
 }
