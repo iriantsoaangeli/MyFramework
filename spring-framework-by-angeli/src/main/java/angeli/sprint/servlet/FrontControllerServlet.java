@@ -40,6 +40,12 @@ public class FrontControllerServlet extends HttpServlet {
     /** Fournit les sessions aux controllers. */
     SessionManager sessionManager;
 
+    /**L'extension du fichier */
+    String prefix ; 
+
+    /**Le debut du chemin du fichier */
+    String suffix;
+
     /**
      * Traite une requete GET.
      *
