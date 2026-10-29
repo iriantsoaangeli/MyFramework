@@ -2,91 +2,61 @@ package angeli.sprint.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import angeli.sprint.url.URLMethod;
-import angeli.sprint.utils.URLParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Ecrit le resultat d'une methode de controller dans la reponse http
+ * (JSON, HTML ou page 404).
+ */
 public class PageWriter {
+
     /**
-     * public static void viewPageNotFound(HttpServletRequest req,
-     * HttpServletResponse rep,
-     * Map<String, URLMethod> urlMethodMapGET, Map<String, URLMethod>
-     * urlMethodMapPOST,
-     * List<String> controllerList, List<Method> methodList)
-     * throws IOException {
-     * 
-     * // Print dans catalina.out que le lien n'a pas de page associée
-     * System.out.println("Page not found: " + URLParser.getUrlFromRequest(req)[1]);
-     * 
-     * PrintWriter wr = rep.getWriter();
-     * String method = req.getMethod();
-     * String[] url = URLParser.getUrlFromRequest(req);
-     * String uri = url[1];
-     * URLMethod methodPresent = urlMethodMapGET.get(uri);
-     * wr.println("
-     * <h2>" + url[0] + " " + url[1] + "</h2>");
-     * wr.println("uri: " + uri);
-     * wr.println("
-     * <h3>Les Controllers trouves sont :</h3>");
-     * wr.println(controllerList);
-     * wr.println("
-     * <h3>Les Methodes annotees avec @URL sont :</h3>");
-     * wr.println(methodList);
-     * wr.println("
-     * <h3>Le Map URL et Method en GET:</h3>");
-     * wr.println(urlMethodMapGET);
-     * wr.println("
-     * <h3>Le Map URL et Method en POST:</h3>");
-     * wr.println(urlMethodMapPOST);
-     * wr.println("
-     * <h3>Votre url : " + url[0] + " " + url[1] + "</h3>");
-     * if (methodPresent == null) {
-     * wr.println("
-     * <h3>Aucune methode n'est associee a cette URL</h3>");
-     * return;
-     * } else {
-     * if (!methodPresent.getRequestMethod().equals(method)) {
-     * wr.println("
-     * <h3>Methode appellee :" + methodPresent.getMethod().getName() + "()</h3>");
-     * } else {
-     * 
-     * methodPresent.getMethod().setAccessible(true);
-     * try {
-     * methodPresent.getMethod()
-     * .invoke(methodPresent.getMethod().getDeclaringClass().getDeclaredConstructor()
-     * .newInstance());
-     * wr.println("
-     * <h3>La methode a ete appelee avec succes</h3>");
-     * } catch (Exception e) {
-     * e.printStackTrace(wr);
-     * }
-     * }
-     * }
-     * 
-     * }
+     * Ecrit une page d'erreur 404 simple.
+     *
+     * @param rep la reponse http
+     * @throws IOException si la reponse ne peut pas etre ecrite
      */
     public static void urlNotFound(HttpServletResponse rep) throws IOException {
         PrintWriter wr = rep.getWriter();
         wr.println("<h1>error 404</h1>");
     }
 
+    /**
+     * Serialise l'objet en JSON avec Jackson et l'ecrit.
+     *
+     * @param wr le writer de la reponse
+     * @param o  l'objet a serialiser
+     * @throws IOException si la serialisation ou l'ecriture echoue
+     */
     public static void printJson(PrintWriter wr, Object o) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(o);
         wr.print(json);
     }
 
+    /**
+     * Ecrit l'objet tel quel (via toString()).
+     *
+     * @param wr le writer de la reponse
+     * @param o  l'objet a ecrire
+     */
     public static void printHtml(PrintWriter wr, Object o) {
         wr.print(o);
     }
 
+    /**
+     * Print manuel dans la reponse , par defaut json.
+     * Seuls "application/json" et "text/html" sont geres, tout autre
+     * Content-Type (ou null) donne du JSON.
+     *
+     * @param req         la requete http
+     * @param rep         la reponse http
+     * @param message     l'objet a ecrire
+     * @param contentType le Content-Type voulu, peut etre null
+     * @throws IOException si la reponse ne peut pas etre ecrite
+     */
     public static void print(HttpServletRequest req, HttpServletResponse rep, Object message, String contentType)
             throws IOException {
         PrintWriter wr = rep.getWriter();

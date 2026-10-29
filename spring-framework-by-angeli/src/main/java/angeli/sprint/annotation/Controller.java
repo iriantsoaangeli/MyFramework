@@ -6,8 +6,11 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 
 /**
- * Annotation pour les controllers
- 
+ * Marque une classe comme controller.
+ * Les classes annotees sont trouvees au demarrage par le
+ * {@link angeli.sprint.servlet.listener.ContextListener} et leurs methodes
+ * {@link URL} sont enregistrees comme routes.
+ * La classe doit avoir un constructeur sans argument.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

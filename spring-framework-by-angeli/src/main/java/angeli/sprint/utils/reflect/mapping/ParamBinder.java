@@ -1,22 +1,27 @@
-package angeli.sprint.utils.reflect;
+package angeli.sprint.utils.reflect.mapping;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.utils.reflect.Descriptor;
+
 /**
- * 
- * ParamBinder
  * Associe les parametres envoyes dans la requete avec les constructeurs
- * respecitfs de chacun des argumentu
+ * respectifs de chacun des arguments
  */
 public class ParamBinder {
 
+    /**
+     * Retourne les constructeurs declares de chaque classe.
+     *
+     * @param clazz les classes
+     * @return les constructeurs declares de chaque classe
+     */
     static Constructor<?>[][] getConstructors(Class<?>[] clazz) {
         Constructor<?>[][] constructors = new Constructor[clazz.length][];
         for (int i = 0; i < clazz.length; i++) {
@@ -27,10 +32,15 @@ public class ParamBinder {
 
     /**
      * Prend les valeurs dans la map et les met dans un Objet[] si il y a plusieurs
-     * valeur sur un nom de parametre
-     * 
+     * valeur sur un nom de parametre.
+     * Seule la premiere valeur de chaque parametre est utilisee.
+     *
+     * @param method la methode ou le constructeur
+     * @param args   les parametres de la requete
+     * @return les valeurs converties, dans l'ordre des parametres
+     * @throws IllegalArgumentException si un parametre manque dans la requete
      */
-    static Object[] bindInOrder(Executable method, Map<String, String[]> args) {
+    public static Object[] bindInOrder(Executable method, Map<String, String[]> args) {
 
         Object[] orderedArgs = new Object[args.size()];
         Integer index = 0;
@@ -48,6 +58,14 @@ public class ParamBinder {
         return orderedArgs;
     }
 
+    /**
+     * Garde les constructeurs dont tous les parametres sont dans la requete
+     * (et les constructeurs vides, avec null comme arguments).
+     *
+     * @param constructors les constructeurs candidats
+     * @param args         les parametres de la requete
+     * @return constructeur vers ses arguments
+     */
     static Map<Constructor<?>, Object[]> findMatch(Constructor<?>[][] constructors, Map<String, String[]> args) {
         Map<Constructor<?>, Object[]> retMap = new java.util.HashMap<>();
         for (Constructor<?>[] construct : constructors) {
@@ -68,8 +86,11 @@ public class ParamBinder {
 
     /**
      * Retourne un tableau de Descripteur pour chaque parametre de la methode
+     *
+     * @param method la methode ou le constructeur
+     * @return un descripteur par parametre, dans l'ordre
      */
-    static Descriptor[] getDescriptors(Executable method) {
+    public static Descriptor[] getDescriptors(Executable method) {
         Parameter[] parameters = method.getParameters();
         List<Descriptor> descriptors = new ArrayList<>();
         for (Parameter parameter : parameters) {

@@ -1,4 +1,4 @@
-package angeli.sprint.utils.reflect;
+package angeli.sprint.utils.reflect.mapping;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -8,9 +8,7 @@ import java.util.Map;
 import angeli.sprint.url.URLMethod;
 
 /**
- * Class pour mapper des methodes/objets
- * 
- *   
+ * Construit les routes : associe chaque URL a sa methode de controller.
  */
 public class Mapper {
 
@@ -20,6 +18,7 @@ public class Mapper {
      * @param methods liste de methodes donnees
      * @param Method  type de methode (GET,POST)
      * @return map avec l'URL comme cle et la methode comme valeur
+     * @throws RuntimeException si deux methodes ont la meme URL et la meme methode HTTP
      */
     public Map<String, URLMethod> mapUrlToMethod(List<Method> methods, String Method) {
         Map<String, URLMethod> urlMap = new HashMap<>();
