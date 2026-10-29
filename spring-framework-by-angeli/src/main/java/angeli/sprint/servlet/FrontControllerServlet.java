@@ -47,7 +47,9 @@ public class FrontControllerServlet extends HttpServlet {
     /** Le debut du chemin du fichier */
     String suffix;
 
-    /** Dis si il existe des authentification {@link angeli.sprint.annotation.Auth}*/
+    /**
+     * Dis si il existe des authentification {@link angeli.sprint.annotation.Auth}
+     */
     boolean auth = false;
     /**
      * La clef dans la map de session qu'il faut regarder
@@ -133,7 +135,7 @@ public class FrontControllerServlet extends HttpServlet {
         boolean UrlExists = checkUrl[0];
         boolean UrlHasView = checkUrl[1];
         boolean UrlisAnAPI = checkUrl[2];
-        boolean isAuthPresent = checkUrl[3] ;
+        boolean isAuthPresent = checkUrl[3];
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
@@ -157,12 +159,12 @@ public class FrontControllerServlet extends HttpServlet {
             }
             return;
         }
-        if(isAuthPresent){
-        try{
-            Authentificator.checkAuth(authKey, req.getSession());
-        }catch(Exception e){
-               e.printStackTrace();
-               return ;
+        if (isAuthPresent) {
+            System.out.println("Authentification requise pour cette URL");
+            try {
+                Authentificator.checkAuth(authKey, req.getSession());
+            } catch (Exception e) {
+                return;
             }
         }
         if (UrlExists && !UrlHasView && !UrlisAnAPI) {
@@ -260,8 +262,8 @@ public class FrontControllerServlet extends HttpServlet {
         sessionManager = (SessionManager) context.getAttribute("sessionManager");
         prefix = (String) context.getInitParameter("angeli.sprint.prefix");
         suffix = (String) context.getInitParameter("angeli.sprint.suffix");
-        auth = context.getInitParameter("angeli.spring.auth") != null
-                && !context.getInitParameter("angeli.spring.auth").isEmpty();
-        authKey = auth ? context.getInitParameter("angeli.spring.auth") : null;
+        auth = context.getInitParameter("angeli.sprint.auth") != null
+                && !context.getInitParameter("angeli.sprint.auth").isEmpty();
+        authKey = auth ? context.getInitParameter("angeli.sprint.auth") : null;
     }
 }
