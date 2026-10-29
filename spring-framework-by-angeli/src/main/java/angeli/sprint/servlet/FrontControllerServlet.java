@@ -44,6 +44,9 @@ public class FrontControllerServlet extends HttpServlet {
     /** L'extension du fichier */
     String prefix;
 
+    /** La clef ou on cherche le role */
+    String roleKey = null;
+
     /** Le debut du chemin du fichier */
     String suffix;
 
@@ -160,9 +163,10 @@ public class FrontControllerServlet extends HttpServlet {
             return;
         }
         if (isAuthPresent) {
+            Method calledMethod = urlMethodMap.get(url).getMethod();
             System.out.println("Authentification requise pour cette URL");
             try {
-                Authentificator.checkAuth(authKey, req.getSession());
+                Authentificator.checkAuth(authKey, req.getSession(),calledMethod, roleKey);
             } catch (Exception e) {
                 PageWriter.print(req, rep, e.getMessage(), "text/plain");
                 return;
@@ -266,5 +270,6 @@ public class FrontControllerServlet extends HttpServlet {
         auth = context.getInitParameter("angeli.sprint.auth") != null
                 && !context.getInitParameter("angeli.sprint.auth").isEmpty();
         authKey = auth ? context.getInitParameter("angeli.sprint.auth") : null;
+        roleKey = auth ? context.getInitParameter("angeli.sprint.role") : null;
     }
 }
