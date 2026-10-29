@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.auth.Authentificator;
 import angeli.sprint.file.Fichier;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.session.SessionManager;
@@ -46,7 +47,7 @@ public class FrontControllerServlet extends HttpServlet {
     /** Le debut du chemin du fichier */
     String suffix;
 
-    /** Dis si il existe des authentification */
+    /** Dis si il existe des authentification {@link angeli.sprint.annotation.Auth}*/
     boolean auth = false;
     /**
      * La clef dans la map de session qu'il faut regarder
@@ -132,6 +133,7 @@ public class FrontControllerServlet extends HttpServlet {
         boolean UrlExists = checkUrl[0];
         boolean UrlHasView = checkUrl[1];
         boolean UrlisAnAPI = checkUrl[2];
+        boolean isAuthPresent = checkUrl[3] ;
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
@@ -154,6 +156,14 @@ public class FrontControllerServlet extends HttpServlet {
                 e.printStackTrace();
             }
             return;
+        }
+        if(isAuthPresent){
+        try{
+            Authentificator.checkAuth(authKey, req.getSession());
+        }catch(Exception e){
+               e.printStackTrace();
+               return ;
+            }
         }
         if (UrlExists && !UrlHasView && !UrlisAnAPI) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
@@ -253,5 +263,5 @@ public class FrontControllerServlet extends HttpServlet {
         auth = context.getInitParameter("angeli.spring.auth") != null
                 && !context.getInitParameter("angeli.spring.auth").isEmpty();
         authKey = auth ? context.getInitParameter("angeli.spring.auth") : null;
-    } 
+    }
 }
