@@ -164,6 +164,7 @@ public class FrontControllerServlet extends HttpServlet {
             try {
                 Authentificator.checkAuth(authKey, req.getSession());
             } catch (Exception e) {
+                PageWriter.print(req, rep, e.getMessage(), "text/plain");
                 return;
             }
         }
