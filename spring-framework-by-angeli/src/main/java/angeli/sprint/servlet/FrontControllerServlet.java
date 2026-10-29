@@ -44,6 +44,9 @@ public class FrontControllerServlet extends HttpServlet {
     /** L'extension du fichier */
     String prefix;
 
+    /** La clef ou on cherche le role */
+    String roleKey = null;
+
     /** Le debut du chemin du fichier */
     String suffix;
 
