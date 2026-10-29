@@ -119,21 +119,4 @@ public class ContextListener implements ServletContextListener {
             throw new RuntimeException("Erreur lors de la récupération des classes pour chercher les URLs", e);
         }
     }
-
-    /**
-     * Copie les parametres "prefix" et "suffix" du web.xml dans le context du
-     * servlet, ils servent a construire le chemin des vues
-     *
-     * @param context le context du servlet
-     */
-    void initSuffixAndPrefix(ServletContext context) {
-        context.setAttribute("prefix", context.getInitParameter("prefix"));
-        context.setAttribute("suffix", context.getInitParameter("suffix"));
-    }
-
-    /**initialiser  */
-    void initAuth(ServletContext context){
-        context.setAttribute("angeli.spring.auth", null);
-    }
-
 }
