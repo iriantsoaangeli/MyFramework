@@ -38,8 +38,6 @@ public class ContextListener implements ServletContextListener {
         initPackageScanner(context);
         initMapper(context);
         initControllerList(context);
-        initSuffixAndPrefix(context);
-        initAuth(context);
         context.setAttribute("sessionManager", new SessionManager());
 
         ModelAndView.setAction((key, value) -> {
