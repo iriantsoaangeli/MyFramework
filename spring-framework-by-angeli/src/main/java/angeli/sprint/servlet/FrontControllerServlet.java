@@ -132,14 +132,16 @@ public class FrontControllerServlet extends HttpServlet {
             // Afficher le path du jsp dans catalina.out
             System.out.println("Forward detecte, on sert: " + targetPath);
 
-            //Cet attribut est celui de la resource jsp a servir
+            // Cet attribut est celui de la resource jsp a servir
             req.setAttribute("org.apache.catalina.jsp_file", targetPath);
             try {
 
-            /**
-             * Le forward c'est un doGet ou un doPost(le navigateur voit ca comme un redirect COMMME !!!!) avec le dispatcher qui dit quelle est la resource specifiee : jsp par exemple,
-             * Include traite la resource ici donc j'evite c chiant si la page se duplique
-             */
+                /**
+                 * Le forward c'est un doGet ou un doPost(le navigateur voit ca comme un
+                 * redirect COMMME !!!!) avec le dispatcher qui dit quelle est la resource
+                 * specifiee : jsp par exemple,
+                 * Include traite la resource ici donc j'evite c chiant si la page se duplique
+                 */
                 req.getServletContext().getNamedDispatcher("jsp").forward(req, rep);
             } catch (ServletException e) {
                 e.printStackTrace();
@@ -190,8 +192,10 @@ public class FrontControllerServlet extends HttpServlet {
      * Attention : ici "suffix" est le debut du chemin et "prefix" la fin.
      *
      * @param viewName le nom de la vue, sans dossier ni extension
-     * @param suffix   debut du chemin, valeur du parametre "suffix" du web.xml (ex : /WEB-INF/views/)
-     * @param prefix   fin du chemin, valeur du parametre "prefix" du web.xml (ex : .jsp)
+     * @param suffix   debut du chemin, valeur du parametre "suffix" du web.xml (ex
+     *                 : /WEB-INF/views/)
+     * @param prefix   fin du chemin, valeur du parametre "prefix" du web.xml (ex :
+     *                 .jsp)
      * @param req      la requete http
      * @param rep      la reponse http
      * @throws IOException si le forward echoue
