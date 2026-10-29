@@ -40,10 +40,10 @@ public class FrontControllerServlet extends HttpServlet {
     /** Fournit les sessions aux controllers. */
     SessionManager sessionManager;
 
-    /**L'extension du fichier */
-    String prefix ; 
+    /** L'extension du fichier */
+    String prefix;
 
-    /**Le debut du chemin du fichier */
+    /** Le debut du chemin du fichier */
     String suffix;
 
     /**
@@ -175,9 +175,7 @@ public class FrontControllerServlet extends HttpServlet {
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);
 
-                    ServletContext context = req.getServletContext();
-                    view(modelAndView.getView(), context.getAttribute("suffix").toString(),
-                            context.getAttribute("prefix").toString(), req, rep);
+                    view(modelAndView.getView(), suffix, prefix, req, rep);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -238,5 +236,8 @@ public class FrontControllerServlet extends HttpServlet {
         urlMethodMapGET = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapGET");
         urlMethodMapPOST = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapPOST");
         sessionManager = (SessionManager) getServletContext().getAttribute("sessionManager");
+        prefix = (String) getServletContext().getInitParameter("angeli.sprint.prefix");
+        suffix = (String) getServletContext().getInitParameter("angeli.sprint.suffix");
+
     }
 }
