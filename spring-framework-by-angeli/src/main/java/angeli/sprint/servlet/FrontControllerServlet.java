@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import angeli.sprint.auth.Authentificator;
 import angeli.sprint.file.Fichier;
 import angeli.sprint.model.ModelAndView;
 import angeli.sprint.session.SessionManager;
@@ -39,6 +40,21 @@ public class FrontControllerServlet extends HttpServlet {
     Map<String, URLMethod> urlMethodMapPOST;
     /** Fournit les sessions aux controllers. */
     SessionManager sessionManager;
+
+    /** L'extension du fichier */
+    String prefix;
+
+    /** Le debut du chemin du fichier */
+    String suffix;
+
+    /**
+     * Dis si il existe des authentification {@link angeli.sprint.annotation.Auth}
+     */
+    boolean auth = false;
+    /**
+     * La clef dans la map de session qu'il faut regarder
+     */
+    String authKey = null;
 
     /**
      * Traite une requete GET.
@@ -115,10 +131,11 @@ public class FrontControllerServlet extends HttpServlet {
         System.out.println("est  multipart: " + estMultipart(req));
         args = DataGeter.addFileNamesToMap(fichiers, args);
 
-        boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);
+        boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap, auth);
         boolean UrlExists = checkUrl[0];
         boolean UrlHasView = checkUrl[1];
         boolean UrlisAnAPI = checkUrl[2];
+        boolean isAuthPresent = checkUrl[3];
 
         if (req.getAttribute("jakarta.servlet.forward.request_uri") != null) {
             String targetPath = url;
@@ -126,19 +143,30 @@ public class FrontControllerServlet extends HttpServlet {
             // Afficher le path du jsp dans catalina.out
             System.out.println("Forward detecte, on sert: " + targetPath);
 
-            //Cet attribut est celui de la resource jsp a servir
+            // Cet attribut est celui de la resource jsp a servir
             req.setAttribute("org.apache.catalina.jsp_file", targetPath);
             try {
 
-            /**
-             * Le forward c'est un doGet ou un doPost(le navigateur voit ca comme un redirect COMMME !!!!) avec le dispatcher qui dit quelle est la resource specifiee : jsp par exemple,
-             * Include traite la resource ici donc j'evite c chiant si la page se duplique
-             */
+                /**
+                 * Le forward c'est un doGet ou un doPost(le navigateur voit ca comme un
+                 * redirect COMMME !!!!) avec le dispatcher qui dit quelle est la resource
+                 * specifiee : jsp par exemple,
+                 * Include traite la resource ici donc j'evite c chiant si la page se duplique
+                 */
                 req.getServletContext().getNamedDispatcher("jsp").forward(req, rep);
             } catch (ServletException e) {
                 e.printStackTrace();
             }
             return;
+        }
+        if (isAuthPresent) {
+            System.out.println("Authentification requise pour cette URL");
+            try {
+                Authentificator.checkAuth(authKey, req.getSession());
+            } catch (Exception e) {
+                PageWriter.print(req, rep, e.getMessage(), "text/plain");
+                return;
+            }
         }
         if (UrlExists && !UrlHasView && !UrlisAnAPI) {
             Method calledMethod = urlMethodMap.get(url).getMethod();
@@ -169,9 +197,7 @@ public class FrontControllerServlet extends HttpServlet {
                     // Print le ModelAndView en String dans catalina.out
                     System.out.println("ModelAndView: " + modelAndView);
 
-                    ServletContext context = req.getServletContext();
-                    view(modelAndView.getView(), context.getAttribute("suffix").toString(),
-                            context.getAttribute("prefix").toString(), req, rep);
+                    view(modelAndView.getView(), suffix, prefix, req, rep);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -186,8 +212,10 @@ public class FrontControllerServlet extends HttpServlet {
      * Attention : ici "suffix" est le debut du chemin et "prefix" la fin.
      *
      * @param viewName le nom de la vue, sans dossier ni extension
-     * @param suffix   debut du chemin, valeur du parametre "suffix" du web.xml (ex : /WEB-INF/views/)
-     * @param prefix   fin du chemin, valeur du parametre "prefix" du web.xml (ex : .jsp)
+     * @param suffix   debut du chemin, valeur du parametre "suffix" du web.xml (ex
+     *                 : /WEB-INF/views/)
+     * @param prefix   fin du chemin, valeur du parametre "prefix" du web.xml (ex :
+     *                 .jsp)
      * @param req      la requete http
      * @param rep      la reponse http
      * @throws IOException si le forward echoue
@@ -227,10 +255,16 @@ public class FrontControllerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        controllerList = (List<String>) getServletContext().getAttribute("controllerList");
-        methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
-        urlMethodMapGET = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapGET");
-        urlMethodMapPOST = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapPOST");
-        sessionManager = (SessionManager) getServletContext().getAttribute("sessionManager");
+        ServletContext context = getServletContext();
+        controllerList = (List<String>) context.getAttribute("controllerList");
+        methodList = (List<Method>) context.getAttribute("urlMethods");
+        urlMethodMapGET = (Map<String, URLMethod>) context.getAttribute("urlMethodMapGET");
+        urlMethodMapPOST = (Map<String, URLMethod>) context.getAttribute("urlMethodMapPOST");
+        sessionManager = (SessionManager) context.getAttribute("sessionManager");
+        prefix = (String) context.getInitParameter("angeli.sprint.prefix");
+        suffix = (String) context.getInitParameter("angeli.sprint.suffix");
+        auth = context.getInitParameter("angeli.sprint.auth") != null
+                && !context.getInitParameter("angeli.sprint.auth").isEmpty();
+        authKey = auth ? context.getInitParameter("angeli.sprint.auth") : null;
     }
 }

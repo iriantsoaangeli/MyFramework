@@ -20,8 +20,8 @@ public class URLChecker {
      * @return [0] l'URL existe, [1] la methode retourne un ModelAndView,
      *         [2] la methode est une API ({@code @WebAPI} sans vue)
      */
-    public static boolean[] checkUrl(String Url, Map<String, URLMethod> urlMethodMap) {
-        boolean[] result = new boolean[3];
+    public static boolean[] checkUrl(String Url, Map<String, URLMethod> urlMethodMap, boolean auth) {
+        boolean[] result = new boolean[4];
         result[0] = doesUrlExist(Url, urlMethodMap);
         if (!result[0]) {
             result[1] = false;
@@ -29,8 +29,14 @@ public class URLChecker {
         } else {
             result[1] = doesUrlHaveView(Url, urlMethodMap);
             result[2] = isUrlAnAPI(Url, urlMethodMap, result[1]);
+            result[3] = auth ? isAuthPresent(Url, urlMethodMap, auth) : false;
         }
         return result;
+    }
+
+    public static boolean isAuthPresent(String url, Map<String, URLMethod> urlMethodMap, boolean auth) {
+        Method callMethod = urlMethodMap.get(url).getMethod();
+        return callMethod.isAnnotationPresent(angeli.sprint.annotation.Auth.class) ;
     }
 
     /**
@@ -55,11 +61,13 @@ public class URLChecker {
     }
 
     /**
-     * Retourne le contentType du {@code @WebAPI} de la methode, "application/json" sinon.
+     * Retourne le contentType du {@code @WebAPI} de la methode, "application/json"
+     * sinon.
      *
      * @param url          le chemin demande, doit exister dans la map
      * @param urlMethodMap les routes
-     * @return le contentType du {@code @WebAPI} de la methode, "application/json" sinon
+     * @return le contentType du {@code @WebAPI} de la methode, "application/json"
+     *         sinon
      */
     public static String getContentTypeForUrl(String url, Map<String, URLMethod> urlMethodMap) {
         Method calledMethod = urlMethodMap.get(url).getMethod();
