@@ -39,6 +39,7 @@ public class ContextListener implements ServletContextListener {
         initMapper(context);
         initControllerList(context);
         initSuffixAndPrefix(context);
+        initAuth(context);
         context.setAttribute("sessionManager", new SessionManager());
 
         ModelAndView.setAction((key, value) -> {
@@ -130,6 +131,11 @@ public class ContextListener implements ServletContextListener {
     void initSuffixAndPrefix(ServletContext context) {
         context.setAttribute("prefix", context.getInitParameter("prefix"));
         context.setAttribute("suffix", context.getInitParameter("suffix"));
+    }
+
+    /**initialiser  */
+    void initAuth(ServletContext context){
+        context.setAttribute("angeli.spring.auth", null);
     }
 
 }
