@@ -9,7 +9,8 @@ import jakarta.servlet.http.HttpSession;
  */
 public class Authentificator {
    public static void checkAuth(String authKey , HttpSession session) throws AuthException {
-        if (session.getAttribute(authKey) == null) {
+    System.out.println("Vérification de l'authentification avec la clé : " + authKey);
+        if (session.getAttribute(authKey) == null || session.getAttribute(authKey).toString().isEmpty()) {
             throw new AuthException("Vous n'avez pas l'autorisation d'accéder à cette ressource");
         }
     }
