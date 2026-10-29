@@ -46,6 +46,13 @@ public class FrontControllerServlet extends HttpServlet {
     /** Le debut du chemin du fichier */
     String suffix;
 
+    /** Dis si il existe des authentification */
+    boolean auth = false;
+    /**
+     * La clef dans la map de session qu'il faut regarder
+     */
+    String authKey = null;
+
     /**
      * Traite une requete GET.
      *
@@ -121,7 +128,7 @@ public class FrontControllerServlet extends HttpServlet {
         System.out.println("est  multipart: " + estMultipart(req));
         args = DataGeter.addFileNamesToMap(fichiers, args);
 
-        boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap);
+        boolean[] checkUrl = URLChecker.checkUrl(url, urlMethodMap, auth);
         boolean UrlExists = checkUrl[0];
         boolean UrlHasView = checkUrl[1];
         boolean UrlisAnAPI = checkUrl[2];
@@ -235,13 +242,16 @@ public class FrontControllerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        controllerList = (List<String>) getServletContext().getAttribute("controllerList");
-        methodList = (List<Method>) getServletContext().getAttribute("urlMethods");
-        urlMethodMapGET = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapGET");
-        urlMethodMapPOST = (Map<String, URLMethod>) getServletContext().getAttribute("urlMethodMapPOST");
-        sessionManager = (SessionManager) getServletContext().getAttribute("sessionManager");
-        prefix = (String) getServletContext().getInitParameter("angeli.sprint.prefix");
-        suffix = (String) getServletContext().getInitParameter("angeli.sprint.suffix");
-
-    }
+        ServletContext context = getServletContext();
+        controllerList = (List<String>) context.getAttribute("controllerList");
+        methodList = (List<Method>) context.getAttribute("urlMethods");
+        urlMethodMapGET = (Map<String, URLMethod>) context.getAttribute("urlMethodMapGET");
+        urlMethodMapPOST = (Map<String, URLMethod>) context.getAttribute("urlMethodMapPOST");
+        sessionManager = (SessionManager) context.getAttribute("sessionManager");
+        prefix = (String) context.getInitParameter("angeli.sprint.prefix");
+        suffix = (String) context.getInitParameter("angeli.sprint.suffix");
+        auth = context.getInitParameter("angeli.spring.auth") != null
+                && !context.getInitParameter("angeli.spring.auth").isEmpty();
+        authKey = auth ? context.getInitParameter("angeli.spring.auth") : null;
+    } 
 }
