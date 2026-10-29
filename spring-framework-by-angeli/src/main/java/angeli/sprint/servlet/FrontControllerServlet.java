@@ -163,9 +163,10 @@ public class FrontControllerServlet extends HttpServlet {
             return;
         }
         if (isAuthPresent) {
+            Method calledMethod = urlMethodMap.get(url).getMethod();
             System.out.println("Authentification requise pour cette URL");
             try {
-                Authentificator.checkAuth(authKey, req.getSession());
+                Authentificator.checkAuth(authKey, req.getSession(),calledMethod, roleKey);
             } catch (Exception e) {
                 PageWriter.print(req, rep, e.getMessage(), "text/plain");
                 return;
