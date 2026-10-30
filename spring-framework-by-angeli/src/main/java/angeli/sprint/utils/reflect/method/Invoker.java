@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Map;
 
+import angeli.sprint.controler.ControllerManager;
 import angeli.sprint.file.Fichier;
 import angeli.sprint.session.Session;
 import angeli.sprint.session.SessionManager;
@@ -66,8 +67,7 @@ public class Invoker {
                 newArgs[index] = descriptor.createObject(args, null, fichiers);
                 index++;
             }
-            ret = method.invoke(method.getDeclaringClass().getDeclaredConstructor().newInstance(),
-                    newArgs);
+            ret = method.invoke(ControllerManager.getController(method.getDeclaringClass()), newArgs);
 
         } catch (Exception e2) {
             // Dis dans catalina.out si la methode ne peut pas etre invoquee avec les
