@@ -1,4 +1,4 @@
-package angeli.sprint.controler;
+package angeli.sprint.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

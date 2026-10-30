@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Map;
 
-import angeli.sprint.controler.ControllerManager;
+import angeli.sprint.controller.ControllerManager;
 import angeli.sprint.file.Fichier;
 import angeli.sprint.session.Session;
 import angeli.sprint.session.SessionManager;
