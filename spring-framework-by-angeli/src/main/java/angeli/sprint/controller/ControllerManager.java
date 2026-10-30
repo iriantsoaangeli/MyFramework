@@ -13,12 +13,20 @@ public class ControllerManager {
      */
     static Map<Class<?> , Object>  controllers = new ConcurrentHashMap<>();
 
+
+    /**
+     * @return Retourne une instance du controller de la classe donnée, en utilisant le constructeur par défaut.
+     *         Si une instance existe déjà dans la map, elle est retournée. Sinon,
+     */
     public static Object getInstance(Class<?> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         Object controller = clazz.getDeclaredConstructor().newInstance();
         controllers.computeIfAbsent(clazz, k -> controller);
         return controller;
     }
 
+    /**
+     * Prend une instance de controller dans la map sinon en cree une et appel {@link #getInstance(Class)} pour l'initialiser
+     */
     public static Object getController(Class<?> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         if(controllers.containsKey(clazz)) {
             return controllers.get(clazz);
